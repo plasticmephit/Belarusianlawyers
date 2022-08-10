@@ -13,11 +13,9 @@ var lawyers:[[String]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         
-      lawyers = parseLawyers()
-        DispatchQueue.main.asyncAfter(deadline: .now()+7) {
-            print(self.lawyers)
-        }
-        print(lawyers)
+    
+        
+        
         
     }
     
