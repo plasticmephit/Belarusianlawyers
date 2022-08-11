@@ -17,12 +17,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow()
        
        
-        window.rootViewController = LawyerViewController()
+        window.rootViewController = LawyerViewController(viewModel: LawyerModelView.init())
         
         window.makeKeyAndVisible()
         self.window = window
         return true
     }
+    
     
     // MARK: UISceneSession Lifecycle
     

@@ -8,7 +8,17 @@ import SnapKit
 import UIKit
 
 class LawyerViewController: UIViewController, UITableViewDataSource {
-    var lawyers:[[String]] = []
+    
+    var viewModel: LawyerModelView
+    
+    init(viewModel: LawyerModelView) {
+        self.viewModel = viewModel
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     
     let tableView: UITableView = .init()
@@ -23,7 +33,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource {
         tableView.delegate = self
         setupTableView()
         DispatchQueue.main.async {
-            self.lawyers = parseLawyers()
+            self.viewModel.fetch()
             self.tableView.reloadData()
         }
         
@@ -41,30 +51,34 @@ extension LawyerViewController:UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return lawyers.count
+        return viewModel.lawyers.count
     }
-
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         guard let cell = tableView.dequeueReusableCell(withIdentifier: "LawyersTableViewCell", for: indexPath) as?  LawyersTableViewCell
         else{
             fatalError()
         }
-        cell.configure(lawyers: lawyers[indexPath.row])
+        cell.configure(lawyers: viewModel.lawyers[indexPath.row])
         return cell
     }
-
-
-   
+    
     func tableView(_ tableView: UITableView, heightForRowAtIndexPath section: Int) -> CGFloat {
         return 0
+    }
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let detailVC = LawyerDetailsViewController()
+//        let navVC = UINavigationController(rootViewController: LawyerViewController.init(viewModel: LawyerModelView.init()))
+        detailVC.lawyersDetails = viewModel.lawyers[indexPath.row]
+        detailVC.modalPresentationStyle = .popover
+        present(detailVC, animated: true, completion: nil)
     }
 }
 
 extension LawyerViewController{
     func setupTableView(){
         view.addSubview(tableView)
-        self.tableView.rowHeight = 130
+        self.tableView.rowHeight = 142
         self.tableView.separatorColor = .clear
         self.tableView.backgroundColor = .clear
         tableView.snp.makeConstraints {
