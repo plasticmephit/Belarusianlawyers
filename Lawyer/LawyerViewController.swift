@@ -68,10 +68,9 @@ extension LawyerViewController:UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
-//        let navVC = UINavigationController(rootViewController: LawyerViewController.init(viewModel: LawyerModelView.init()))
         detailVC.lawyersDetails = viewModel.lawyers[indexPath.row]
         detailVC.modalPresentationStyle = .popover
-        present(detailVC, animated: true, completion: nil)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

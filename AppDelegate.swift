@@ -17,7 +17,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         let window = UIWindow()
        
        
-        window.rootViewController = LawyerViewController(viewModel: LawyerModelView.init())
+        window.rootViewController = TabBar()
         
         window.makeKeyAndVisible()
         self.window = window
