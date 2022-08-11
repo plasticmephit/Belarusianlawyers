@@ -1,11 +1,8 @@
 //
-//  LawyerAssembly.swift
+//  LawyerDetailsSetup.swift
 //  Belarusianlawyers
 //
 //  Created by Maksimilian on 11.08.22.
 //
 
 import Foundation
-class LawyerAssembly: NSObject{
-    
-}

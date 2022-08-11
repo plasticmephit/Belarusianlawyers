@@ -8,20 +8,8 @@ import SnapKit
 import UIKit
 
 class LawyerViewController: UIViewController, UITableViewDataSource {
-    
-    var viewModel: LawyerModelView
-    
-    init(viewModel: LawyerModelView) {
-        self.viewModel = viewModel
-        super.init(nibName: nil, bundle: nil)
-    }
-    
-    required init?(coder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-    
-    
     let tableView: UITableView = .init()
+    var lawyers: [[String]]=[]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,7 +21,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource {
         tableView.delegate = self
         setupTableView()
         DispatchQueue.main.async {
-            self.viewModel.fetch()
+            self.lawyers = parseLawyers()
             self.tableView.reloadData()
         }
         
@@ -51,7 +39,7 @@ extension LawyerViewController:UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return viewModel.lawyers.count
+        return lawyers.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -59,7 +47,7 @@ extension LawyerViewController:UITableViewDelegate
         else{
             fatalError()
         }
-        cell.configure(lawyers: viewModel.lawyers[indexPath.row])
+        cell.configure(lawyers: lawyers[indexPath.row])
         return cell
     }
     
@@ -68,8 +56,8 @@ extension LawyerViewController:UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
-        detailVC.lawyersDetails = viewModel.lawyers[indexPath.row]
-        detailVC.modalPresentationStyle = .popover
+        detailVC.lawyersDetails = lawyers[indexPath.row]
+//        detailVC.modalPresentationStyle = .popover
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

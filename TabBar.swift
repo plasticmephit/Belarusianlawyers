@@ -22,9 +22,9 @@ class TabBar: UITabBarController {
     func setupVCs() {
         viewControllers = [
             createNavController(for: HomeViewController(), title: NSLocalizedString("Главная", comment: ""), image: UIImage(systemName: "house")!),
-            createNavController(for: LawyerViewController(viewModel: LawyerModelView.init()), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "house")!),
+            createNavController(for: LawyerViewController(), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: HomeViewController(), title: NSLocalizedString("Чат", comment: ""), image: UIImage(systemName: "house")!),
-            createNavController(for: HomeViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
+            createNavController(for: MapViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
         ]
     }
     override func viewDidLoad() {

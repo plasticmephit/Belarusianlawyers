@@ -10,7 +10,7 @@ import UIKit
 class HomeViewController: UIViewController {
     
     let menuView = UIView()
-    
+   
     let lawyers = UIButton()
     let lawyersText : UILabel = {
         let label = UILabel()
@@ -41,6 +41,8 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHomeViewController()
+      
+       
         // Do any additional setup after loading the view.
     }
 
