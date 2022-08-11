@@ -11,14 +11,15 @@ import SnapKit
 extension LawyerDetailsViewController{
     
     func setupLawyerDetailsViewController(){
+        view.backgroundColor = .blue
         [menuView].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
+        menuView.backgroundColor = .white
         menuView.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(40)
+            make.top.equalToSuperview().inset(60)
             make.left.equalToSuperview().inset(0)
             make.right.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(0)
@@ -91,15 +92,15 @@ extension LawyerDetailsViewController{
         configureHomeViewConroller()
     }
     func configureHomeViewConroller(){
-        name.text = "Адвокаты"
-        status.text = "Отрасли права"
-        mainNumber.text = "Коллегии по регионам"
-        otveti.text = "БРКА"
-        blagodarnost.text = "Адвокаты"
-        statii.text = "Отрасли права"
-        about.text = "Коллегии по регионам"
-        kollegion.text = "БРКА"
-        consult.text = "Адвокаты"
-        specialization.text = "Отрасли права"
+        name.text = lawyersDetails[1]
+        status.text = lawyersDetails[1]
+        mainNumber.text = lawyersDetails[1]
+        otveti.text = lawyersDetails[1]
+        blagodarnost.text = lawyersDetails[1]
+        statii.text = lawyersDetails[1]
+        about.text = lawyersDetails[1]
+        kollegion.text = lawyersDetails[1]
+        consult.text = lawyersDetails[1]
+        specialization.text = lawyersDetails[1]
     }
 }

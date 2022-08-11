@@ -15,7 +15,7 @@ class LawyerDetailsViewController: UIViewController  {
     let avatar = UIImageView()
     let name : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 20)
         return label
     }()
     let status : UILabel = {
