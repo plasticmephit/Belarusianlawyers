@@ -10,7 +10,7 @@ import UIKit
 class LawyerViewController: UIViewController, UITableViewDataSource {
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
-    
+    let tab = HomeViewController()
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -20,16 +20,24 @@ class LawyerViewController: UIViewController, UITableViewDataSource {
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        DispatchQueue.main.async {
-            self.lawyers = parseLawyers()
-            self.tableView.reloadData()
-        }
+        print(lawyers.count)
+//        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+//        queueConc.async {
+//            self.lawyers = parseLawyers()
+//            DispatchQueue.main.async {
+//                self.tableView.reloadData()
+//            }
+//        }
         
         
         
         // Do any additional setup after loading the view.
     }
-    
+    override func viewWillAppear(_ animated: Bool) {
+        lawyers = alawyers
+        print(alawyers.count)
+        self.tableView.reloadData()
+    }
 }
 
 extension LawyerViewController:UITableViewDelegate
@@ -57,7 +65,7 @@ extension LawyerViewController:UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
         detailVC.lawyersDetails = lawyers[indexPath.row]
-//        detailVC.modalPresentationStyle = .popover
+        //        detailVC.modalPresentationStyle = .popover
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }

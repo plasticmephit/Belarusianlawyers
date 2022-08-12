@@ -8,7 +8,9 @@
 import UIKit
 
 class HomeViewController: UIViewController {
-    
+   
+   
+
     let menuView = UIView()
    
     let lawyers = UIButton()
@@ -41,7 +43,11 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHomeViewController()
-      
+        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+        queueConc.async {
+            alawyers = parseLawyers()
+            print(alawyers[2][20])
+        }
        
         // Do any additional setup after loading the view.
     }

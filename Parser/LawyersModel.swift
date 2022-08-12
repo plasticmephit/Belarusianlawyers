@@ -7,6 +7,8 @@
 
 import Foundation
 
+var alawyers: [[String]]=[]
+
 struct Lawyers
 {
     var id:String?

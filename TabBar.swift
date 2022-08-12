@@ -8,7 +8,7 @@
 import UIKit
 
 class TabBar: UITabBarController {
-    
+   
     func createNavController(for rootViewController: UIViewController,
                              title: String,
                              image: UIImage) -> UIViewController {
@@ -32,5 +32,6 @@ class TabBar: UITabBarController {
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
         setupVCs()
+        
     }
 }
