@@ -7,8 +7,11 @@
 
 import UIKit
 
+
+let myNotificationKey = "com.bobthedeveloper.notificationKey"
 class TabBar: UITabBarController {
-   
+    
+
     func createNavController(for rootViewController: UIViewController,
                              title: String,
                              image: UIImage) -> UIViewController {
@@ -35,3 +38,4 @@ class TabBar: UITabBarController {
         
     }
 }
+

@@ -7,36 +7,52 @@
 import SnapKit
 import UIKit
 
-class LawyerViewController: UIViewController, UITableViewDataSource {
+
+
+class LawyerViewController: UIViewController, UITableViewDataSource{
+    
+   
+    
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
-    let tab = HomeViewController()
+//    let tab = TabBar()
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        lawyers = lawyersGlobal
         view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
         
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
+       
         print(lawyers.count)
-//        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-//        queueConc.async {
-//            self.lawyers = parseLawyers()
-//            DispatchQueue.main.async {
-//                self.tableView.reloadData()
-//            }
-//        }
-        
-        
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
+                                               object: nil,
+                                               queue: nil,
+                                               using:catchNotification)
+        //        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+        //        queueConc.async {
+        //            self.lawyers = parseLawyers()
+        //            DispatchQueue.main.async {
+        //                self.tableView.reloadData()
+        //            }
+        //        }
+       
         
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
-        lawyers = alawyers
-        print(alawyers.count)
-        self.tableView.reloadData()
+       
+    }
+    func catchNotification(notification:Notification) -> Void {
+      guard let name = notification.userInfo!["name"] else { return }
+        lawyers = name as! [[String]]
+        DispatchQueue.main.async {
+                      self.tableView.reloadData()
+                  }
+   
+        
     }
 }
 

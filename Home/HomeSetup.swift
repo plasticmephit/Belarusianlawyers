@@ -21,21 +21,21 @@ extension HomeViewController{
             make.right.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(0)
         }
-        [lawyers, otrasli, kollegii, brka].forEach{
+        [lawyersBut, otrasli, kollegii, brka].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             menuView.addSubview($0)
         }
         
-        lawyers.backgroundColor = .white
-        lawyers.layer.cornerRadius = 10
-        lawyers.snp.makeConstraints { make in
+        lawyersBut.backgroundColor = .white
+        lawyersBut.layer.cornerRadius = 10
+        lawyersBut.snp.makeConstraints { make in
             make.width.equalTo(300)
             make.height.equalTo(79)
             make.top.equalToSuperview().inset(50)
             make.centerX.equalToSuperview()
         }
-        lawyers.translatesAutoresizingMaskIntoConstraints = false
-        lawyers.addSubview(lawyersText)
+        lawyersBut.translatesAutoresizingMaskIntoConstraints = false
+        lawyersBut.addSubview(lawyersText)
         lawyersText.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().inset(90)
@@ -45,7 +45,7 @@ extension HomeViewController{
         otrasli.snp.makeConstraints { make in
             make.width.equalTo(300)
             make.height.equalTo(79)
-            make.top.equalTo(lawyers).inset(90)
+            make.top.equalTo(lawyersBut).inset(90)
             make.centerX.equalToSuperview()
         }
         otrasli.translatesAutoresizingMaskIntoConstraints = false

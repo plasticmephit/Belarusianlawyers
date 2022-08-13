@@ -7,13 +7,13 @@
 
 import UIKit
 
+var lawyersGlobal: [[String]]=[]
 class HomeViewController: UIViewController {
-   
-   
-
+    
+ 
     let menuView = UIView()
-   
-    let lawyers = UIButton()
+    
+    let lawyersBut = UIButton()
     let lawyersText : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -43,13 +43,20 @@ class HomeViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         setupHomeViewController()
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(doThisWhenNotify),
+                                               name: NSNotification.Name(rawValue: myNotificationKey),
+                                               object: nil)
+        
         let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
         queueConc.async {
-            alawyers = parseLawyers()
-            print(alawyers[2][20])
+            lawyersGlobal = parseLawyers()
+          
+            print(lawyersGlobal.count)
+            NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
         }
-       
         // Do any additional setup after loading the view.
     }
-
+    @objc func doThisWhenNotify() { print("I've sent a spark!")
+    }
 }
