@@ -8,6 +8,8 @@
 import UIKit
 import Kingfisher
 import MapKit
+import AlamofireImage
+import Alamofire
 class MapViewController: UIViewController, MKMapViewDelegate {
     var mapLawyers: [MapLawyer] = []
     let mapLawyer = MKMapView()
@@ -16,23 +18,17 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        lawyers = lawyersGlobal
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
         setupMapViewController()
-        mapLawyer.register(
-          ArtworkView.self,
-          forAnnotationViewWithReuseIdentifier:
-            MKMapViewDefaultAnnotationViewReuseIdentifier)
 
-//
-        if lawyers.count != 0
-        { loadInitialData()}
-        
+        if lawyersGlobal.count != 0
+        {
+            loadInitialData()}
         mapLawyer.delegate = self
-        
-        // Do any additional setup after loading the view.
     }
     
     
@@ -55,71 +51,54 @@ extension MapViewController{
     
     private func loadInitialData() {
         for i in 1...lawyers.count-1{
+           
+        
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != "" {
-                let kostil = UIImageView()
-                kostil.kf.setImage(with: URL(string: lawyers[i][19]))
                 let geoLawyer = MapLawyer(
                     title: lawyers[i][1],
                     locationName: lawyers[i][1],
                     discipline: lawyers[i][1],
-                    coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!),
-                    ava: kostil)
+                    coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: <#UIImage#> )
                 mapLawyers.append(geoLawyer)
-                
+                mapLawyer.addAnnotation(geoLawyer)
             }
         }
         
     }
     func catchNotification(notification:Notification) -> Void {
-      guard let name = notification.userInfo!["name"] else { return }
+        guard let name = notification.userInfo!["name"] else { return }
         lawyers = name as! [[String]]
-        
-        DispatchQueue.main.async {
+        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+        queueConc.async {
             self.loadInitialData()
-            self.mapLawyer.addAnnotations(self.mapLawyers)
-                  }
-   
+            //            self.mapLawyer.addAnnotations(self.mapLawyers)
+        }
+        
         
     }
-//    func mapView(mapView: MKMapView, viewForAnnotation annotation: MKAnnotation) -> MKAnnotationView? {
-//        if annotation is MKUserLocation {
-//            return nil
-//        }
-//
-//        let identifier = "MyCustomAnnotation"
-//
-//
-//        let index = (self.mapLawyer.annotations as NSArray).index(of: annotation)
-//
-//        let kostil = UIImageView()
-//                        kostil.kf.setImage(with: URL(string: alawyers[index][19]))
-//
-//        var annotationView = mapLawyer.dequeueReusableAnnotationView(withIdentifier: identifier)
-//        if annotationView == nil {
-//            annotationView = MKAnnotationView(annotation: annotation, reuseIdentifier: identifier)
-//            annotationView?.canShowCallout = true
-//
-//            annotationView!.image = kostil.image
-//
-//        } else {
-//            annotationView!.annotation = annotation
-//        }
-//
-//
-////        configureDetailView(annotationView: annotationView!)
-//
-//        return annotationView
-//    }
+    //
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
+
+
+        annotationView.canShowCallout = true
+        annotationView.animatesWhenAdded = true
+//                annotationView.glyphTintColor = .clear
+ 
+//                annotationView.markerTintColor = .clear
+        return annotationView
+    }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let annotation = view.annotation
         let index = (self.mapLawyer.annotations as NSArray).index(of: annotation!)
         print ("Annotation Index = \(index)")
-
+        
+        
+        
+        
     }
-//    func configureDetailView(annotationView: MKAnnotationView) {
-//            annotationView.detailCalloutAccessoryView = UIImageView(image: UIImage(named: "url.jpg"))
-//    }
+    
 }
 private extension MKMapView {
     func centerToLocation(
