@@ -16,12 +16,14 @@ class MapLawyer: NSObject, MKAnnotation {
     let discipline: String?
     let coordinate: CLLocationCoordinate2D
     var image: String?
+   
     init(
         title: String?,
         locationName: String?,
         discipline: String?,
         coordinate: CLLocationCoordinate2D,
         image: String
+       
     )
     {
         self.title = title
@@ -29,6 +31,7 @@ class MapLawyer: NSObject, MKAnnotation {
         self.discipline = discipline
         self.coordinate = coordinate
         self.image = image
+      
         super.init()
     }
     
@@ -36,6 +39,7 @@ class MapLawyer: NSObject, MKAnnotation {
         return locationName
     }
 }
+
 //
 //class ArtworkView: MKAnnotationView {
 //  override var annotation: MKAnnotation? {

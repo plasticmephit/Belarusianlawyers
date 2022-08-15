@@ -28,7 +28,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource  {
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-       
+        if lawyers.count == 0
+        {
+            lawyers = lawyersGlobal
+        }
         print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
