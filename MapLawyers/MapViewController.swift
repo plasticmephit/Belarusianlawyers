@@ -10,15 +10,20 @@ import Kingfisher
 import MapKit
 import AlamofireImage
 import Alamofire
+
 class MapViewController: UIViewController, MKMapViewDelegate {
     var mapLawyers: [MapLawyer] = []
     let mapLawyer = MKMapView()
     var lawyers:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
-    
+    var lawyersForTableView:[[String]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         lawyers = lawyersGlobal
+//        mapLawyer.register(
+//          ArtworkView.self,
+//          forAnnotationViewWithReuseIdentifier:
+//            MKMapViewDefaultAnnotationViewReuseIdentifier)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
@@ -56,10 +61,10 @@ extension MapViewController{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != "" {
                 let geoLawyer = MapLawyer(
-                    title: lawyers[i][1],
+                    title: lawyers[i][5],
                     locationName: lawyers[i][1],
                     discipline: lawyers[i][1],
-                    coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: <#UIImage#> )
+                    coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19] )
                 mapLawyers.append(geoLawyer)
                 mapLawyer.addAnnotation(geoLawyer)
             }
@@ -78,22 +83,25 @@ extension MapViewController{
         
     }
     //
-    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
-
-
-        annotationView.canShowCallout = true
-        annotationView.animatesWhenAdded = true
-//                annotationView.glyphTintColor = .clear
- 
-//                annotationView.markerTintColor = .clear
-        return annotationView
-    }
+   
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         let annotation = view.annotation
         let index = (self.mapLawyer.annotations as NSArray).index(of: annotation!)
         print ("Annotation Index = \(index)")
-        
+        let detailVC = LawyerViewController()
+        lawyersForTableView.removeAll()
+        lawyersForTableView.append(lawyers[index])
+        for i in 1...lawyers.count-1{
+           
+            if lawyers[index][20] == lawyers[i][20]
+            {
+                lawyersForTableView.append(lawyers[i])
+            }
+        }
+        print(lawyersForTableView.count)
+        detailVC.lawyers = lawyersForTableView
+        //        detailVC.modalPresentationStyle = .popover
+        navigationController?.pushViewController(detailVC, animated: true)
         
         
         

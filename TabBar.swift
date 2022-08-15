@@ -9,6 +9,7 @@ import UIKit
 
 
 let myNotificationKey = "com.bobthedeveloper.notificationKey"
+let myNotificationKey2 = "com.bobthedeveloper.notificationKey2"
 class TabBar: UITabBarController {
     
 

@@ -9,7 +9,6 @@ import UIKit
 
 var lawyersGlobal: [[String]]=[]
 class HomeViewController: UIViewController {
-    
  
     let menuView = UIView()
     
@@ -51,7 +50,6 @@ class HomeViewController: UIViewController {
         let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
         queueConc.async {
             lawyersGlobal = parseLawyers()
-          
             print(lawyersGlobal.count)
             NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
         }

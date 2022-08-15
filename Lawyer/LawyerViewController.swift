@@ -9,19 +9,22 @@ import UIKit
 
 
 
-class LawyerViewController: UIViewController, UITableViewDataSource{
+class LawyerViewController: UIViewController, UITableViewDataSource  {
+  
+    
     
    
     
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
 //    let tab = TabBar()
+   
     override func viewDidLoad() {
         super.viewDidLoad()
-        lawyers = lawyersGlobal
+//        lawyers = lawyersGlobal
         view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
-        
+       
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
@@ -31,15 +34,8 @@ class LawyerViewController: UIViewController, UITableViewDataSource{
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        //        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-        //        queueConc.async {
-        //            self.lawyers = parseLawyers()
-        //            DispatchQueue.main.async {
-        //                self.tableView.reloadData()
-        //            }
-        //        }
        
-        
+       
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
