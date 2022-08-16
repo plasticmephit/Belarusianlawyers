@@ -16,7 +16,6 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     let mapView = MKMapView()
     var lawyers:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
-    var lawyersForTableView:[[String]] = []
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
@@ -33,7 +32,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                 self.loadInitialData()
             }
         }
-   
+        
     }
     
     
@@ -57,7 +56,7 @@ extension MapViewController{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != "" {
                 let geoLawyer = MapLawyer(
-                    title: lawyers[5][1],
+                    title: lawyers[i][5],
                     locationName: String(i),
                     discipline: lawyers[i][1],
                     coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
@@ -90,8 +89,10 @@ extension MapViewController {
             annotationView.annotation = item
             annotationView.image = UIImage(named: "annotation")
             // 3
+            annotationView.canShowCallout = true
             annotationView.subtitleVisibility = .hidden
             annotationView.clusteringIdentifier = "mapItemClustered"
+            annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
             annotationView.animatesWhenAdded = true
             return annotationView
         } else if let cluster = annotation as? MKClusterAnnotation {
@@ -109,46 +110,60 @@ extension MapViewController {
     }
     
     //
-//    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-//        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
-//        annotationView.markerTintColor = UIColor.blue
-//        annotationView.canShowCallout = true
-////        annotationView.calloutOffset = CGPoint(x: -5, y: 5)
-////        let mapsButton = UIButton(frame: CGRect(
-////            origin: CGPoint.zero,
-////            size: CGSize(width: 48, height: 48)))
-////        //        mapsButton.setBackgroundImage(#imageLiteral(resourceName: "Map"), for: .normal)
-////        annotationView.rightCalloutAccessoryView = mapsButton
-//        annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-//        if #available(iOS 11.0, *) {
-//            annotationView.clusteringIdentifier = "MyMarker"
-//        }
-//        return annotationView
-//    }
-//
-//
-    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-    var lawyersForTableView:[[String]] = []
-
-        if let cluster = view.annotation as? MKClusterAnnotation {
-            //*** Need array list of annotation inside cluster here ***
-            for i in 0...cluster.memberAnnotations.count-1
-            {
-                let j = Int(cluster.memberAnnotations[i].subtitle!!)!
-                lawyersForTableView.append(lawyers[j])
+    //    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+    //        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
+    //        annotationView.markerTintColor = UIColor.blue
+    //        annotationView.canShowCallout = true
+    ////        annotationView.calloutOffset = CGPoint(x: -5, y: 5)
+    ////        let mapsButton = UIButton(frame: CGRect(
+    ////            origin: CGPoint.zero,
+    ////            size: CGSize(width: 48, height: 48)))
+    ////        //        mapsButton.setBackgroundImage(#imageLiteral(resourceName: "Map"), for: .normal)
+    ////        annotationView.rightCalloutAccessoryView = mapsButton
+    //        annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+    //        if #available(iOS 11.0, *) {
+    //            annotationView.clusteringIdentifier = "MyMarker"
+    //        }
+    //        return annotationView
+    //    }
+    //
+    //
+    func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+        if control == view.rightCalloutAccessoryView {
+            var lawyersForTableView:[[String]] = []
+            if let cluster = view.annotation as? MKClusterAnnotation {
+                //*** Need array list of annotation inside cluster here ***
+                
+                for i in 0...cluster.memberAnnotations.count-1
+                {
+                    
+                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
+                    lawyersForTableView.append(lawyers[j])
+                }
+                let detailVC = LawyerViewController()
+                
+                detailVC.lawyers = lawyersForTableView
+                //        detailVC.modalPresentationStyle = .popover
+                navigationController?.pushViewController(detailVC, animated: true)
             }
-            // If you want the map to display the cluster members
-//            mapView.showAnnotations(cluster.memberAnnotations, animated: true)
-                        let detailVC = LawyerViewController()
-
-                        detailVC.lawyers = lawyersForTableView
-                        //        detailVC.modalPresentationStyle = .popover
-                        navigationController?.pushViewController(detailVC, animated: true)
-//
-
+            
+            else {
+                if let annotation = view.annotation as? MapLawyer{
+                    let index = (self.mapView.annotations as NSArray).index(of: annotation)
+                    let detailVC = LawyerViewController()
+                    lawyersForTableView.append(lawyers[index])
+                    detailVC.lawyers = lawyersForTableView
+                    //        detailVC.modalPresentationStyle = .popover
+                    navigationController?.pushViewController(detailVC, animated: true)
+                }
+            }
         }
     }
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+    }
 }
+
+
 private extension MKMapView {
     func centerToLocation(
         _ location: CLLocation,
