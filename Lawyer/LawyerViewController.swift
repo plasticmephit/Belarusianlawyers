@@ -28,7 +28,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource  {
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        if lawyers.count == 0
+        if lawyers.count == 0 
         {
             lawyers = lawyersGlobal
         }
@@ -70,7 +70,9 @@ extension LawyerViewController:UITableViewDelegate
         else{
             fatalError()
         }
+        if lawyersGlobal.count > 10{
         cell.configure(lawyers: lawyers[indexPath.row])
+        }
         return cell
     }
     

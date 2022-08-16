@@ -16,7 +16,7 @@ extension HomeViewController{
         menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
         menuView.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(110)
+            make.height.equalTo(478)
             make.left.equalToSuperview().inset(0)
             make.right.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(0)
@@ -29,9 +29,9 @@ extension HomeViewController{
         lawyersBut.backgroundColor = .white
         lawyersBut.layer.cornerRadius = 10
         lawyersBut.snp.makeConstraints { make in
-            make.width.equalTo(300)
             make.height.equalTo(79)
-            make.top.equalToSuperview().inset(50)
+            make.right.left.equalToSuperview().inset(20)
+            make.top.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
         }
         lawyersBut.translatesAutoresizingMaskIntoConstraints = false
@@ -43,7 +43,7 @@ extension HomeViewController{
         otrasli.backgroundColor = .white
         otrasli.layer.cornerRadius = 10
         otrasli.snp.makeConstraints { make in
-            make.width.equalTo(300)
+            make.right.left.equalToSuperview().inset(20)
             make.height.equalTo(79)
             make.top.equalTo(lawyersBut).inset(90)
             make.centerX.equalToSuperview()
@@ -57,7 +57,7 @@ extension HomeViewController{
         kollegii.backgroundColor = .white
         kollegii.layer.cornerRadius = 10
         kollegii.snp.makeConstraints { make in
-            make.width.equalTo(300)
+            make.right.left.equalToSuperview().inset(20)
             make.height.equalTo(79)
             make.top.equalTo(otrasli).inset(90)
             make.centerX.equalToSuperview()
@@ -71,7 +71,7 @@ extension HomeViewController{
         brka.backgroundColor = .white
         brka.layer.cornerRadius = 10
         brka.snp.makeConstraints { make in
-            make.width.equalTo(300)
+            make.right.left.equalToSuperview().inset(20)
             make.height.equalTo(79)
             make.top.equalTo(kollegii).inset(90)
             make.centerX.equalToSuperview()

@@ -27,7 +27,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                                                using:catchNotification)
         setupMapViewController()
         let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-        if lawyersGlobal.count != 0
+        if lawyersGlobal.count > 10
         {
             queueConc.async {
                 self.loadInitialData()

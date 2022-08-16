@@ -9,7 +9,8 @@ import UIKit
 
 var lawyersGlobal: [[String]]=[]
 class HomeViewController: UIViewController {
- 
+    var online:Int = 0
+    var indexOnline:[[String]] = []
     let menuView = UIView()
     
     let lawyersBut = UIButton()
@@ -47,11 +48,36 @@ class HomeViewController: UIViewController {
                                                name: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil)
         
-        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-        queueConc.async {
-            lawyersGlobal = parseLawyers()
+        let queueConc = OperationQueue()
+        queueConc.maxConcurrentOperationCount = 1
+        if parseLawyersUserDefaults().count > 1{
+                print(11)
+
+                lawyersGlobal = parseLawyersUserDefaults()
             print(lawyersGlobal.count)
-            NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
+        }
+        queueConc.addOperation{
+          
+            print(12)
+            let kostil = parseLawyers()
+            if lawyersGlobal.count < 10
+            {
+                lawyersGlobal = kostil
+                NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
+            }
+           
+        }
+        queueConc.addOperation {
+            print(13)
+            for i in 1...lawyersGlobal.count-1
+            {
+                if lawyersGlobal[i][29] == "да"
+                {
+                    self.indexOnline.append(lawyersGlobal[i])
+                }
+            }
+            //            print(lawyersGlobal[885][19])
+            print(self.indexOnline.count)
         }
         // Do any additional setup after loading the view.
     }
