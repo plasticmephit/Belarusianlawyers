@@ -46,9 +46,9 @@ extension MapViewController{
         mapView.translatesAutoresizingMaskIntoConstraints = false
         mapView.snp.makeConstraints {
             make in
-            make.right.equalToSuperview().inset(10)
-            make.left.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(60)
+            make.right.equalToSuperview().inset(0)
+            make.left.equalToSuperview().inset(0)
+            make.top.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(60)
         }
     }
