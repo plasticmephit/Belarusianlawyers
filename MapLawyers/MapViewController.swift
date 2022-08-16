@@ -15,6 +15,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     var mapLawyers: [MapLawyer] = []
     let mapView = MKMapView()
     var lawyers:[[String]] = []
+    var lawyersForTableView:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -79,16 +80,10 @@ extension MapViewController{
 }
 extension MapViewController {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-        // 1
-        
         if let item = annotation as? MapLawyer {
-            // 2
-            
             let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
-            
             annotationView.annotation = item
             annotationView.image = UIImage(named: "annotation")
-            // 3
             annotationView.canShowCallout = true
             annotationView.subtitleVisibility = .hidden
             annotationView.clusteringIdentifier = "mapItemClustered"
@@ -98,70 +93,74 @@ extension MapViewController {
         } else if let cluster = annotation as? MKClusterAnnotation {
             // 4
             let clusterView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker2")
-            clusterView.canShowCallout = true
+            if cluster.memberAnnotations.count < 100{
+                clusterView.canShowCallout = true}
             clusterView.annotation = cluster
-            clusterView.image = UIImage(named: "cluster")
-            clusterView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
+            clusterView.rightCalloutAccessoryView = UIButton(type: .infoDark)
             clusterView.animatesWhenAdded = true
+            clusterView.calloutOffset = CGPoint(x: -5, y: 5)
             return clusterView
         } else {
             return nil
         }
     }
     
-    //
-    //    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
-    //        let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
-    //        annotationView.markerTintColor = UIColor.blue
-    //        annotationView.canShowCallout = true
-    ////        annotationView.calloutOffset = CGPoint(x: -5, y: 5)
-    ////        let mapsButton = UIButton(frame: CGRect(
-    ////            origin: CGPoint.zero,
-    ////            size: CGSize(width: 48, height: 48)))
-    ////        //        mapsButton.setBackgroundImage(#imageLiteral(resourceName: "Map"), for: .normal)
-    ////        annotationView.rightCalloutAccessoryView = mapsButton
-    //        annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-    //        if #available(iOS 11.0, *) {
-    //            annotationView.clusteringIdentifier = "MyMarker"
-    //        }
-    //        return annotationView
-    //    }
-    //
-    //
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
+       
         if control == view.rightCalloutAccessoryView {
-            var lawyersForTableView:[[String]] = []
-            if let cluster = view.annotation as? MKClusterAnnotation {
+            if view.annotation is MKClusterAnnotation {
                 //*** Need array list of annotation inside cluster here ***
-                
-                for i in 0...cluster.memberAnnotations.count-1
-                {
-                    
-                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
-                    lawyersForTableView.append(lawyers[j])
-                }
                 let detailVC = LawyerViewController()
-                
                 detailVC.lawyers = lawyersForTableView
-                //        detailVC.modalPresentationStyle = .popover
+                detailVC.modalPresentationStyle = .formSheet
                 navigationController?.pushViewController(detailVC, animated: true)
             }
             
             else {
-                if let annotation = view.annotation as? MapLawyer{
-                    let index = (self.mapView.annotations as NSArray).index(of: annotation)
-                    let detailVC = LawyerViewController()
-                    lawyersForTableView.append(lawyers[index])
-                    detailVC.lawyers = lawyersForTableView
-                    //        detailVC.modalPresentationStyle = .popover
-                    navigationController?.pushViewController(detailVC, animated: true)
-                }
+                let detailVC = LawyerViewController()
+                detailVC.lawyers = lawyersForTableView
+                //        detailVC.modalPresentationStyle = .popover
+                navigationController?.pushViewController(detailVC, animated: true)
+                
             }
         }
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        lawyersForTableView.removeAll()
+        print(mapView.camera.centerCoordinateDistance )
+        if let cluster = view.annotation as? MKClusterAnnotation {
+            if mapView.camera.centerCoordinateDistance > 3000{
+                
+            let currentSpan = mapView.region.span
+            let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
+            let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
+            let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
+            mapView.setRegion(zoomed, animated: true)
+            }
+            let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+            queueConc.async {
+                for i in 0...cluster.memberAnnotations.count-1
+                {
+                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
+                    self.lawyersForTableView.append(self.lawyers[j])
+                }
+            }
+        }
+        else {
+            if let annotation = view.annotation as? MapLawyer{
+                let currentSpan = mapView.region.span
+                let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
+                let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
+                let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
+                mapView.setRegion(zoomed, animated: true)
+                let index = (self.mapView.annotations as NSArray).index(of: annotation)
+                self.lawyersForTableView.append(self.lawyers[index])
+            }
+        }
+        
     }
 }
+
 
 
 private extension MKMapView {
