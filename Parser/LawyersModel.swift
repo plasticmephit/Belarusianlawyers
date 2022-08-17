@@ -43,6 +43,7 @@ struct Lawyers
     var online:String?
     var about:String?
 }
+//
 //for i in 0...1854
 //{
 //    lawyers[i].id = parsedCSV[i][1]

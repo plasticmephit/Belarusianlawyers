@@ -9,7 +9,7 @@ import UIKit
 extension HomeViewController{
     
     func setupHomeViewController(){
-        [menuView].forEach{
+        [menuView, onlineLawyers, onlineLawyersText].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -82,8 +82,29 @@ extension HomeViewController{
             make.centerY.equalToSuperview()
             make.left.equalToSuperview().inset(90)
         }
+        onlineLawyers.backgroundColor = .clear
+        onlineLawyers.layer.cornerRadius = 10
+        onlineLawyers.snp.makeConstraints { make in
+            make.right.left.equalToSuperview().inset(50)
+            make.height.equalTo(120)
+            make.top.equalToSuperview().inset(50)
+            make.centerX.equalToSuperview()
+        }
+        onlineLawyers.translatesAutoresizingMaskIntoConstraints = false
+        onlineLawyers.addSubview(onlineLawyersText)
+        onlineLawyersText.snp.makeConstraints { make in
+            make.centerX.equalToSuperview()
+            make.top.equalToSuperview().inset(0)
+        }
+        onlineLawyers.addSubview(onlineLawyersTextLawyer)
+        onlineLawyersTextLawyer.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(50)
+            make.centerX.equalToSuperview()
+        }
+        
         configureHomeViewConroller()
     }
+
     func configureHomeViewConroller(){
         lawyersText.text = "Адвокаты"
         otrasliText.text = "Отрасли права"

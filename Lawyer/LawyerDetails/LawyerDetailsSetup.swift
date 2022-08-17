@@ -31,61 +31,61 @@ extension LawyerDetailsViewController{
       
         name.snp.makeConstraints { make in
            
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(100)
             make.right.equalToSuperview().inset(0)
         }
       
         status.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(150)
             make.right.equalToSuperview().inset(0)
         }
       
         mainNumber.snp.makeConstraints { make in
           
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(200)
             make.right.equalToSuperview().inset(0)
         }
        
         otveti.snp.makeConstraints { make in
            
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(250)
             make.right.equalToSuperview().inset(0)
         }
        
         blagodarnost.snp.makeConstraints { make in
            
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(300)
             make.right.equalToSuperview().inset(0)
         }
         
         statii.snp.makeConstraints { make in
            
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(350)
             make.right.equalToSuperview().inset(0)
         }
        
         about.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(400)
             make.right.equalToSuperview().inset(0)
         }
       
         kollegion.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(450)
             make.right.equalToSuperview().inset(0)
         }
        
         consult.snp.makeConstraints { make in
           
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(500)
             make.right.equalToSuperview().inset(0)
         }
        
         specialization.snp.makeConstraints { make in
            
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(550)
             make.right.equalToSuperview().inset(0)
         }
         
