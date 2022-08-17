@@ -59,51 +59,78 @@ class HomeViewController: UIViewController {
                                                name: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
-        DispatchQueue.main.async {
-            self.onlineLawyersText.text = "0"
-        }
-        let queueConc = OperationQueue()
+        
+        onlineLawyersText.text = "0"
+        
+        let queue = DispatchQueue.global(qos: .utility)
         
         if parseLawyersUserDefaults().count > 1{
             print(11)
             
             lawyersGlobal = parseLawyersUserDefaults()
+            lawyersGlobal.remove(at: 0)
+            lawyersGlobal.sort { ($0[29]) < ($1[29]) }
+            if lawyersGlobal.count > 10{
+                
+                queue.async{ [self] in
+                    print(13)
+                    for i in 1...lawyersGlobal.count-1
+                    {
+                        if lawyersGlobal[i][29] == "да"
+                        {
+                            self.indexOnline.append(lawyersGlobal[i])
+                        }
+                    }
+                    //            print(lawyersGlobal[885][19])
+                    DispatchQueue.main.async {
+                        self.onlineLawyersText.text = String(self.indexOnline.count)
+                        
+                    }
+                    print(self.indexOnline.count)
+                    
+                }
+            }
             print(lawyersGlobal.count)
         }
-        if lawyersGlobal.count < 10{
-            queueConc.maxConcurrentOperationCount = 1
-        }
-        queueConc.addOperation{
+        
+        
+        queue.async{
             
             
             let kostil = parseLawyers()
+            
             if lawyersGlobal.count < 10
             {
                 lawyersGlobal = kostil
+                lawyersGlobal.remove(at: 0)
+                lawyersGlobal.sort { ($0[29]) < ($1[29]) }
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
-               
-            }
-            print(12)
-        }
-        queueConc.addOperation { [self] in
-            print(13)
-            for i in 1...lawyersGlobal.count-1
-            {
-                if lawyersGlobal[i][29] == "да"
-                {
-                    self.indexOnline.append(lawyersGlobal[i])
+                
+                    
+                    queue.async{ [self] in
+                        print(13)
+                        for i in 1...lawyersGlobal.count-1
+                        {
+                            if lawyersGlobal[i][29] == "да"
+                            {
+                                self.indexOnline.append(lawyersGlobal[i])
+                            }
+                        }
+                        //            print(lawyersGlobal[885][19])
+                        DispatchQueue.main.async {
+                            self.onlineLawyersText.text = String(self.indexOnline.count)
+                            
+                        }
+                        print(self.indexOnline.count)
+                        
+                    
                 }
             }
-            //            print(lawyersGlobal[885][19])
-            DispatchQueue.main.async {
-                self.onlineLawyersText.text = String(self.indexOnline.count)
-                
-            }
-            print(self.indexOnline.count)
-            lawyersGlobal.remove(at: 0)
-            lawyersGlobal.sort { ($0[29] as? String ?? "") < ($1[29] as? String ?? "") }
-
+            
+            print(12)
         }
+        let queue1 = DispatchQueue.global(qos: .utility)
+        
         // Do any additional setup after loading the view.
     }
     @objc func doThisWhenNotify() { print("I've sent a spark!")

@@ -10,10 +10,12 @@ import Kingfisher
 import MapKit
 import AlamofireImage
 import Alamofire
+
 class LocationSearchTable : UITableViewController {
     var filteredlawyers: [[String]]=[]
     var mapView: MKMapView? = nil
     var handleMapSearchDelegate:HandleMapSearch? = nil
+    
 }
 extension LocationSearchTable {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -23,7 +25,7 @@ extension LocationSearchTable {
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
         let selectedItem = filteredlawyers[indexPath.row]
-//        cell.backgroundColor = .clear
+        //        cell.backgroundColor = .clear
         cell.textLabel?.text = selectedItem[1]
         cell.detailTextLabel?.text = ""
         return cell
@@ -31,10 +33,13 @@ extension LocationSearchTable {
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedItem = filteredlawyers[indexPath.row]
         handleMapSearchDelegate?.dropPinZoomIn(placemark: selectedItem)
+        handleMapSearchDelegate?.placeMarkFunc(placeMark: selectedItem)
         dismiss(animated: true, completion: nil)
     }
 }
 protocol HandleMapSearch {
+    
+    func placeMarkFunc(placeMark:[String])
     func dropPinZoomIn(placemark:[String])
 }
 extension LocationSearchTable : UISearchResultsUpdating {
@@ -44,25 +49,26 @@ extension LocationSearchTable : UISearchResultsUpdating {
         tableView.snp.makeConstraints { make in
             make.top.right.bottom.left.equalToSuperview().inset(10)
         }
-        guard let mapView = mapView,
-              let searchBarText = searchController.searchBar.text else { return }
+        guard let searchBarText = searchController.searchBar.text else { return }
         filteredlawyers = lawyersGlobal.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchBarText) }
-//        print(filteredlawyers)
+        //        print(filteredlawyers)
         self.tableView.reloadData()
     }
 }
 
-class MapViewController: UIViewController, MKMapViewDelegate {
+class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegate {
     
     
     var resultSearchController:UISearchController? = nil
     
-    
-    
-    
-    
-    
-    
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        print(lawyers.count)
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async{
+            self.loadInitialData()
+        }
+    }
+    var placemark:[String] = []
     
     var selectedPin:MKPlacemark? = nil
     var mapLawyers: [MapLawyer] = []
@@ -86,6 +92,7 @@ class MapViewController: UIViewController, MKMapViewDelegate {
         let searchBar = resultSearchController!.searchBar
         searchBar.backgroundColor = .clear
         searchBar.sizeToFit()
+        searchBar.delegate = self
         searchBar.placeholder = "Search for places"
         navigationItem.titleView = resultSearchController?.searchBar
         navigationItem.titleView?.backgroundColor = .clear
@@ -97,11 +104,11 @@ class MapViewController: UIViewController, MKMapViewDelegate {
                                                using:catchNotification)
         
         setupMapViewController()
-        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-        if lawyersGlobal.count > 10
-        {
-            queueConc.async {
-                self.loadInitialData()
+        if lawyersGlobal.count > 2{
+            let queueConc = OperationQueue()
+            queueConc.addOperation { [self] in
+                lawyers = lawyersGlobal
+                loadInitialData()
             }
         }
         
@@ -113,28 +120,39 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     
 }
 extension MapViewController: HandleMapSearch {
+    func placeMarkFunc(placeMark: [String]) {
+        placemark = placeMark
+    }
+    
+   
+    
     func dropPinZoomIn(placemark: [String]) {
         // cache the pin
         // clear existing pins
         mapView.removeAnnotations(mapView.annotations)
-        let annotation = MKPointAnnotation()
+        _ = MKPointAnnotation()
         let gps: [String] = placemark[20].components(separatedBy: ",")
+        if gps[0] != "" {
         let geoLawyer = MapLawyer(
             title: placemark[5],
-            locationName: placemark[2],
+            locationName: placemark[0],
             discipline: placemark[1],
             coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: placemark[19])
         mapView.addAnnotation(geoLawyer)
         
         let location = CLLocation(latitude: Double(gps[0])!, longitude: Double(gps[1])!)
-    let regionRadius: CLLocationDistance = 3000
-            let coordinateRegion = MKCoordinateRegion(
-                center: location.coordinate,
-                latitudinalMeters: regionRadius,
-                longitudinalMeters: regionRadius)
+        let regionRadius: CLLocationDistance = 3000
+        let coordinateRegion = MKCoordinateRegion(
+            center: location.coordinate,
+            latitudinalMeters: regionRadius,
+            longitudinalMeters: regionRadius)
         mapView.setRegion(coordinateRegion, animated: true)
         }
+        else {
+            
+        }
     }
+}
 extension MapViewController{
     
     func setupMapViewController(){
@@ -151,12 +169,12 @@ extension MapViewController{
     }
     func loadInitialData() {
         
-        for i in 1...lawyers.count-1{
+        for i in 0...lawyers.count-1{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
-            if gps[0] != "" {
+            if gps[0] != ""{
                 let geoLawyer = MapLawyer(
                     title: lawyers[i][5],
-                    locationName: String(i),
+                    locationName: lawyers[i][0],
                     discipline: lawyers[i][1],
                     coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
                 mapLawyers.append(geoLawyer)
@@ -252,7 +270,14 @@ extension MapViewController {
                 let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
                 mapView.setRegion(zoomed, animated: true)
                 let index = (self.mapView.annotations as NSArray).index(of: annotation)
-                self.lawyersForTableView.append(self.lawyers[index])
+                if placemark[0] != ""
+                {
+                    self.lawyersForTableView.append(self.placemark)
+                }
+                else{
+                    self.lawyersForTableView.append(self.lawyers[index])
+                }
+                
             }
         }
         
