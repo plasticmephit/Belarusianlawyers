@@ -90,7 +90,7 @@ class LawyersTableViewCell: UITableViewCell {
     {
       
         name.text = lawyers[1].components(separatedBy: " ").dropLast().joined(separator: " ")
-        status.text = lawyers[29].replacingOccurrences(of: "нет", with: "Офлайн")
+        status.text = lawyers[29].replacingOccurrences(of: "нет", with: "Офлайн").replacingOccurrences(of: "да", with: "Онлайн")
         let url = URL(string: lawyers[19])
         avatar.kf.setImage(with: url)
         let newString = lawyers[4].replacingOccurrences(of: "городская", with: "гор").replacingOccurrences(of: "областная", with: "обл")

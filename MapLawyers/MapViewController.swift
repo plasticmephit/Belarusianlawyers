@@ -10,8 +10,50 @@ import Kingfisher
 import MapKit
 import AlamofireImage
 import Alamofire
+class LocationSearchTable : UITableViewController {
+    var filteredlawyers: [[String]]=[]
+    var mapView: MKMapView? = nil
+    
+}
+extension LocationSearchTable {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return filteredlawyers.count
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath as IndexPath)
+        let selectedItem = filteredlawyers[indexPath.row]
+        cell.textLabel?.text = selectedItem[1]
+        cell.detailTextLabel?.text = ""
+        return cell
+    }
+}
+extension LocationSearchTable : UISearchResultsUpdating {
+    func updateSearchResults(for searchController: UISearchController) {
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
+        guard let mapView = mapView,
+              let searchBarText = searchController.searchBar.text else { return }
+        filteredlawyers = lawyersGlobal.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchBarText) }
+        print(filteredlawyers)
+        
+        self.tableView.reloadData()
+    }
+}
+
 
 class MapViewController: UIViewController, MKMapViewDelegate {
+    
+    
+    var resultSearchController:UISearchController? = nil
+    
+    
+    
+    
+    
+    
+    
+    
+    
     var mapLawyers: [MapLawyer] = []
     let mapView = MKMapView()
     var lawyers:[[String]] = []
@@ -20,7 +62,20 @@ class MapViewController: UIViewController, MKMapViewDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+        
         lawyers = lawyersGlobal
+        
+        
+        let locationSearchTable = LocationSearchTable()
+        resultSearchController = UISearchController(searchResultsController: locationSearchTable)
+        resultSearchController?.searchResultsUpdater = locationSearchTable
+        resultSearchController?.hidesNavigationBarDuringPresentation = false
+        definesPresentationContext = true
+        let searchBar = resultSearchController!.searchBar
+        searchBar.sizeToFit()
+        searchBar.placeholder = "Search for places"
+        navigationItem.titleView = resultSearchController?.searchBar
+        locationSearchTable.mapView = mapView
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
@@ -34,12 +89,15 @@ class MapViewController: UIViewController, MKMapViewDelegate {
             }
         }
         
+        
+        
     }
     
     
     
 }
 extension MapViewController{
+    
     func setupMapViewController(){
         view.addSubview(mapView)
         mapView.centerToLocation(initialLocation)
@@ -53,6 +111,7 @@ extension MapViewController{
         }
     }
     func loadInitialData() {
+        
         for i in 1...lawyers.count-1{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != "" {
@@ -65,7 +124,6 @@ extension MapViewController{
                 mapView.addAnnotation(geoLawyer)
             }
         }
-        
     }
     
     func catchNotification(notification:Notification) -> Void {
@@ -80,6 +138,7 @@ extension MapViewController{
 }
 extension MapViewController {
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        
         if let item = annotation as? MapLawyer {
             let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
             annotationView.annotation = item
@@ -106,7 +165,7 @@ extension MapViewController {
     }
     
     func mapView(_ mapView: MKMapView, annotationView view: MKAnnotationView, calloutAccessoryControlTapped control: UIControl) {
-       
+        
         if control == view.rightCalloutAccessoryView {
             if view.annotation is MKClusterAnnotation {
                 //*** Need array list of annotation inside cluster here ***
@@ -131,11 +190,11 @@ extension MapViewController {
         if let cluster = view.annotation as? MKClusterAnnotation {
             if mapView.camera.centerCoordinateDistance > 3000{
                 
-            let currentSpan = mapView.region.span
-            let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
-            let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
-            let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
-            mapView.setRegion(zoomed, animated: true)
+                let currentSpan = mapView.region.span
+                let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
+                let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
+                let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
+                mapView.setRegion(zoomed, animated: true)
             }
             let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
             queueConc.async {

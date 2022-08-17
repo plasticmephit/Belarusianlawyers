@@ -12,7 +12,6 @@ class HomeViewController: UIViewController {
     var online:Int = 0
     var indexOnline:[[String]] = []
     let menuView = UIView()
-    var lawyers:[Lawyers] = []
     
     let lawyersBut = UIButton()
     let lawyersText : UILabel = {
@@ -101,7 +100,8 @@ class HomeViewController: UIViewController {
                 
             }
             print(self.indexOnline.count)
-            
+            lawyersGlobal.remove(at: 0)
+            lawyersGlobal.sort { ($0[29] as? String ?? "") < ($1[29] as? String ?? "") }
 
         }
         // Do any additional setup after loading the view.

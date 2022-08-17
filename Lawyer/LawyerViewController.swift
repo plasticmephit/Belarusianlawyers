@@ -12,7 +12,7 @@ import UIKit
 class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating  {
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
-        filteredlawyers = lawyers.filter { $0[1].contains(searchText) }
+        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
