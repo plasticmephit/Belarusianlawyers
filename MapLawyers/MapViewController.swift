@@ -27,7 +27,7 @@ extension LocationSearchTable {
         let selectedItem = filteredlawyers[indexPath.row]
         //        cell.backgroundColor = .clear
         cell.textLabel?.text = selectedItem[1]
-        cell.detailTextLabel?.text = ""
+        cell.detailTextLabel?.text = selectedItem[5]
         return cell
     }
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -63,10 +63,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         print(lawyers.count)
-        let queue = DispatchQueue.global(qos: .utility)
-        queue.async{
-            self.loadInitialData()
-        }
+       
+        mapView.addAnnotations(mapLawyers)
     }
     var placemark:[String] = []
     
@@ -105,8 +103,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         
         setupMapViewController()
         if lawyersGlobal.count > 2{
-            let queueConc = OperationQueue()
-            queueConc.addOperation { [self] in
+            let queue = DispatchQueue.global(qos: .utility)
+            queue.async 
+                { [self] in
                 lawyers = lawyersGlobal
                 loadInitialData()
             }
@@ -178,8 +177,9 @@ extension MapViewController{
                     discipline: lawyers[i][1],
                     coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
                 mapLawyers.append(geoLawyer)
-                mapView.addAnnotation(geoLawyer)
+                
             }
+            mapView.addAnnotations(mapLawyers)
         }
     }
     
@@ -233,9 +233,9 @@ extension MapViewController {
             }
             
             else {
-                let detailVC = LawyerViewController()
-                detailVC.lawyers = lawyersForTableView
-                //        detailVC.modalPresentationStyle = .popover
+                let detailVC = LawyerDetailsViewController()
+                detailVC.lawyersDetails = lawyersForTableView[0]
+            
                 navigationController?.pushViewController(detailVC, animated: true)
                 
             }
@@ -243,7 +243,7 @@ extension MapViewController {
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         lawyersForTableView.removeAll()
-        print(mapView.camera.centerCoordinateDistance )
+//        print(mapView.camera.centerCoordinateDistance )
         if let cluster = view.annotation as? MKClusterAnnotation {
             if mapView.camera.centerCoordinateDistance > 3000{
                 

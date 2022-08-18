@@ -94,11 +94,11 @@ extension HomeViewController{
         onlineLawyers.addSubview(onlineLawyersText)
         onlineLawyersText.snp.makeConstraints { make in
             make.centerX.equalToSuperview()
-            make.top.equalToSuperview().inset(0)
+            make.centerY.equalToSuperview().inset(0)
         }
         onlineLawyers.addSubview(onlineLawyersTextLawyer)
         onlineLawyersTextLawyer.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(50)
+            make.top.equalTo(onlineLawyersText).inset(100)
             make.centerX.equalToSuperview()
         }
         

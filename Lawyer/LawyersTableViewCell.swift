@@ -20,14 +20,14 @@ class LawyersTableViewCell: UITableViewCell {
     
     let status: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor(red: 0.984, green: 0.682, blue: 0.008, alpha: 1)
         return label
     }()
     
     let mainNumber: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 14)
         label.textColor = UIColor(red: 0.435, green: 0.545, blue: 0.643, alpha: 1)
         return label
     }()
@@ -91,8 +91,14 @@ class LawyersTableViewCell: UITableViewCell {
       
         name.text = lawyers[1].components(separatedBy: " ").dropLast().joined(separator: " ")
         status.text = lawyers[29].replacingOccurrences(of: "нет", with: "Офлайн").replacingOccurrences(of: "да", with: "Онлайн")
-        let url = URL(string: lawyers[19])
+       if let url = URL(string: lawyers[19])
+        {
         avatar.kf.setImage(with: url)
+       }
+        else
+        {
+            avatar.image = UIImage(systemName: "person.crop.square")
+        }
         let newString = lawyers[4].replacingOccurrences(of: "городская", with: "гор").replacingOccurrences(of: "областная", with: "обл")
 
         kollegion.text = newString.components(separatedBy: " ").dropLast().joined(separator: " ")

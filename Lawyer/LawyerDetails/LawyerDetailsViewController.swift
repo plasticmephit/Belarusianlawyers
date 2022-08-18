@@ -11,8 +11,9 @@ class LawyerDetailsViewController: UIViewController  {
   
     var lawyersDetails:[String] = []
     let menuView = UIView()
-    
-    let avatar = UIImageView()
+   lazy var scroll = UIScrollView()
+    var avatar = UIImageView()
+    var buttonRazver = UIButton()
     let name : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)
@@ -30,7 +31,7 @@ class LawyerDetailsViewController: UIViewController  {
     }()
     let otveti : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
+        label.font = UIFont.systemFont(ofSize: 14)
         return label
     }()
     let blagodarnost : UILabel = {
@@ -46,6 +47,8 @@ class LawyerDetailsViewController: UIViewController  {
     let about : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 7
         return label
     }()
     let kollegion : UILabel = {
@@ -53,7 +56,7 @@ class LawyerDetailsViewController: UIViewController  {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
-    let consult : UILabel = {
+    let mestoRaboti : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         return label
@@ -63,7 +66,23 @@ class LawyerDetailsViewController: UIViewController  {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
+    
+ 
+    var view1 = UILabel()
+    var view2 = UILabel()
+    var view3 = UILabel()
+    var view4 = UILabel()
     override func viewDidLoad() {
-        setupLawyerDetailsViewController()
+        
+        setupLawyerDetailsViewController(height: 1200, heightScrroll: 100)
+    }
+}
+extension UILabel {
+    var maxNumberOfLines: Int {
+        let maxSize = CGSize(width: frame.size.width, height: CGFloat(MAXFLOAT))
+        let text = (self.text ?? "") as NSString
+        let textHeight = text.boundingRect(with: maxSize, options: .usesLineFragmentOrigin, attributes: [.font: font], context: nil).height
+        let lineHeight = font.lineHeight
+        return Int(ceil(textHeight / lineHeight))
     }
 }

@@ -65,7 +65,7 @@ class HomeViewController: UIViewController {
         let queue = DispatchQueue.global(qos: .utility)
         
         if parseLawyersUserDefaults().count > 1{
-            print(11)
+            
             
             lawyersGlobal = parseLawyersUserDefaults()
             lawyersGlobal.remove(at: 0)
@@ -98,7 +98,7 @@ class HomeViewController: UIViewController {
             
             
             let kostil = parseLawyers()
-            
+            print("parcer")
             if lawyersGlobal.count < 10
             {
                 lawyersGlobal = kostil
@@ -109,7 +109,7 @@ class HomeViewController: UIViewController {
                     
                     queue.async{ [self] in
                         print(13)
-                        for i in 1...lawyersGlobal.count-1
+                        for i in 0...lawyersGlobal.count-1
                         {
                             if lawyersGlobal[i][29] == "да"
                             {
@@ -127,9 +127,8 @@ class HomeViewController: UIViewController {
                 }
             }
             
-            print(12)
+           
         }
-        let queue1 = DispatchQueue.global(qos: .utility)
         
         // Do any additional setup after loading the view.
     }
