@@ -48,10 +48,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     override func viewDidLoad() {
         super.viewDidLoad()
         //        lawyers = lawyersGlobal
-        defaults.removeObject(forKey: "filterCollegia")
-        defaults.removeObject(forKey: "filterotrasli")
-        defaults.removeObject(forKey: "filterMesto")
-        defaults.removeObject(forKey: "filterCount")
+        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Type something here to search"
@@ -74,6 +71,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         
         
         // Do any additional setup after loading the view.
+        defaults.removeObject(forKey: "filterCollegia")
+        defaults.removeObject(forKey: "filterotrasli")
+        defaults.removeObject(forKey: "filterMesto")
+        defaults.removeObject(forKey: "filterCount")
     }
     override func viewWillAppear(_ animated: Bool) {
         DispatchQueue.main.async {

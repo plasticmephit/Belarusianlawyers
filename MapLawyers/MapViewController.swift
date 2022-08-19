@@ -77,10 +77,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        
         lawyers = lawyersGlobal
-        
-        
         let locationSearchTable = LocationSearchTable()
         locationSearchTable.mapView?.backgroundColor = .clear
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -138,7 +135,6 @@ extension MapViewController: HandleMapSearch {
             discipline: placemark[1],
             coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: placemark[19])
         mapView.addAnnotation(geoLawyer)
-        
         let location = CLLocation(latitude: Double(gps[0])!, longitude: Double(gps[1])!)
         let regionRadius: CLLocationDistance = 3000
         let coordinateRegion = MKCoordinateRegion(
@@ -167,7 +163,6 @@ extension MapViewController{
         }
     }
     func loadInitialData() {
-        
         for i in 0...lawyers.count-1{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != ""{
@@ -177,7 +172,6 @@ extension MapViewController{
                     discipline: lawyers[i][1],
                     coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
                 mapLawyers.append(geoLawyer)
-                
             }
             mapView.addAnnotations(mapLawyers)
         }
@@ -185,9 +179,10 @@ extension MapViewController{
     
     func catchNotification(notification:Notification) -> Void {
         guard let name = notification.userInfo!["name"] else { return }
-        lawyers = name as! [[String]]
-        let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-        queueConc.async {
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async {
+            self.lawyers = name as! [[String]]
+       
             self.loadInitialData()
             //            self.mapLawyer.addAnnotations(self.mapLawyers)
         }

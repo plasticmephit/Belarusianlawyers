@@ -18,7 +18,7 @@ extension LawyerDetailsViewController{
         scroll.backgroundColor = .white
         scroll.snp.makeConstraints { make in
        
-                   make.top.equalToSuperview().inset(60)
+                   make.top.equalToSuperview().inset(0)
                    make.width.equalToSuperview().inset(0)
                    make.right.equalToSuperview().inset(0)
                    make.bottom.equalToSuperview().inset(0)
@@ -35,7 +35,7 @@ extension LawyerDetailsViewController{
 //            make.right.equalToSuperview().inset(0)
 //            make.bottom.equalToSuperview().inset(0)
 //        }
-        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specialization, view1, view3, view2, view4, avatar].forEach{
+        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specialization, view1, view3, view2, view4, avatar, buttonMarscrut, buttonChat, buttonZvonok ].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             scroll.addSubview($0)
         }
@@ -45,7 +45,7 @@ extension LawyerDetailsViewController{
             make.top.equalToSuperview().inset(48)
             make.left.equalToSuperview().inset(125)
         }
-      
+        status.textColor = UIColor(red: 0.984, green: 0.682, blue: 0.008, alpha: 1)
         status.snp.makeConstraints { make in
             
             make.top.equalTo(name).inset(35)
@@ -94,12 +94,16 @@ extension LawyerDetailsViewController{
             make.top.equalToSuperview().inset(550)
             make.right.equalToSuperview().inset(0)
         }
+       
         avatar.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(33)
             make.left.equalToSuperview().inset(17)
             make.width.equalTo(90)
             make.height.equalTo(90)
         }
+        avatar.layer.masksToBounds = true
+        avatar.layer.borderWidth = 3
+        avatar.layer.cornerRadius = 12
       
         about.snp.makeConstraints { make in
           
@@ -119,6 +123,43 @@ extension LawyerDetailsViewController{
             make.width.equalTo(300)
             make.height.equalTo(20)
             make.centerX.equalTo(about).inset(0)
+        }
+        buttonMarscrut.setTitle("Маршрут", for: .normal)
+        buttonMarscrut.backgroundColor = UIColor(red: 0.067, green: 0.027, blue: 0.298, alpha: 1)
+        buttonMarscrut.addTarget(self, action: #selector(buttonTappedMarscrut(_:)), for: .touchUpInside)
+        buttonMarscrut.titleLabel?.font = .systemFont(ofSize: 12)
+        buttonMarscrut.layer.cornerRadius = 8
+        buttonMarscrut.snp.makeConstraints { make in
+            make.top.equalTo(avatar).inset(112)
+            make.width.equalTo(93)
+            make.height.equalTo(40)
+            make.left.equalToSuperview().inset(259)
+        }
+     
+        
+        buttonChat.setTitle("Начать чат", for: .normal)
+        buttonChat.titleLabel?.font = .systemFont(ofSize: 12)
+        buttonChat.backgroundColor = UIColor(red: 0.067, green: 0.027, blue: 0.298, alpha: 1)
+        buttonChat.addTarget(self, action: #selector(buttonTappedChat(_:)), for: .touchUpInside)
+        buttonChat.layer.cornerRadius = 8
+        buttonChat.snp.makeConstraints { make in
+            make.top.equalTo(avatar).inset(112)
+            make.width.equalTo(93)
+            make.height.equalTo(40)
+            make.left.equalToSuperview().inset(28)
+        }
+      
+      
+        buttonZvonok.setTitle("Заказать звонок", for: .normal)
+        buttonZvonok.titleLabel?.font = .systemFont(ofSize: 12)
+        buttonZvonok.backgroundColor = UIColor(red: 0.067, green: 0.027, blue: 0.298, alpha: 1)
+        buttonZvonok.addTarget(self, action: #selector(buttonTappedZvonok(_:)), for: .touchUpInside)
+        buttonZvonok.layer.cornerRadius = 8
+        buttonZvonok.snp.makeConstraints { make in
+            make.top.equalTo(avatar).inset(112)
+            make.width.equalTo(120)
+            make.height.equalTo(40)
+            make.left.equalToSuperview().inset(130)
         }
         
         view1.layer.backgroundColor = UIColor(red: 0.943, green: 0.949, blue: 0.963, alpha: 1).cgColor
@@ -159,9 +200,9 @@ extension LawyerDetailsViewController{
         }
         
         
-        configureHomeViewConroller()
+        configureLawyersDetails()
     }
-    func configureHomeViewConroller(){
+    func configureLawyersDetails(){
         name.text = lawyersDetails[1]
         status.text = lawyersDetails[29].replacingOccurrences(of: "нет", with: "Офлайн").replacingOccurrences(of: "да", with: "Онлайн")
         mainNumber.text = formatPhoneNumber(number: "+"+lawyersDetails[6])
@@ -178,7 +219,7 @@ extension LawyerDetailsViewController{
        }
         else
         {
-            avatar.image = UIImage(systemName: "person.crop.square")
+            avatar.image = UIImage(systemName: "person")
         }
     
     }
@@ -200,4 +241,10 @@ extension LawyerDetailsViewController{
                 
             }
         }
+    @objc func buttonTappedChat(_ sender: Any) {
+    }
+    @objc func buttonTappedZvonok(_ sender: Any) {
+    }
+    @objc func buttonTappedMarscrut(_ sender: Any) {
+    }
 }

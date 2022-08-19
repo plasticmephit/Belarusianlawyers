@@ -14,6 +14,9 @@ class LawyerDetailsViewController: UIViewController  {
    lazy var scroll = UIScrollView()
     var avatar = UIImageView()
     var buttonRazver = UIButton()
+    var buttonMarscrut = UIButton()
+    var buttonChat = UIButton()
+    var buttonZvonok = UIButton()
     let name : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 20)

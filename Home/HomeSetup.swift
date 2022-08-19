@@ -16,7 +16,7 @@ extension HomeViewController{
         menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
         menuView.snp.makeConstraints { make in
             
-            make.height.equalTo(478)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/3)
             make.left.equalToSuperview().inset(0)
             make.right.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(0)

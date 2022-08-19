@@ -75,7 +75,9 @@ class LawyersTableViewCell: UITableViewCell {
             make.top.equalToSuperview().offset(14)
                 make.width.height.equalTo(60)
         }
-   
+        avatar.layer.masksToBounds = true
+        avatar.layer.borderWidth = 1
+        avatar.layer.cornerRadius = 10
         backgroundColor = .clear // very important
         layer.masksToBounds = false
         layer.shadowOpacity = 0.2
@@ -97,7 +99,7 @@ class LawyersTableViewCell: UITableViewCell {
        }
         else
         {
-            avatar.image = UIImage(systemName: "person.crop.square")
+            avatar.image = UIImage(systemName: "person")
         }
         let newString = lawyers[4].replacingOccurrences(of: "городская", with: "гор").replacingOccurrences(of: "областная", with: "обл")
 
