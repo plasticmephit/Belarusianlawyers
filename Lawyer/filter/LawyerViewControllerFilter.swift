@@ -6,10 +6,21 @@
 //
 
 import UIKit
-protocol LawyerViewControllerFilterDelegate: AnyObject{
+protocol LawyerViewControllerFilterWorkDelegate: AnyObject{
     func updateMesto(text: String)
 }
-class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterDelegate  {
+protocol LawyerViewControllerFilterCollegiaDelegate: AnyObject{
+    func updateCollegia(text: String)
+}
+protocol LawyerViewControllerFilterOtraslDelegate: AnyObject{
+    func updateCollegia(text: String)
+}
+class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWorkDelegate, LawyerViewControllerFilterCollegiaDelegate{
+    func updateCollegia(text: String) {
+        collegionBut.setTitle(text, for: .normal)
+        filteredlawyers = lawyers.filter { $0[4].contains(text) }
+    }
+    
     func updateMesto(text: String) {
         workBut.setTitle(text, for: .normal)
         filteredlawyers = lawyers.filter { $0[5].contains(text) }
@@ -39,7 +50,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterDe
         workBut.backgroundColor = .white
         workBut.setTitleColor(.systemBlue, for: .normal)
        
-        workBut.addTarget(self, action: #selector(buttonTappedRzzvernut(_:)), for: .touchUpInside)
+        workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
         workBut.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(100)
             make.left.right.equalToSuperview().inset(10)
@@ -50,7 +61,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterDe
         collegionBut.backgroundColor = .white
         collegionBut.setTitleColor(.systemBlue, for: .normal)
        
-        collegionBut.addTarget(self, action: #selector(buttonTappedRzzvernut(_:)), for: .touchUpInside)
+        collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
         collegionBut.snp.makeConstraints { make in
             make.top.equalTo(workBut).inset(50)
             make.left.right.equalToSuperview().inset(10)
@@ -58,8 +69,14 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterDe
         }
         
     }
-    @objc func buttonTappedRzzvernut(_ sender: Any) {
+    @objc func buttonTappedWork(_ sender: Any) {
         let detailVC = FilterWorksViewController()
+        detailVC.delegate = self
+       
+        showDetailViewController(detailVC, sender: self)
+    }
+    @objc func buttonTappedCollegia(_ sender: Any) {
+        let detailVC = FilterCollegiaViewController()
         detailVC.delegate = self
        
         showDetailViewController(detailVC, sender: self)

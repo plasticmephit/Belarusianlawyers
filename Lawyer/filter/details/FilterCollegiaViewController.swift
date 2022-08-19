@@ -1,30 +1,30 @@
 //
-//  FilterDetailsViewController.swift
+//  FilterCollegiaViewController.swift
 //  Belarusianlawyers
 //
-//  Created by Maksimilian on 18.08.22.
+//  Created by Maksimilian on 19.08.22.
 //
 
 import UIKit
 
-class FilterWorksViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class FilterCollegiaViewController:UIViewController, UITableViewDataSource, UITableViewDelegate {
     var filteredPreset:[[String]] = []
     var filteredforlawyers:[[String]] = []
     let tableView: UITableView = .init()
-    weak var delegate: LawyerViewControllerFilterWorkDelegate?
+    weak var delegate: LawyerViewControllerFilterCollegiaDelegate?
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredPreset.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "CellFilterc", for: indexPath as IndexPath)
+        let cell = tableView.dequeueReusableCell(withIdentifier: "CellFiltercc", for: indexPath as IndexPath)
         cell.textLabel?.text = filteredPreset[indexPath.row][0]
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        delegate?.updateMesto(text: filteredPreset[indexPath.row][0])
+        delegate?.updateCollegia(text: filteredPreset[indexPath.row][0])
         self.dismiss(animated: true, completion: nil)
     }
     
@@ -37,10 +37,10 @@ class FilterWorksViewController: UIViewController, UITableViewDataSource, UITabl
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellFilterc")
+        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellFiltercc")
         if filteredPreset.count == 0
         {
-            filteredPreset = consultsGlobal
+            filteredPreset = collegionssGlobal
         }
         print(filteredPreset.count)
         tableView.dataSource = self
@@ -64,7 +64,7 @@ class FilterWorksViewController: UIViewController, UITableViewDataSource, UITabl
     func catchNotification(notification:Notification) -> Void {
         guard let name = notification.userInfo!["name"] else { return }
 //        filteredPreset = name as! [[String]]
-        filteredPreset = consultsGlobal
+        filteredPreset = collegionssGlobal
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

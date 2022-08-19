@@ -75,10 +75,11 @@ class HomeViewController: UIViewController {
             lawyersGlobal.sort { ($0[29]) < ($1[29]) }
             consultsGlobal = parseConsultsUserDefaults()
             collegionssGlobal = parseCollegionUserDefaults()
+            print(lawyersGlobal[3])
             if lawyersGlobal.count > 10{
                 
                 queue.async{ [self] in
-                    print(13)
+                  
                     for i in 1...lawyersGlobal.count-1
                     {
                         if lawyersGlobal[i][29] == "да"
