@@ -73,7 +73,6 @@ class LawyerDetailsViewController: UIViewController  {
     var view3 = UILabel()
     var view4 = UILabel()
     override func viewDidLoad() {
-        
         setupLawyerDetailsViewController(height: 1200, heightScrroll: 100)
     }
 }

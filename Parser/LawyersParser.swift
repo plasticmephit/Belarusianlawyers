@@ -29,7 +29,28 @@ func parseLawyers()->([[String]]){
         let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
     defaults.removeObject(forKey: "lawyersGlobal")
     defaults.set(content, forKey: "lawyersGlobal")
-    print("2")
+    
+    return parsedCSV
+}
+func parseCollegion()->([[String]]){
+   
+    
+        let content = readStringFromURL(stringURL: "https://rka.by/upload/collegium.csv")
+        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")}
+    defaults.removeObject(forKey: "lawyersCollegion")
+    defaults.set(content, forKey: "lawyersCollegion")
+   
+    return parsedCSV
+}
+func parseConsults()->([[String]]){
+   
+    
+        let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv"
+)
+        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")}
+    defaults.removeObject(forKey: "lawyersConsults")
+    defaults.set(content, forKey: "lawyersConsults")
+   
     return parsedCSV
 }
 func parseLawyersUserDefaults()->([[String]]){
@@ -43,8 +64,34 @@ func parseLawyersUserDefaults()->([[String]]){
     let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: ";")
         }
     
-    print("3")
+   
     return parsedCSV
 }
+func parseCollegionUserDefaults()->([[String]]){
+   
+    var content = String()
+    if let name = defaults.string(forKey: "lawyersCollegion")
+    {
+        content = name
+    }
+   
+    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")
+        }
+    
+  
+    return parsedCSV
+}
+func parseConsultsUserDefaults()->([[String]]){
+   
+    var content = String()
+    if let name = defaults.string(forKey: "lawyersConsults")
+    {
+        content = name
+    }
+   
+    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")
+        }
  
+    return parsedCSV
+}
 

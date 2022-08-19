@@ -7,9 +7,19 @@
 import SnapKit
 import UIKit
 
+protocol LawyerViewControllerForFilterDelegate: AnyObject {
+    func update(text: [[String]])
+}
 
-
-class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating  {
+class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
+    func update(text: [[String]]) {
+        lawyers = text
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+        }
+    }
+    
     func updateSearchResults(for searchController: UISearchController) {
         guard let searchText = searchController.searchBar.text else { return }
         filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
@@ -21,8 +31,6 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     
     
     let searchController = UISearchController(searchResultsController: nil)
-    
-    
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
     var filteredlawyers: [[String]]=[]
@@ -55,7 +63,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         // Do any additional setup after loading the view.
     }
     override func viewWillAppear(_ animated: Bool) {
-        
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+        }
     }
     func catchNotification(notification:Notification) -> Void {
         guard let name = notification.userInfo!["name"] else { return }
@@ -119,6 +130,7 @@ extension LawyerViewController:UITableViewDelegate
 
 extension LawyerViewController{
     func setupTableView(){
+        
         view.addSubview(tableView)
         self.tableView.rowHeight = 142
         self.tableView.separatorColor = .clear
@@ -129,8 +141,20 @@ extension LawyerViewController{
             make.left.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(55)
             make.bottom.equalToSuperview().inset(20)
+            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
         }
     }
-    
-    
+    @objc func buttonTappedRzzvernut(_ sender: Any) {
+        let detailVC = LawyerViewControllerFilter()
+        lawyers.removeAll()
+        lawyers = lawyersGlobal
+        DispatchQueue.main.async {
+            
+            self.tableView.reloadData()
+        }
+        detailVC.lawyers = lawyers
+        detailVC.delegate = self
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+   
 }

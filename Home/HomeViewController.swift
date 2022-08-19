@@ -8,6 +8,8 @@
 import UIKit
 
 var lawyersGlobal: [[String]]=[]
+var collegionssGlobal: [[String]]=[]
+var consultsGlobal: [[String]]=[]
 class HomeViewController: UIViewController {
     var online:Int = 0
     var indexOnline:[[String]] = []
@@ -53,6 +55,7 @@ class HomeViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         setupHomeViewController()
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(doThisWhenNotify),
@@ -70,6 +73,8 @@ class HomeViewController: UIViewController {
             lawyersGlobal = parseLawyersUserDefaults()
             lawyersGlobal.remove(at: 0)
             lawyersGlobal.sort { ($0[29]) < ($1[29]) }
+            consultsGlobal = parseConsultsUserDefaults()
+            collegionssGlobal = parseCollegionUserDefaults()
             if lawyersGlobal.count > 10{
                 
                 queue.async{ [self] in
@@ -90,7 +95,6 @@ class HomeViewController: UIViewController {
                     
                 }
             }
-            print(lawyersGlobal.count)
         }
         
         
@@ -104,30 +108,31 @@ class HomeViewController: UIViewController {
                 lawyersGlobal = kostil
                 lawyersGlobal.remove(at: 0)
                 lawyersGlobal.sort { ($0[29]) < ($1[29]) }
+                consultsGlobal = parseConsults()
+                collegionssGlobal = parseCollegion()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
                 
-                    
-                    queue.async{ [self] in
-                        print(13)
-                        for i in 0...lawyersGlobal.count-1
-                        {
-                            if lawyersGlobal[i][29] == "да"
-                            {
-                                self.indexOnline.append(lawyersGlobal[i])
-                            }
-                        }
-                        //            print(lawyersGlobal[885][19])
-                        DispatchQueue.main.async {
-                            self.onlineLawyersText.text = String(self.indexOnline.count)
-                            
-                        }
-                        print(self.indexOnline.count)
-                        
+                
+                
+               
+                for i in 0...lawyersGlobal.count-1
+                {
+                    if lawyersGlobal[i][29] == "да"
+                    {
+                        self.indexOnline.append(lawyersGlobal[i])
+                    }
+                }
+                //            print(lawyersGlobal[885][19])
+                DispatchQueue.main.async {
+                    self.onlineLawyersText.text = String(self.indexOnline.count)
                     
                 }
+                
+                
+                
             }
             
-           
+            
         }
         
         // Do any additional setup after loading the view.
