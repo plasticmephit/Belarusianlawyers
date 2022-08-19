@@ -75,7 +75,6 @@ class HomeViewController: UIViewController {
             lawyersGlobal.sort { ($0[29]) < ($1[29]) }
             consultsGlobal = parseConsultsUserDefaults()
             collegionssGlobal = parseCollegionUserDefaults()
-            print(lawyersGlobal[3])
             if lawyersGlobal.count > 10{
                 
                 queue.async{ [self] in
@@ -92,8 +91,7 @@ class HomeViewController: UIViewController {
                         self.onlineLawyersText.text = String(self.indexOnline.count)
                         
                     }
-                    print(self.indexOnline.count)
-                    
+                   
                 }
             }
         }

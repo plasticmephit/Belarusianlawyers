@@ -9,9 +9,18 @@ import UIKit
 
 protocol LawyerViewControllerForFilterDelegate: AnyObject {
     func update(text: [[String]])
+    func sbros()
 }
 
 class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
+    func sbros() {
+        lawyers.removeAll()
+        lawyers = lawyersGlobal
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+    }
+    
     func update(text: [[String]]) {
         lawyers = text
         DispatchQueue.main.async {
@@ -39,6 +48,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     override func viewDidLoad() {
         super.viewDidLoad()
         //        lawyers = lawyersGlobal
+        defaults.removeObject(forKey: "filterCollegia")
+        defaults.removeObject(forKey: "filterotrasli")
+        defaults.removeObject(forKey: "filterMesto")
+        defaults.removeObject(forKey: "filterCount")
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Type something here to search"
@@ -146,13 +159,12 @@ extension LawyerViewController{
     }
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         let detailVC = LawyerViewControllerFilter()
-        lawyers.removeAll()
-        lawyers = lawyersGlobal
+       
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
         }
-        detailVC.lawyers = lawyers
+        detailVC.lawyers = lawyersGlobal
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)
     }
