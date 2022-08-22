@@ -69,8 +69,39 @@ class LawyerDetailsViewController: UIViewController  {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
+    let obadvokate : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text  = "Об адвокате"
+        return label
+    }()
+    let otvetitext : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.text  = "Ответов"
+        return label
+    }()
+    let blagodarnostitext : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.text  = "Благодарностей"
+        return label
+    }()
+    let statiitext : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.text  = "Статьи"
+        return label
+    }()
     
- 
+    let address : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 7
+        return label
+    }()
+    
     var view1 = UILabel()
     var view2 = UILabel()
     var view3 = UILabel()

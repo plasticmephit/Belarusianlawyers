@@ -29,7 +29,7 @@ extension HomeViewController{
         lawyersBut.backgroundColor = .white
         lawyersBut.layer.cornerRadius = 10
         lawyersBut.snp.makeConstraints { make in
-            make.height.equalTo(79)
+            make.height.equalTo(UIScreen.main.bounds.height/10)
             make.right.left.equalToSuperview().inset(20)
             make.top.equalToSuperview().inset(30)
             make.centerX.equalToSuperview()
@@ -44,8 +44,8 @@ extension HomeViewController{
         otrasli.layer.cornerRadius = 10
         otrasli.snp.makeConstraints { make in
             make.right.left.equalToSuperview().inset(20)
-            make.height.equalTo(79)
-            make.top.equalTo(lawyersBut).inset(90)
+            make.height.equalTo(UIScreen.main.bounds.height/10)
+            make.top.equalTo(lawyersBut).inset(UIScreen.main.bounds.height/10+10)
             make.centerX.equalToSuperview()
         }
         otrasli.translatesAutoresizingMaskIntoConstraints = false
@@ -58,8 +58,8 @@ extension HomeViewController{
         kollegii.layer.cornerRadius = 10
         kollegii.snp.makeConstraints { make in
             make.right.left.equalToSuperview().inset(20)
-            make.height.equalTo(79)
-            make.top.equalTo(otrasli).inset(90)
+            make.height.equalTo(UIScreen.main.bounds.height/10)
+            make.top.equalTo(otrasli).inset(UIScreen.main.bounds.height/10+10)
             make.centerX.equalToSuperview()
         }
         kollegii.translatesAutoresizingMaskIntoConstraints = false
@@ -72,8 +72,8 @@ extension HomeViewController{
         brka.layer.cornerRadius = 10
         brka.snp.makeConstraints { make in
             make.right.left.equalToSuperview().inset(20)
-            make.height.equalTo(79)
-            make.top.equalTo(kollegii).inset(90)
+            make.height.equalTo(UIScreen.main.bounds.height/10)
+            make.top.equalTo(kollegii).inset(UIScreen.main.bounds.height/10+10)
             make.centerX.equalToSuperview()
         }
         brka.translatesAutoresizingMaskIntoConstraints = false
@@ -86,7 +86,7 @@ extension HomeViewController{
         onlineLawyers.layer.cornerRadius = 10
         onlineLawyers.snp.makeConstraints { make in
             make.right.left.equalToSuperview().inset(50)
-            make.height.equalTo(120)
+            make.height.equalTo(UIScreen.main.bounds.height/10+10)
             make.top.equalToSuperview().inset(50)
             make.centerX.equalToSuperview()
         }
