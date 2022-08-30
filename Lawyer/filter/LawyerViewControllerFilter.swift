@@ -15,7 +15,10 @@ protocol LawyerViewControllerFilterCollegiaDelegate: AnyObject{
 protocol LawyerViewControllerFilterOtraslDelegate: AnyObject{
     func updateOtrasli(text: String)
 }
-class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWorkDelegate, LawyerViewControllerFilterCollegiaDelegate, LawyerViewControllerFilterOtraslDelegate{
+protocol LawyerViewControllerFilterOnlineDelegate: AnyObject{
+    func updateOnline(text: String)
+}
+class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWorkDelegate, LawyerViewControllerFilterCollegiaDelegate, LawyerViewControllerFilterOtraslDelegate, LawyerViewControllerFilterOnlineDelegate{
     func updateOtrasli(text: String) {
         otraskiBut.setTitle(text, for: .normal)
         defaults.removeObject(forKey: "filterotrasli")
@@ -31,7 +34,33 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         {
             filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
         }
-      
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+        }
+        defaults.removeObject(forKey: "filterCount")
+        defaults.set(filteredlawyers.count, forKey: "filterCount")
+        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+    }
+    func updateOnline(text: String) {
+        onlineBut.setTitle(text, for: .normal)
+        defaults.removeObject(forKey: "filterOnline")
+        defaults.set(text, forKey: "filterOnline")
+        filterOnline = text
+        filteredlawyers = filteredlawyers.filter { $0[29].contains(text) }
+        if let name = defaults.string(forKey: "filterMesto")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
+            
+        }
+        if let name = defaults.string(forKey: "filterCollegia")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterotrasli")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
+        }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
         primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
@@ -44,6 +73,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         
         filterCollegii = text
         filteredlawyers = filteredlawyers.filter { $0[4].contains(text) }
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+        }
         if let name = defaults.string(forKey: "filterMesto")
         {
             filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
@@ -72,6 +105,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         {
             filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
         }
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+        }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
         primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
@@ -84,10 +121,15 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     var filterCollegii:String = ""
     var filterOtrasli:String = ""
     var filterMesto:String = ""
+    var filterOnline:String = ""
     var workBut = UIButton()
         var collegionBut  = UIButton()
     var otraskiBut  = UIButton()
+    var onlineBut  = UIButton()
+    
+    
     var primenitBut  = UIButton()
+  
     weak var delegate: LawyerViewControllerForFilterDelegate?
     
     
@@ -176,6 +218,24 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(20)
         }
+        view.addSubview(onlineBut)
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            onlineBut.setTitle(name, for: .normal)
+            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+        }
+        else{
+            onlineBut.setTitle("Онлайн", for: .normal)
+        }
+        onlineBut.backgroundColor = .white
+        onlineBut.setTitleColor(.systemBlue, for: .normal)
+       
+        onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
+        onlineBut.snp.makeConstraints { make in
+            make.top.equalTo(otraskiBut).inset(50)
+            make.left.right.equalToSuperview().inset(10)
+            make.height.equalTo(20)
+        }
         view.addSubview(primenitBut)
         if let name = defaults.string(forKey: "filterCount")
         {
@@ -193,6 +253,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             make.left.right.equalToSuperview().inset(10)
             make.height.equalTo(20)
         }
+        
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
     }
     
@@ -217,6 +278,13 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
 //        filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
+    @objc func buttonTappedOnline(_ sender: Any) {
+        let detailVC = FilterOnlineViewController()
+        filteredlawyers = lawyers
+        detailVC.delegate = self
+//        filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
     /*
     // MARK: - Navigation
 
@@ -227,15 +295,16 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     }
     */
     @objc func buttonTappedRzzvernut(_ sender: Any) {
-        delegate?.sbros()
         filteredlawyers = lawyersGlobal
         collegionBut.setTitle("Коллегия", for: .normal)
         workBut.setTitle("Место работы", for: .normal)
         otraskiBut.setTitle("Отрасль", for: .normal)
+        onlineBut.setTitle("Онлайн", for: .normal)
         primenitBut.setTitle("Применить", for: .normal)
         defaults.removeObject(forKey: "filterCollegia")
         defaults.removeObject(forKey: "filterotrasli")
         defaults.removeObject(forKey: "filterMesto")
+        defaults.removeObject(forKey: "filterOnline")
         defaults.removeObject(forKey: "filterCount")
     }
 }

@@ -69,14 +69,16 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
                                                queue: nil,
                                                using:catchNotification)
         
-        
-        // Do any additional setup after loading the view.
         defaults.removeObject(forKey: "filterCollegia")
         defaults.removeObject(forKey: "filterotrasli")
         defaults.removeObject(forKey: "filterMesto")
         defaults.removeObject(forKey: "filterCount")
+        defaults.removeObject(forKey: "filterOnline")
+        // Do any additional setup after loading the view.
+       
     }
     override func viewWillAppear(_ animated: Bool) {
+       
         DispatchQueue.main.async {
             
             self.tableView.reloadData()

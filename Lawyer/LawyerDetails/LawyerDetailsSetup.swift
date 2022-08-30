@@ -35,13 +35,12 @@ extension LawyerDetailsViewController{
         //            make.right.equalToSuperview().inset(0)
         //            make.bottom.equalToSuperview().inset(0)
         //        }
-        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specialization, view1, view3, view2, view4, avatar, buttonMarscrut, buttonChat, buttonZvonok, obadvokate, address, otvetitext, blagodarnostitext , statiitext ].forEach{
+        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specialization, view1, view3, view2, view4, avatar, buttonMarscrut, buttonChat, buttonZvonok, obadvokate, address, otvetitext, blagodarnostitext , statiitext].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             scroll.addSubview($0)
         }
         
         name.snp.makeConstraints { make in
-            
             make.top.equalToSuperview().inset(48)
             make.left.equalToSuperview().inset(125)
         }
@@ -54,7 +53,7 @@ extension LawyerDetailsViewController{
         
         mainNumber.snp.makeConstraints { make in
             
-            make.top.equalToSuperview().inset(114)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/5.5)
             make.left.equalToSuperview().offset(154)
         }
         
@@ -127,7 +126,7 @@ extension LawyerDetailsViewController{
         about.snp.makeConstraints { make in
             
             make.top.equalToSuperview().inset(345)
-            make.width.equalTo(330)
+            make.width.equalTo(UIScreen.main.bounds.width*0.88)
             make.height.equalTo(heightScrroll)
             make.left.equalToSuperview().inset(14)
         }
@@ -152,7 +151,7 @@ extension LawyerDetailsViewController{
             
             make.top.equalTo(buttonRazver).inset(34)
             make.left.equalToSuperview().inset(61)
-            make.width.equalTo(320)
+            make.width.equalTo(UIScreen.main.bounds.width*0.75)
         }
         }
         else{
@@ -170,9 +169,9 @@ extension LawyerDetailsViewController{
         buttonMarscrut.layer.cornerRadius = 8
         buttonMarscrut.snp.makeConstraints { make in
             make.top.equalTo(avatar).inset(112)
-            make.width.equalTo(93)
+            make.width.equalTo(UIScreen.main.bounds.width/4)
             make.height.equalTo(40)
-            make.left.equalToSuperview().inset(259)
+            make.left.equalTo(buttonZvonok).inset(UIScreen.main.bounds.width/3+9)
         }
         
         buttonChat.setTitle("Начать чат", for: .normal)
@@ -182,9 +181,9 @@ extension LawyerDetailsViewController{
         buttonChat.layer.cornerRadius = 8
         buttonChat.snp.makeConstraints { make in
             make.top.equalTo(avatar).inset(112)
-            make.width.equalTo(93)
+            make.width.equalTo(UIScreen.main.bounds.width/4)
             make.height.equalTo(40)
-            make.left.equalToSuperview().inset(28)
+            make.left.equalToSuperview().inset(20)
         }
         
         buttonZvonok.setTitle("Заказать звонок", for: .normal)
@@ -194,9 +193,9 @@ extension LawyerDetailsViewController{
         buttonZvonok.layer.cornerRadius = 8
         buttonZvonok.snp.makeConstraints { make in
             make.top.equalTo(avatar).inset(112)
-            make.width.equalTo(120)
+            make.width.equalTo(UIScreen.main.bounds.width/3)
             make.height.equalTo(40)
-            make.left.equalToSuperview().inset(130)
+            make.left.equalTo(buttonChat).inset(UIScreen.main.bounds.width/4+9)
         }
         
         view1.layer.backgroundColor = UIColor(red: 0.943, green: 0.949, blue: 0.963, alpha: 1).cgColor
@@ -220,14 +219,15 @@ extension LawyerDetailsViewController{
         view2.snp.makeConstraints { make in
             
             make.top.equalToSuperview().inset(226)
-            make.left.equalToSuperview().inset(110)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width/3.2)
             make.width.equalTo(1)
             make.height.equalTo(35)
         }
         view3.snp.makeConstraints { make in
             
             make.top.equalToSuperview().inset(226)
-            make.left.equalToSuperview().inset(248)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width*5/7)
+            print(UIScreen.main.bounds.height)
             make.width.equalTo(1)
             make.height.equalTo(35)
         }
@@ -280,5 +280,8 @@ extension LawyerDetailsViewController{
     @objc func buttonTappedZvonok(_ sender: Any) {
     }
     @objc func buttonTappedMarscrut(_ sender: Any) {
+        let detailVC = MapDetailsViewController()
+        detailVC.lawyers = lawyersDetails
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
