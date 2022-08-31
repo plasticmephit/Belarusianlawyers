@@ -74,6 +74,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         defaults.removeObject(forKey: "filterMesto")
         defaults.removeObject(forKey: "filterCount")
         defaults.removeObject(forKey: "filterOnline")
+        defaults.removeObject(forKey: "filterMediator")
         // Do any additional setup after loading the view.
        
     }
@@ -156,7 +157,7 @@ extension LawyerViewController{
             make.right.equalToSuperview().inset(10)
             make.left.equalToSuperview().inset(10)
             make.top.equalToSuperview().inset(55)
-            make.bottom.equalToSuperview().inset(20)
+            make.bottom.equalToSuperview().inset(0)
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
         }
     }

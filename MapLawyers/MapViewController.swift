@@ -159,7 +159,7 @@ extension MapViewController{
             make.right.equalToSuperview().inset(0)
             make.left.equalToSuperview().inset(0)
             make.top.equalToSuperview().inset(0)
-            make.bottom.equalToSuperview().inset(60)
+            make.bottom.equalToSuperview().inset(0)
         }
     }
     func loadInitialData() {

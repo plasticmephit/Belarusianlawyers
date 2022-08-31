@@ -24,6 +24,7 @@ class TabBar: UITabBarController {
     }
     
     func setupVCs() {
+        
         viewControllers = [
             createNavController(for: HomeViewController(), title: NSLocalizedString("Главная", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: LawyerViewController(), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "house")!),
@@ -31,12 +32,47 @@ class TabBar: UITabBarController {
             createNavController(for: MapViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
         ]
     }
+
+    private func setTabBarAppearance() {
+        let positionOnX: CGFloat = view.frame.size.height/80
+        let positionOnY: CGFloat = view.frame.size.height/80
+        let width = tabBar.bounds.width - positionOnX * 2.5
+        let height = tabBar.bounds.height + positionOnY * 2.5-12
+
+        let roundLayer = CAShapeLayer()
+
+        let bezierPath = UIBezierPath(
+            roundedRect: CGRect(
+                x: positionOnX,
+                y: tabBar.bounds.minY - positionOnY*1.3,
+                width: width,
+                height: height
+            ),
+            cornerRadius: height / 5
+        )
+
+        roundLayer.path = bezierPath.cgPath
+
+        tabBar.layer.insertSublayer(roundLayer, at: 0)
+        tabBar.itemWidth = width / 5
+        tabBar.itemPositioning = .centered
+        roundLayer.fillColor = UIColor.white.cgColor
+        tabBar.tintColor = .black
+        tabBar.unselectedItemTintColor = .blue
+        tabBar.layer.shadowOffset = CGSize(width: 0, height: 0)
+        tabBar.layer.shadowRadius = 3
+        tabBar.layer.shadowColor = UIColor.black.cgColor
+        tabBar.layer.shadowOpacity = 0.3
+    }
     override func viewDidLoad() {
         view.backgroundColor = .systemBackground
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
+        let app = UITabBarAppearance()
+               app.backgroundEffect = .none
+               tabBar.standardAppearance = app
         setupVCs()
-        
+        setTabBarAppearance()
     }
 }
 

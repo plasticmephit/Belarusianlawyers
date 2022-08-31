@@ -19,7 +19,7 @@ extension HomeViewController{
             make.top.equalToSuperview().inset(UIScreen.main.bounds.height/3)
             make.left.equalToSuperview().inset(0)
             make.right.equalToSuperview().inset(0)
-            make.bottom.equalToSuperview().inset(0)
+            make.bottom.equalTo(view).inset(0)
         }
         [lawyersBut, otrasli, kollegii, brka].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
@@ -101,7 +101,10 @@ extension HomeViewController{
             make.top.equalTo(onlineLawyersText).inset(100)
             make.centerX.equalToSuperview()
         }
-        
+        lawyersBut.addTarget(self, action: #selector(buttonTappedLawyers(_:)), for: .touchUpInside)
+        otrasli.addTarget(self, action: #selector(buttonTappedOtrasli(_:)), for: .touchUpInside)
+        kollegii.addTarget(self, action: #selector(buttonTappedKollegii(_:)), for: .touchUpInside)
+        brka.addTarget(self, action: #selector(buttonTappedBrka(_:)), for: .touchUpInside)
         configureHomeViewConroller()
     }
 
@@ -110,5 +113,21 @@ extension HomeViewController{
         otrasliText.text = "Отрасли права"
         kollegiiText.text = "Коллегии по регионам"
         brkaText.text = "БРКА"
+    }
+    @objc func buttonTappedLawyers(_ sender: Any) {
+        let detailVC = LawyerViewController()
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    @objc func buttonTappedOtrasli(_ sender: Any) {
+        let detailVC = OtraslViewController()
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    @objc func buttonTappedKollegii(_ sender: Any) {
+        let detailVC = KollegiiViewController()
+        navigationController?.pushViewController(detailVC, animated: true)
+    }
+    @objc func buttonTappedBrka(_ sender: Any) {
+        let detailVC = BRKAViewController()
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
