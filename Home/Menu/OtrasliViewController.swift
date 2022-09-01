@@ -33,7 +33,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerViewController()
         detailVC.lawyers = lawyersGlobal.filter { $0[18].contains(filteredPreset[indexPath.row]) }
-        
+        detailVC.lawyersFilterSave = lawyersGlobal.filter { $0[18].contains(filteredPreset[indexPath.row]) }
         navigationController?.pushViewController(detailVC, animated: true)
     }
     

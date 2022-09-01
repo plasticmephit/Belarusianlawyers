@@ -36,7 +36,8 @@ func parseCollegion()->([[String]]){
    
     
         let content = readStringFromURL(stringURL: "https://rka.by/upload/collegium.csv")
-        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")}
+        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
+    
     defaults.removeObject(forKey: "lawyersCollegion")
     defaults.set(content, forKey: "lawyersCollegion")
    
@@ -47,7 +48,7 @@ func parseConsults()->([[String]]){
     
         let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv"
 )
-        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")}
+        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
     defaults.removeObject(forKey: "lawyersConsults")
     defaults.set(content, forKey: "lawyersConsults")
    
@@ -75,7 +76,7 @@ func parseCollegionUserDefaults()->([[String]]){
         content = name
     }
    
-    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")
+    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: ";")
         }
     
   
@@ -89,7 +90,7 @@ func parseConsultsUserDefaults()->([[String]]){
         content = name
     }
    
-    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: "\t")
+    let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: ";")
         }
  
     return parsedCSV

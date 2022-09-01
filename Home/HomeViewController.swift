@@ -11,7 +11,19 @@ var lawyersGlobal: [[String]]=[]
 var lawyersGlobalFilter: [[String]]=[]
 var collegionssGlobal: [[String]]=[]
 var consultsGlobal: [[String]]=[]
-class HomeViewController: UIViewController {
+
+protocol TabBarPerehodDelegate: AnyObject
+{
+    func perehod()
+}
+
+class HomeViewController: UIViewController, TabBarPerehodDelegate {
+
+    
+    func perehod() {
+        print("sscddf")
+    }
+    
     var online:Int = 0
     var indexOnline:[[String]] = []
     let menuView = UIView()

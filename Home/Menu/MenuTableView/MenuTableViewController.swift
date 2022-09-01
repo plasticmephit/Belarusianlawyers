@@ -1,18 +1,13 @@
 //
-//  LawyerViewController.swift
-//  
+//  MenuTableViewController.swift
+//  Belarusianlawyers
 //
-//  Created by Maksimilian on 9.08.22.
+//  Created by Maksimilian on 1.09.22.
 //
-import SnapKit
+
+
 import UIKit
-
-protocol LawyerViewControllerForFilterDelegate: AnyObject {
-    func update(text: [[String]])
-    func sbros()
-}
-
-class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
+class MenuTableViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
     func sbros() {
         lawyers.removeAll()
         lawyers = lawyersGlobal
@@ -49,13 +44,13 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     override func viewDidLoad() {
         super.viewDidLoad()
         //        lawyers = lawyersGlobal
-       
+        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Type something here to search"
         navigationItem.searchController = searchController
         view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
-        tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
+        tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersMenuTableViewCell")
         
         tableView.dataSource = self
         tableView.delegate = self
@@ -71,36 +66,36 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
                                                using:catchNotification)
         if let name = defaults.string(forKey: "filterMesto")
         {
-            lawyers = lawyers.filter { $0[5].contains(name) }
+            filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
             
         }
         if let name = defaults.string(forKey: "filterCollegia")
         {
-            lawyers = lawyers.filter { $0[4].contains(name) }
+            filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
         }
         if let name = defaults.string(forKey: "filterOnline")
         {
-            lawyers = lawyers.filter { $0[29].contains(name) }
+            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
         }
         if let name = defaults.string(forKey: "filterMediator")
         {
-            lawyers = lawyers.filter { $0[24].contains(name) }
+            filteredlawyers = filteredlawyers.filter { $0[24].contains(name) }
         }
         if let name = defaults.string(forKey: "filterotrasli")
         {
-            lawyers = lawyers.filter { $0[18].contains(name) }
+            filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
         }
-//        defaults.removeObject(forKey: "filterCollegia")
-//        defaults.removeObject(forKey: "filterotrasli")
-//        defaults.removeObject(forKey: "filterMesto")
-//        defaults.removeObject(forKey: "filterCount")
-//        defaults.removeObject(forKey: "filterOnline")
-//        defaults.removeObject(forKey: "filterMediator")
+        //        defaults.removeObject(forKey: "filterCollegia")
+        //        defaults.removeObject(forKey: "filterotrasli")
+        //        defaults.removeObject(forKey: "filterMesto")
+        //        defaults.removeObject(forKey: "filterCount")
+        //        defaults.removeObject(forKey: "filterOnline")
+        //        defaults.removeObject(forKey: "filterMediator")
         // Do any additional setup after loading the view.
         
     }
     override func viewWillAppear(_ animated: Bool) {
-       
+        
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
@@ -117,7 +112,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     }
 }
 
-extension LawyerViewController:UITableViewDelegate
+extension MenuTableViewController:UITableViewDelegate
 {
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
@@ -134,7 +129,7 @@ extension LawyerViewController:UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LawyersTableViewCell", for: indexPath) as?  LawyersTableViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: "LawyersMenuTableViewCell", for: indexPath) as?  LawyersTableViewCell
         else{
             fatalError()
         }
@@ -168,7 +163,7 @@ extension LawyerViewController:UITableViewDelegate
     }
 }
 
-extension LawyerViewController{
+extension MenuTableViewController{
     func setupTableView(){
         
         view.addSubview(tableView)
@@ -186,14 +181,14 @@ extension LawyerViewController{
     }
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         let detailVC = LawyerViewControllerFilter()
-       
+        
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
         }
-        detailVC.lawyers = lawyersGlobal
+        detailVC.lawyers = lawyersFilterSave
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)
     }
-   
+    
 }

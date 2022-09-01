@@ -10,7 +10,13 @@ import UIKit
 
 let myNotificationKey = "com.bobthedeveloper.notificationKey"
 let myNotificationKey2 = "com.bobthedeveloper.notificationKey2"
+
+
 class TabBar: UITabBarController {
+    
+    
+   
+    
     
     func createNavController(for rootViewController: UIViewController,
                              title: String,
@@ -27,7 +33,7 @@ class TabBar: UITabBarController {
         
         viewControllers = [
             createNavController(for: HomeViewController(), title: NSLocalizedString("Главная", comment: ""), image: UIImage(systemName: "house")!),
-            createNavController(for: LawyerViewController(), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "house")!),
+            createNavController(for: LawyerViewControllerFilter(), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: HomeViewController(), title: NSLocalizedString("Чат", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: MapViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
         ]
@@ -72,6 +78,7 @@ class TabBar: UITabBarController {
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
         tabBar.backgroundColor = .white
+        delegate
 //        let app = UITabBarAppearance()
 //               app.backgroundEffect = .none
 //               tabBar.standardAppearance = app

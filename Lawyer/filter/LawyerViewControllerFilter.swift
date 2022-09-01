@@ -31,15 +31,15 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     var filterOnline:String = ""
     var filterMediator:String = ""
     var workBut = UIButton()
-        var collegionBut  = UIButton()
+    var collegionBut  = UIButton()
     var otraskiBut  = UIButton()
     var onlineBut  = UIButton()
     var mediatorBut  = UIButton()
     
     var primenitBut  = UIButton()
-  
-    weak var delegate: LawyerViewControllerForFilterDelegate?
     
+    weak var delegate: LawyerViewControllerForFilterDelegate?
+    weak var delegateTabBar: TabBarPerehodDelegate?
     
     func updateOtrasli(text: String) {
         otraskiBut.setTitle(text, for: .normal)
@@ -96,7 +96,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
     }
     func updateMediator(text: String) {
-       mediatorBut.setTitle(text, for: .normal)
+        mediatorBut.setTitle(text, for: .normal)
         defaults.removeObject(forKey: "filterMediator")
         defaults.set(text, forKey: "filterMediator")
         filterMediator = text
@@ -179,28 +179,31 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
     }
     
-
-   
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
+        if lawyers.count == 0
+        {
+            lawyers = lawyersGlobal
+        }
         filteredlawyers = lawyers
         setup()
-       
+        
         // Do any additional setup after loading the view.
     }
-//    override func viewWillAppear(_ animated: Bool) {
-//        filteredlawyers = lawyers.filter {$0[4].contains(filterCollegii)}
-//        filteredlawyers = filteredlawyers.filter{$0[5].contains(filterMesto)}
-//        filteredlawyers = lawyers.filter { $0[18].contains(filterOtrasli) }
-//        print(filteredlawyers.count)
-//    }
+ 
+        override func viewWillAppear(_ animated: Bool) {
+            filteredlawyers = lawyers
+            setup()
+        }
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-
+        
         if self.isMovingFromParent {
             if filteredlawyers.count != 0{
-            delegate?.update(text: filteredlawyers)
+                delegate?.update(text: filteredlawyers)
             }
             else{
                 print("yte")
@@ -217,12 +220,12 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             
         }
         else{
-        workBut.setTitle("Место работы", for: .normal)
+            workBut.setTitle("Место работы", for: .normal)
             
         }
         workBut.backgroundColor = .white
         workBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
         workBut.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(100)
@@ -238,10 +241,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         else{
             collegionBut.setTitle("Коллегия", for: .normal)
         }
-       
+        
         collegionBut.backgroundColor = .white
         collegionBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
         collegionBut.snp.makeConstraints { make in
             make.top.equalTo(workBut).inset(50)
@@ -255,11 +258,11 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
         }
         else{
-        otraskiBut.setTitle("Отрасль", for: .normal)
+            otraskiBut.setTitle("Отрасль", for: .normal)
         }
         otraskiBut.backgroundColor = .white
         otraskiBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         otraskiBut.addTarget(self, action: #selector(buttonTappedPravo(_:)), for: .touchUpInside)
         otraskiBut.snp.makeConstraints { make in
             make.top.equalTo(collegionBut).inset(50)
@@ -277,7 +280,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         onlineBut.backgroundColor = .white
         onlineBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
         onlineBut.snp.makeConstraints { make in
             make.top.equalTo(otraskiBut).inset(50)
@@ -295,7 +298,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         mediatorBut.backgroundColor = .white
         mediatorBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         mediatorBut.addTarget(self, action: #selector(buttonTappedMediator(_:)), for: .touchUpInside)
         mediatorBut.snp.makeConstraints { make in
             make.top.equalTo(onlineBut).inset(50)
@@ -312,7 +315,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         primenitBut.backgroundColor = .white
         primenitBut.setTitleColor(.systemBlue, for: .normal)
-       
+        
         primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
         primenitBut.snp.makeConstraints { make in
             make.bottom.equalToSuperview().inset(100)
@@ -327,65 +330,77 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         let detailVC = FilterWorksViewController()
         detailVC.delegate = self
         filteredlawyers = lawyers
-//        filteredlawyers = filteringlawyers
+        //        filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
     @objc func buttonTappedCollegia(_ sender: Any) {
         let detailVC = FilterCollegiaViewController()
         detailVC.delegate = self
         filteredlawyers = lawyers
-//       filteredlawyers = filteringlawyers
+        //       filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
     @objc func buttonTappedPravo(_ sender: Any) {
         let detailVC = FilterOtraslViewController()
         filteredlawyers = lawyers
         detailVC.delegate = self
-//        filteredlawyers = filteringlawyers
+        //        filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
     @objc func buttonTappedOnline(_ sender: Any) {
         let detailVC = FilterOnlineViewController()
         filteredlawyers = lawyers
         detailVC.delegate = self
-//        filteredlawyers = filteringlawyers
+        //        filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
     @objc func buttonTappedMediator(_ sender: Any) {
         let detailVC = FilterMediatorViewController()
         filteredlawyers = lawyers
         detailVC.delegate = self
-//        filteredlawyers = filteringlawyers
+        //        filteredlawyers = filteringlawyers
         showDetailViewController(detailVC, sender: self)
     }
     /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
-    }
-    */
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
     @objc func buttonTappedPrimenit(_ sender: Any) {
         if self.isMovingFromParent {
+           
             if filteredlawyers.count != 0{
-            delegate?.update(text: filteredlawyers)
+                delegate?.update(text: filteredlawyers)
+                
             }
             else{
                 print("yte")
             }
-           
         }
+        if let tabBarController = self.navigationController?.tabBarController  {
+                tabBarController.selectedIndex = 0
+            delegateTabBar?.perehod()
+            }
+            
         navigationController?.popViewController(animated: true)
+      
+//            let detailVC = LawyerViewController()
+//            detailVC.lawyers = filteredlawyers
+//            detailVC.lawyersFilterSave = filteredlawyers
+//            navigationController?.pushViewController(detailVC, animated: true)
     }
+
     @objc func buttonTappedSbros(_ sender: Any) {
         filteredlawyers = lawyers
         collegionBut.setTitle("Коллегия", for: .normal)
         workBut.setTitle("Место работы", for: .normal)
         otraskiBut.setTitle("Отрасль", for: .normal)
         onlineBut.setTitle("Онлайн", for: .normal)
-       mediatorBut.setTitle("Медиатор", for: .normal)
+        mediatorBut.setTitle("Медиатор", for: .normal)
         primenitBut.setTitle("Применить", for: .normal)
         defaults.removeObject(forKey: "filterCollegia")
         defaults.removeObject(forKey: "filterotrasli")
@@ -395,3 +410,4 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         defaults.removeObject(forKey: "filterCount")
     }
 }
+
