@@ -320,7 +320,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             make.height.equalTo(20)
         }
         
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedSbros))
     }
     
     @objc func buttonTappedWork(_ sender: Any) {
@@ -379,8 +379,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         navigationController?.popViewController(animated: true)
     }
-    @objc func buttonTappedRzzvernut(_ sender: Any) {
-        filteredlawyers = lawyersGlobal
+    @objc func buttonTappedSbros(_ sender: Any) {
+        filteredlawyers = lawyers
         collegionBut.setTitle("Коллегия", for: .normal)
         workBut.setTitle("Место работы", for: .normal)
         otraskiBut.setTitle("Отрасль", for: .normal)

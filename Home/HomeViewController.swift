@@ -8,6 +8,7 @@
 import UIKit
 
 var lawyersGlobal: [[String]]=[]
+var lawyersGlobalFilter: [[String]]=[]
 var collegionssGlobal: [[String]]=[]
 var consultsGlobal: [[String]]=[]
 class HomeViewController: UIViewController {

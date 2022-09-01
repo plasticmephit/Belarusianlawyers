@@ -168,7 +168,7 @@ extension LawyerViewController{
             
             self.tableView.reloadData()
         }
-        detailVC.lawyers = lawyersGlobal
+        detailVC.lawyers = lawyers
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)
     }
