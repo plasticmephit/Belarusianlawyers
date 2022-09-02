@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+var flagPerehod: Int = 0
 var lawyersGlobal: [[String]]=[]
 var lawyersGlobalFilter: [[String]]=[]
 var collegionssGlobal: [[String]]=[]
@@ -150,5 +150,14 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         // Do any additional setup after loading the view.
     }
     @objc func doThisWhenNotify() { print("I've sent a spark!")
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        if flagPerehod == 1{
+            flagPerehod = 0
+            let detailVC = LawyerViewController()
+            navigationController?.pushViewController(detailVC, animated: true)
+            
+        }
+        print("aa")
     }
 }

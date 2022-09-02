@@ -72,7 +72,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         if let name = defaults.string(forKey: "filterMesto")
         {
             lawyers = lawyers.filter { $0[5].contains(name) }
-            
+
         }
         if let name = defaults.string(forKey: "filterCollegia")
         {
@@ -99,8 +99,29 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         // Do any additional setup after loading the view.
         
     }
-    override func viewWillAppear(_ animated: Bool) {
-       
+    override func viewDidAppear(_ animated: Bool) {
+        lawyers = lawyersGlobal
+        if let name = defaults.string(forKey: "filterMesto")
+        {
+            lawyers = lawyers.filter { $0[5].contains(name) }
+
+        }
+        if let name = defaults.string(forKey: "filterCollegia")
+        {
+            lawyers = lawyers.filter { $0[4].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            lawyers = lawyers.filter { $0[29].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterMediator")
+        {
+            lawyers = lawyers.filter { $0[24].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterotrasli")
+        {
+            lawyers = lawyers.filter { $0[18].contains(name) }
+        }
         DispatchQueue.main.async {
             
             self.tableView.reloadData()

@@ -6,6 +6,7 @@
 //
 
 import UIKit
+
 protocol LawyerViewControllerFilterWorkDelegate: AnyObject{
     func updateMesto(text: String)
 }
@@ -381,9 +382,12 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
                 print("yte")
             }
         }
+        
         if let tabBarController = self.navigationController?.tabBarController  {
+            flagPerehod = 1
                 tabBarController.selectedIndex = 0
-            delegateTabBar?.perehod()
+          
+       
             }
             
         navigationController?.popViewController(animated: true)

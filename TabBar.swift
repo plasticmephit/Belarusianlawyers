@@ -78,7 +78,6 @@ class TabBar: UITabBarController {
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
         tabBar.backgroundColor = .white
-        delegate
 //        let app = UITabBarAppearance()
 //               app.backgroundEffect = .none
 //               tabBar.standardAppearance = app
