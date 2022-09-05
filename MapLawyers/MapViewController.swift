@@ -66,7 +66,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
        
         mapView.addAnnotations(mapLawyers)
     }
-    var placemark:[String] = []
+    var placemark:[String] = [""]
     
     var selectedPin:MKPlacemark? = nil
     var mapLawyers: [MapLawyer] = []
@@ -151,6 +151,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
 }
 extension MapViewController: HandleMapSearch {
     func placeMarkFunc(placeMark: [String]) {
+        placemark.removeAll()
         placemark = placeMark
     }
     
@@ -289,7 +290,7 @@ extension MapViewController {
                 for i in 0...cluster.memberAnnotations.count-1
                 {
                     let j = Int(cluster.memberAnnotations[i].subtitle!!)!
-                    self.lawyersForTableView.append(self.lawyers[j])
+                    self.lawyersForTableView.append(lawyersGlobal[j])
                 }
             }
         }
