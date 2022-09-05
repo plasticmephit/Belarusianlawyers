@@ -100,16 +100,50 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         
         setupMapViewController()
         if lawyersGlobal.count > 2{
-            let queue = DispatchQueue.global(qos: .utility)
-            queue.async 
-                { [self] in
-                lawyers = lawyersGlobal
-                loadInitialData()
-            }
+//            let queue = DispatchQueue.global(qos: .utility)
+//            queue.async
+//                { [self] in
+//                lawyers = lawyersGlobal
+//                loadInitialData()
+//            }
         }
         
         
         
+    }
+    override func viewWillAppear(_ animated: Bool) {
+        mapView.removeAnnotations(mapView.annotations)
+     
+        let queue = DispatchQueue.global(qos: .utility)
+        queue.async
+            { [self] in
+                lawyers.removeAll()
+                mapLawyers.removeAll()
+            lawyers = lawyersGlobal
+                if let name = defaults.string(forKey: "filterMesto")
+                {
+                    lawyers = lawyers.filter { $0[5].contains(name) }
+
+                }
+                if let name = defaults.string(forKey: "filterCollegia")
+                {
+                    lawyers = lawyers.filter { $0[4].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterOnline")
+                {
+                    lawyers = lawyers.filter { $0[29].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterMediator")
+                {
+                    lawyers = lawyers.filter { $0[24].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterotrasli")
+                {
+                    lawyers = lawyers.filter { $0[18].contains(name) }
+                }
+               
+            loadInitialData()
+        }
     }
     
     
@@ -163,7 +197,7 @@ extension MapViewController{
         }
     }
     func loadInitialData() {
-        for i in 0...lawyers.count-1{
+        for i in 1...lawyers.count-1{
             let gps: [String] = lawyers[i][20].components(separatedBy: ",")
             if gps[0] != ""{
                 let geoLawyer = MapLawyer(
@@ -221,8 +255,10 @@ extension MapViewController {
         if control == view.rightCalloutAccessoryView {
             if view.annotation is MKClusterAnnotation {
                 //*** Need array list of annotation inside cluster here ***
-                let detailVC = LawyerViewController()
+                let detailVC = MenuTableViewController()
+                lawyersForTableView.sort { ($0[29]) < ($1[29]) }
                 detailVC.lawyers = lawyersForTableView
+                detailVC.lawyersFilterSave = lawyersForTableView
                 detailVC.modalPresentationStyle = .formSheet
                 navigationController?.pushViewController(detailVC, animated: true)
             }
@@ -249,7 +285,7 @@ extension MapViewController {
                 mapView.setRegion(zoomed, animated: true)
             }
             let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-            queueConc.async {
+            queueConc.async { [self] in
                 for i in 0...cluster.memberAnnotations.count-1
                 {
                     let j = Int(cluster.memberAnnotations[i].subtitle!!)!

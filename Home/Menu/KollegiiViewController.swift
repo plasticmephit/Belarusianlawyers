@@ -31,7 +31,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let detailVC = LawyerViewController()
+        let detailVC = MenuTableViewController()
         detailVC.lawyers = lawyersGlobal.filter { $0[4].contains(filteredPreset[indexPath.row][0])
         }
         detailVC.lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filteredPreset[indexPath.row][0]) }

@@ -84,8 +84,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
             
             
             lawyersGlobal = parseLawyersUserDefaults()
-            lawyersGlobal.remove(at: 0)
-            lawyersGlobal.sort { ($0[29]) < ($1[29]) }
+         
             consultsGlobal = parseConsultsUserDefaults()
             collegionssGlobal = parseCollegionUserDefaults()
             if lawyersGlobal.count > 10{
@@ -118,8 +117,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
             if lawyersGlobal.count < 10
             {
                 lawyersGlobal = kostil
-                lawyersGlobal.remove(at: 0)
-                lawyersGlobal.sort { ($0[29]) < ($1[29]) }
+              
                 consultsGlobal = parseConsults()
                 collegionssGlobal = parseCollegion()
                 NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])

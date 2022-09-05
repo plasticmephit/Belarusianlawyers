@@ -9,7 +9,6 @@ import UIKit
 
 protocol LawyerViewControllerForFilterDelegate: AnyObject {
     func update(text: [[String]])
-    func sbros()
 }
 
 class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
@@ -60,36 +59,38 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        if lawyers.count == 0
-        {
-            lawyers = lawyersGlobal
-        }
+//        if lawyers.count == 0
+//        {
+//            lawyers = lawyersGlobal
+//            lawyers.remove(at: 0)
+//            lawyers.sort { ($0[29]) < ($1[29]) }
+//        }
         print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        if let name = defaults.string(forKey: "filterMesto")
-        {
-            lawyers = lawyers.filter { $0[5].contains(name) }
-
-        }
-        if let name = defaults.string(forKey: "filterCollegia")
-        {
-            lawyers = lawyers.filter { $0[4].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterOnline")
-        {
-            lawyers = lawyers.filter { $0[29].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterMediator")
-        {
-            lawyers = lawyers.filter { $0[24].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterotrasli")
-        {
-            lawyers = lawyers.filter { $0[18].contains(name) }
-        }
+//        if let name = defaults.string(forKey: "filterMesto")
+//        {
+//            lawyers = lawyers.filter { $0[5].contains(name) }
+//
+//        }
+//        if let name = defaults.string(forKey: "filterCollegia")
+//        {
+//            lawyers = lawyers.filter { $0[4].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterOnline")
+//        {
+//            lawyers = lawyers.filter { $0[29].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterMediator")
+//        {
+//            lawyers = lawyers.filter { $0[24].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterotrasli")
+//        {
+//            lawyers = lawyers.filter { $0[18].contains(name) }
+//        }
 //        defaults.removeObject(forKey: "filterCollegia")
 //        defaults.removeObject(forKey: "filterotrasli")
 //        defaults.removeObject(forKey: "filterMesto")
@@ -99,8 +100,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         // Do any additional setup after loading the view.
         
     }
-    override func viewDidAppear(_ animated: Bool) {
+    override func viewWillAppear(_ animated: Bool) {
         lawyers = lawyersGlobal
+        lawyers.remove(at: 0)
+        lawyers.sort { ($0[29]) < ($1[29]) }
         if let name = defaults.string(forKey: "filterMesto")
         {
             lawyers = lawyers.filter { $0[5].contains(name) }
@@ -185,7 +188,7 @@ extension LawyerViewController:UITableViewDelegate
         }
         
         //        detailVC.modalPresentationStyle = .popover
-        navigationController?.pushViewController(detailVC, animated: true)
+//        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

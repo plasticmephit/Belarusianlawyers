@@ -64,27 +64,27 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        if let name = defaults.string(forKey: "filterMesto")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
-            
-        }
-        if let name = defaults.string(forKey: "filterCollegia")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterOnline")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterMediator")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[24].contains(name) }
-        }
-        if let name = defaults.string(forKey: "filterotrasli")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
-        }
+//        if let name = defaults.string(forKey: "filterMesto")
+//        {
+//            filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
+//
+//        }
+//        if let name = defaults.string(forKey: "filterCollegia")
+//        {
+//            filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterOnline")
+//        {
+//            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterMediator")
+//        {
+//            filteredlawyers = filteredlawyers.filter { $0[24].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterotrasli")
+//        {
+//            filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
+//        }
         //        defaults.removeObject(forKey: "filterCollegia")
         //        defaults.removeObject(forKey: "filterotrasli")
         //        defaults.removeObject(forKey: "filterMesto")
