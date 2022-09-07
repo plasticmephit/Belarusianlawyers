@@ -72,12 +72,14 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     var mapLawyers: [MapLawyer] = []
     let mapView = MKMapView()
     var lawyers:[[String]] = []
+   
     var lawyersForTableView:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         lawyers = lawyersGlobal
+       
         let locationSearchTable = LocationSearchTable()
         locationSearchTable.mapView?.backgroundColor = .clear
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -118,8 +120,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         queue.async
             { [self] in
                 lawyers.removeAll()
+                
                 mapLawyers.removeAll()
             lawyers = lawyersGlobal
+              
                 if let name = defaults.string(forKey: "filterMesto")
                 {
                     lawyers = lawyers.filter { $0[5].contains(name) }
@@ -307,7 +311,7 @@ extension MapViewController {
                     self.lawyersForTableView.append(self.placemark)
                 }
                 else{
-                    self.lawyersForTableView.append(self.lawyers[index])
+                    self.lawyersForTableView.append(lawyersGlobal[index])
                 }
                 
             }

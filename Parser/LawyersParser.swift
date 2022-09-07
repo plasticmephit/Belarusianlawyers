@@ -26,7 +26,7 @@ func parseLawyers()->([[String]]){
    
     
         let content = readStringFromURL(stringURL: "https://rka.by/upload/lawyers.csv")
-        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
+    let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? lawyersGlobal
     defaults.removeObject(forKey: "lawyersGlobal")
     defaults.set(content, forKey: "lawyersGlobal")
     
@@ -36,7 +36,7 @@ func parseCollegion()->([[String]]){
    
     
         let content = readStringFromURL(stringURL: "https://rka.by/upload/collegium.csv")
-        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
+        let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? collegionssGlobal
     
     defaults.removeObject(forKey: "lawyersCollegion")
     defaults.set(content, forKey: "lawyersCollegion")
@@ -48,7 +48,7 @@ func parseConsults()->([[String]]){
     
         let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv"
 )
-        let parsedCSV: [[String]] = content!.components(separatedBy: "\n").map{$0.components(separatedBy: ";")}
+        let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? consultsGlobal
     defaults.removeObject(forKey: "lawyersConsults")
     defaults.set(content, forKey: "lawyersConsults")
    

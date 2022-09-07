@@ -70,6 +70,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: NSNotification.Name.connectivityStatus.rawValue),
+                                               object: nil,
+                                               queue: nil,
+                                               using:catchNotificationNetwork)
 //        if let name = defaults.string(forKey: "filterMesto")
 //        {
 //            lawyers = lawyers.filter { $0[5].contains(name) }
@@ -136,8 +140,9 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
-        
-        
+    }
+    func catchNotificationNetwork(notification:Notification) -> Void {
+       
     }
 }
 

@@ -10,7 +10,7 @@ import UIKit
 
 let myNotificationKey = "com.bobthedeveloper.notificationKey"
 let myNotificationKey2 = "com.bobthedeveloper.notificationKey2"
-
+let myNotificationKeyNetwork = "com.bobthedeveloper.notificationKey23"
 
 class TabBar: UITabBarController {
     
@@ -78,11 +78,15 @@ class TabBar: UITabBarController {
         UITabBar.appearance().barTintColor = .systemBackground
         tabBar.tintColor = .label
         tabBar.backgroundColor = .white
+        NotificationCenter.default.addObserver(self, selector: #selector(showOfflineDeviceUI(notification:)), name: NSNotification.Name.connectivityStatus, object: nil)
 //        let app = UITabBarAppearance()
 //               app.backgroundEffect = .none
 //               tabBar.standardAppearance = app
         setupVCs()
 //        setTabBarAppearance()
+    }
+    @objc func showOfflineDeviceUI(notification: Notification) {
+          
     }
 }
 

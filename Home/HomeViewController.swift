@@ -18,7 +18,7 @@ protocol TabBarPerehodDelegate: AnyObject
 }
 
 class HomeViewController: UIViewController, TabBarPerehodDelegate {
-
+    
     
     func perehod() {
         print("sscddf")
@@ -70,83 +70,25 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         super.viewDidLoad()
         
         setupHomeViewController()
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: NSNotification.Name.connectivityStatus.rawValue),
+                                               object: nil,
+                                               queue: nil,
+                                               using:catchNotificationNetwork)
         NotificationCenter.default.addObserver(self,
                                                selector: #selector(doThisWhenNotify),
                                                name: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
-        
         onlineLawyersText.text = "0"
-        
-        let queue = DispatchQueue.global(qos: .utility)
-        
-        if parseLawyersUserDefaults().count > 1{
-            
-            
-            lawyersGlobal = parseLawyersUserDefaults()
-         
-            consultsGlobal = parseConsultsUserDefaults()
-            collegionssGlobal = parseCollegionUserDefaults()
-            if lawyersGlobal.count > 10{
-                
-                queue.async{ [self] in
-                  
-                    for i in 1...lawyersGlobal.count-1
-                    {
-                        if lawyersGlobal[i][29] == "да"
-                        {
-                            self.indexOnline.append(lawyersGlobal[i])
-                        }
-                    }
-                    //            print(lawyersGlobal[885][19])
-                    DispatchQueue.main.async {
-                        self.onlineLawyersText.text = String(self.indexOnline.count)
-                        
-                    }
-                   
-                }
-            }
-        }
-        
-        
-        queue.async{
-            
-            
-            let kostil = parseLawyers()
-            print("parcer")
-            if lawyersGlobal.count < 10
-            {
-                lawyersGlobal = kostil
-              
-                consultsGlobal = parseConsults()
-                collegionssGlobal = parseCollegion()
-                NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
-                
-                
-                
-               
-                for i in 0...lawyersGlobal.count-1
-                {
-                    if lawyersGlobal[i][29] == "да"
-                    {
-                        self.indexOnline.append(lawyersGlobal[i])
-                    }
-                }
-                //            print(lawyersGlobal[885][19])
-                DispatchQueue.main.async {
-                    self.onlineLawyersText.text = String(self.indexOnline.count)
-                    
-                }
-                
-                
-                
-            }
-            
-            
-        }
-        
+        lawyersGlobal = parseLawyersUserDefaults()
+        consultsGlobal = parseConsultsUserDefaults()
+        collegionssGlobal = parseCollegionUserDefaults()
+        print(lawyersGlobal.count)
+        loadLawyersConsultsAnd(kostil: true)
+    
         // Do any additional setup after loading the view.
     }
+    
     @objc func doThisWhenNotify() { print("I've sent a spark!")
     }
     override func viewWillAppear(_ animated: Bool) {
@@ -157,5 +99,67 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
             
         }
         print("aa")
+    }
+    func catchNotificationNetwork(notification:Notification) -> Void {
+        loadLawyersConsultsAnd(kostil: false)
+        print( NetworkMonitor.shared.isConnected)
+    }
+    func loadLawyersConsultsAnd(kostil: Bool){
+       
+            let queue = DispatchQueue.global(qos: .utility)
+            if parseLawyersUserDefaults().count > 10{
+                
+                if lawyersGlobal.count > 10{
+                    queue.async{ [self] in
+                        
+                        for i in 1...lawyersGlobal.count-1
+                        {
+                            if lawyersGlobal[i][29] == "да"
+                            {
+                                self.indexOnline.append(lawyersGlobal[i])
+                            }
+                        }
+                        //            print(lawyersGlobal[885][19])
+                        DispatchQueue.main.async {
+                            self.onlineLawyersText.text = String(self.indexOnline.count)
+                            self.indexOnline.removeAll()
+                        }
+                        
+                    }
+                }
+            }
+        if NetworkMonitor.shared.isConnected == kostil{
+            queue.async{
+                print("work")
+                let kostil = parseLawyers()
+               
+                if kostil.count > 10
+                {
+                    lawyersGlobal = kostil
+                    consultsGlobal = parseConsults()
+                    collegionssGlobal = parseCollegion()
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
+                    
+                    for i in 0...lawyersGlobal.count-1
+                    {
+                        if lawyersGlobal[i][29] == "да"
+                        {
+                            self.indexOnline.append(lawyersGlobal[i])
+                        }
+                    }
+                    //            print(lawyersGlobal[885][19])
+                    DispatchQueue.main.async {
+                        self.onlineLawyersText.text = String(self.indexOnline.count)
+                        self.indexOnline.removeAll()
+                    }
+                }
+            }
+        }
+        else{
+            print("nowork")
+            DispatchQueue.main.async {
+            self.onlineLawyersText.text = "нет сети"
+            }
+        }
     }
 }
