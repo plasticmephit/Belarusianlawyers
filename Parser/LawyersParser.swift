@@ -64,7 +64,6 @@ func parseLawyersUserDefaults()->([[String]]){
    
     let parsedCSV: [[String]] = content.components(separatedBy: "\n").map{$0.components(separatedBy: ";")
         }
-    
    
     return parsedCSV
 }

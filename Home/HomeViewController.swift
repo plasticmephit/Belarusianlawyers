@@ -84,8 +84,8 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         consultsGlobal = parseConsultsUserDefaults()
         collegionssGlobal = parseCollegionUserDefaults()
         print(lawyersGlobal.count)
-        loadLawyersConsultsAnd(kostil: true)
-    
+        loadLawyersConsultsAnd()
+        
         // Do any additional setup after loading the view.
     }
     
@@ -101,46 +101,19 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         print("aa")
     }
     func catchNotificationNetwork(notification:Notification) -> Void {
-        loadLawyersConsultsAnd(kostil: false)
-        print( NetworkMonitor.shared.isConnected)
+        loadLawyersConsultsAnd()
+        print(NetworkMonitor.shared.isConnected)
+        
     }
-    func loadLawyersConsultsAnd(kostil: Bool){
-       
-            let queue = DispatchQueue.global(qos: .utility)
-            if parseLawyersUserDefaults().count > 10{
+    func loadLawyersConsultsAnd(){
+        
+        let queue = DispatchQueue.global(qos: .utility)
+      
+            if lawyersGlobal.count > 10{
                 
-                if lawyersGlobal.count > 10{
-                    queue.async{ [self] in
-                        
-                        for i in 1...lawyersGlobal.count-1
-                        {
-                            if lawyersGlobal[i][29] == "да"
-                            {
-                                self.indexOnline.append(lawyersGlobal[i])
-                            }
-                        }
-                        //            print(lawyersGlobal[885][19])
-                        DispatchQueue.main.async {
-                            self.onlineLawyersText.text = String(self.indexOnline.count)
-                            self.indexOnline.removeAll()
-                        }
-                        
-                    }
-                }
-            }
-        if NetworkMonitor.shared.isConnected == kostil{
-            queue.async{
-                print("work")
-                let kostil = parseLawyers()
-               
-                if kostil.count > 10
-                {
-                    lawyersGlobal = kostil
-                    consultsGlobal = parseConsults()
-                    collegionssGlobal = parseCollegion()
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
-                    
-                    for i in 0...lawyersGlobal.count-1
+                queue.async{ [self] in
+                    indexOnline.removeAll()
+                    for i in 1...lawyersGlobal.count-1
                     {
                         if lawyersGlobal[i][29] == "да"
                         {
@@ -148,17 +121,45 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                         }
                     }
                     //            print(lawyersGlobal[885][19])
-                    DispatchQueue.main.async {
-                        self.onlineLawyersText.text = String(self.indexOnline.count)
-                        self.indexOnline.removeAll()
+                    
+                    
+                }
+            
+        }
+        if NetworkMonitor.shared.isConnected{
+            queue.async{
+                print("work")
+                let kostil = parseLawyers()
+                
+                if kostil.count > 10
+                {
+                    lawyersGlobal = kostil
+                    consultsGlobal = parseConsults()
+                    collegionssGlobal = parseCollegion()
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
+                    self.indexOnline.removeAll()
+                    for i in 0...lawyersGlobal.count-1
+                    {
+                        if lawyersGlobal[i][29] == "да"
+                        {
+                            self.indexOnline.append(lawyersGlobal[i])
+                        }
                     }
+                    DispatchQueue.main.async { [self] in
+                       
+                            onlineLawyersText.text = String(indexOnline.count)
+                        }
+                    //            print(lawyersGlobal[885][19])
+                    
                 }
             }
         }
-        else{
-            print("nowork")
-            DispatchQueue.main.async {
-            self.onlineLawyersText.text = "нет сети"
+        DispatchQueue.main.async { [self] in
+            if NetworkMonitor.shared.isConnected{
+                onlineLawyersText.text = String(indexOnline.count)
+            }
+            else{
+                onlineLawyersText.text = "нет сети"
             }
         }
     }

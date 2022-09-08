@@ -62,8 +62,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     var resultSearchController:UISearchController? = nil
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        print(lawyers.count)
-       
+        //        print(lawyers.count)
+        
         mapView.addAnnotations(mapLawyers)
     }
     var placemark:[String] = [""]
@@ -72,14 +72,13 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     var mapLawyers: [MapLawyer] = []
     let mapView = MKMapView()
     var lawyers:[[String]] = []
-   
+    let potokzagr = OperationQueue()
+    
     var lawyersForTableView:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        lawyers = lawyersGlobal
-       
         let locationSearchTable = LocationSearchTable()
         locationSearchTable.mapView?.backgroundColor = .clear
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -101,51 +100,53 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
                                                using:catchNotification)
         
         setupMapViewController()
+        potokzagr.maxConcurrentOperationCount = 1
         if lawyersGlobal.count > 2{
-//            let queue = DispatchQueue.global(qos: .utility)
-//            queue.async
-//                { [self] in
-//                lawyers = lawyersGlobal
-//                loadInitialData()
-//            }
+            //            let queue = DispatchQueue.global(qos: .utility)
+            //            queue.async
+            //                { [self] in
+            //                lawyers = lawyersGlobal
+            //                loadInitialData()
+            //            }
         }
         
         
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        mapView.removeAnnotations(mapView.annotations)
-     
-        let queue = DispatchQueue.global(qos: .utility)
-        queue.async
-            { [self] in
-                lawyers.removeAll()
-                
-                mapLawyers.removeAll()
+       
+        
+        potokzagr.addOperation
+        { [self] in
+            lawyers.removeAll()
+            
+            mapLawyers.removeAll()
             lawyers = lawyersGlobal
-              
-                if let name = defaults.string(forKey: "filterMesto")
-                {
-                    lawyers = lawyers.filter { $0[5].contains(name) }
-
-                }
-                if let name = defaults.string(forKey: "filterCollegia")
-                {
-                    lawyers = lawyers.filter { $0[4].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterOnline")
-                {
-                    lawyers = lawyers.filter { $0[29].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterMediator")
-                {
-                    lawyers = lawyers.filter { $0[24].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterotrasli")
-                {
-                    lawyers = lawyers.filter { $0[18].contains(name) }
-                }
-               
+            lawyers.remove(at: 0)
+            if let name = defaults.string(forKey: "filterMesto")
+            {
+                lawyers = lawyers.filter { $0[5].contains(name) }
+                
+            }
+            if let name = defaults.string(forKey: "filterCollegia")
+            {
+                lawyers = lawyers.filter { $0[4].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterOnline")
+            {
+                lawyers = lawyers.filter { $0[29].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterMediator")
+            {
+                lawyers = lawyers.filter { $0[24].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterotrasli")
+            {
+                lawyers = lawyers.filter { $0[18].contains(name) }
+            }
+            DispatchQueue.main.async { [self] in
+                mapView.removeAnnotations(mapView.annotations)
+            }
             loadInitialData()
         }
     }
@@ -159,7 +160,7 @@ extension MapViewController: HandleMapSearch {
         placemark = placeMark
     }
     
-   
+    
     
     func dropPinZoomIn(placemark: [String]) {
         // cache the pin
@@ -168,19 +169,19 @@ extension MapViewController: HandleMapSearch {
         _ = MKPointAnnotation()
         let gps: [String] = placemark[20].components(separatedBy: ",")
         if gps[0] != "" {
-        let geoLawyer = MapLawyer(
-            title: placemark[5],
-            locationName: placemark[0],
-            discipline: placemark[1],
-            coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: placemark[19])
-        mapView.addAnnotation(geoLawyer)
-        let location = CLLocation(latitude: Double(gps[0])!, longitude: Double(gps[1])!)
-        let regionRadius: CLLocationDistance = 3000
-        let coordinateRegion = MKCoordinateRegion(
-            center: location.coordinate,
-            latitudinalMeters: regionRadius,
-            longitudinalMeters: regionRadius)
-        mapView.setRegion(coordinateRegion, animated: true)
+            let geoLawyer = MapLawyer(
+                title: placemark[5],
+                locationName: placemark[0],
+                discipline: placemark[1],
+                coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: placemark[19])
+            mapView.addAnnotation(geoLawyer)
+            let location = CLLocation(latitude: Double(gps[0])!, longitude: Double(gps[1])!)
+            let regionRadius: CLLocationDistance = 3000
+            let coordinateRegion = MKCoordinateRegion(
+                center: location.coordinate,
+                latitudinalMeters: regionRadius,
+                longitudinalMeters: regionRadius)
+            mapView.setRegion(coordinateRegion, animated: true)
         }
         else {
             
@@ -202,27 +203,36 @@ extension MapViewController{
         }
     }
     func loadInitialData() {
-        for i in 1...lawyers.count-1{
-            let gps: [String] = lawyers[i][20].components(separatedBy: ",")
-            if gps[0] != ""{
-                let geoLawyer = MapLawyer(
-                    title: lawyers[i][5],
-                    locationName: lawyers[i][0],
-                    discipline: lawyers[i][1],
-                    coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
-                mapLawyers.append(geoLawyer)
+        if lawyers != [] {
+            
+            for i in 0...lawyers.count-1{
+                let gps: [String] = lawyers[i][20].components(separatedBy: ",")
+                if gps[0] != ""{
+                    let geoLawyer = MapLawyer(
+                        title: lawyers[i][5],
+                        locationName: lawyers[i][0],
+                        discipline: lawyers[i][1],
+                        coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
+                    mapLawyers.append(geoLawyer)
+                }
+                mapView.addAnnotations(mapLawyers)
             }
-            mapView.addAnnotations(mapLawyers)
         }
     }
     
     func catchNotification(notification:Notification) -> Void {
-        guard let name = notification.userInfo!["name"] else { return }
-        let queue = DispatchQueue.global(qos: .utility)
-        queue.async {
-            self.lawyers = name as! [[String]]
+        
+        potokzagr.addOperation  { [self] in
+        lawyers.removeAll()
        
-            self.loadInitialData()
+        mapLawyers.removeAll()
+        lawyers = lawyersGlobal
+        lawyers.remove(at: 0)
+      
+            DispatchQueue.main.async { [self] in
+                mapView.removeAnnotations(mapView.annotations)
+            }
+            loadInitialData()
             //            self.mapLawyer.addAnnotations(self.mapLawyers)
         }
     }
@@ -271,7 +281,7 @@ extension MapViewController {
             else {
                 let detailVC = LawyerDetailsViewController()
                 detailVC.lawyersDetails = lawyersForTableView[0]
-            
+                
                 navigationController?.pushViewController(detailVC, animated: true)
                 
             }
@@ -279,7 +289,7 @@ extension MapViewController {
     }
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
         lawyersForTableView.removeAll()
-//        print(mapView.camera.centerCoordinateDistance )
+        //        print(mapView.camera.centerCoordinateDistance )
         if let cluster = view.annotation as? MKClusterAnnotation {
             if mapView.camera.centerCoordinateDistance > 3000{
                 
@@ -295,6 +305,7 @@ extension MapViewController {
                 {
                     let j = Int(cluster.memberAnnotations[i].subtitle!!)!
                     self.lawyersForTableView.append(lawyersGlobal[j])
+                    //                    print(j)
                 }
             }
         }
@@ -305,7 +316,8 @@ extension MapViewController {
                 let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
                 let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
                 mapView.setRegion(zoomed, animated: true)
-                let index = (self.mapView.annotations as NSArray).index(of: annotation)
+                let index = Int(annotation.subtitle!)!
+                print(index)
                 if placemark[0] != ""
                 {
                     self.lawyersForTableView.append(self.placemark)

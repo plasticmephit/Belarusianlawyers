@@ -135,8 +135,11 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         }
     }
     func catchNotification(notification:Notification) -> Void {
+       
         guard let name = notification.userInfo!["name"] else { return }
         lawyers = name as! [[String]]
+        lawyers.remove(at: 0)
+        lawyers.sort { ($0[29]) < ($1[29]) }
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }
@@ -193,7 +196,7 @@ extension LawyerViewController:UITableViewDelegate
         }
         
         //        detailVC.modalPresentationStyle = .popover
-//        navigationController?.pushViewController(detailVC, animated: true)
+        navigationController?.pushViewController(detailVC, animated: true)
     }
 }
 

@@ -227,7 +227,7 @@ extension LawyerDetailsViewController{
             
             make.top.equalToSuperview().inset(226)
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width*5/7)
-            print(UIScreen.main.bounds.height)
+//            print(UIScreen.main.bounds.height)
             make.width.equalTo(1)
             make.height.equalTo(35)
         }
