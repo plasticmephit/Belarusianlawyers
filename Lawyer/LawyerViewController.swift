@@ -48,7 +48,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     override func viewDidLoad() {
         super.viewDidLoad()
         //        lawyers = lawyersGlobal
-       
+        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Type something here to search"
@@ -59,12 +59,12 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-//        if lawyers.count == 0
-//        {
-//            lawyers = lawyersGlobal
-//            lawyers.remove(at: 0)
-//            lawyers.sort { ($0[29]) < ($1[29]) }
-//        }
+        //        if lawyers.count == 0
+        //        {
+        //            lawyers = lawyersGlobal
+        //            lawyers.remove(at: 0)
+        //            lawyers.sort { ($0[29]) < ($1[29]) }
+        //        }
         print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
@@ -74,44 +74,80 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
                                                object: nil,
                                                queue: nil,
                                                using:catchNotificationNetwork)
-//        if let name = defaults.string(forKey: "filterMesto")
-//        {
-//            lawyers = lawyers.filter { $0[5].contains(name) }
-//
-//        }
-//        if let name = defaults.string(forKey: "filterCollegia")
-//        {
-//            lawyers = lawyers.filter { $0[4].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterOnline")
-//        {
-//            lawyers = lawyers.filter { $0[29].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterMediator")
-//        {
-//            lawyers = lawyers.filter { $0[24].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterotrasli")
-//        {
-//            lawyers = lawyers.filter { $0[18].contains(name) }
-//        }
-//        defaults.removeObject(forKey: "filterCollegia")
-//        defaults.removeObject(forKey: "filterotrasli")
-//        defaults.removeObject(forKey: "filterMesto")
-//        defaults.removeObject(forKey: "filterCount")
-//        defaults.removeObject(forKey: "filterOnline")
-//        defaults.removeObject(forKey: "filterMediator")
+        //        if let name = defaults.string(forKey: "filterMesto")
+        //        {
+        //            lawyers = lawyers.filter { $0[5].contains(name) }
+        //
+        //        }
+        //        if let name = defaults.string(forKey: "filterCollegia")
+        //        {
+        //            lawyers = lawyers.filter { $0[4].contains(name) }
+        //        }
+        //        if let name = defaults.string(forKey: "filterOnline")
+        //        {
+        //            lawyers = lawyers.filter { $0[29].contains(name) }
+        //        }
+        //        if let name = defaults.string(forKey: "filterMediator")
+        //        {
+        //            lawyers = lawyers.filter { $0[24].contains(name) }
+        //        }
+        //        if let name = defaults.string(forKey: "filterotrasli")
+        //        {
+        //            lawyers = lawyers.filter { $0[18].contains(name) }
+        //        }
+        //        defaults.removeObject(forKey: "filterCollegia")
+        //        defaults.removeObject(forKey: "filterotrasli")
+        //        defaults.removeObject(forKey: "filterMesto")
+        //        defaults.removeObject(forKey: "filterCount")
+        //        defaults.removeObject(forKey: "filterOnline")
+        //        defaults.removeObject(forKey: "filterMediator")
         // Do any additional setup after loading the view.
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        
+        lawyers = lawyersGlobal
+        if lawyers.count > 0{
+            lawyers.remove(at: 0)
+            lawyers.sort { ($0[29]) < ($1[29]) }
+            if let name = defaults.string(forKey: "filterMesto")
+            {
+                lawyers = lawyers.filter { $0[5].contains(name) }
+                
+            }
+            if let name = defaults.string(forKey: "filterCollegia")
+            {
+                lawyers = lawyers.filter { $0[4].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterOnline")
+            {
+                lawyers = lawyers.filter { $0[29].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterMediator")
+            {
+                lawyers = lawyers.filter { $0[24].contains(name) }
+            }
+            if let name = defaults.string(forKey: "filterotrasli")
+            {
+                lawyers = lawyers.filter { $0[18].contains(name) }
+            }
+            DispatchQueue.main.async {
+                
+                self.tableView.reloadData()
+            }
+        }
+    }
+    func catchNotification(notification:Notification) -> Void {
+        
+        guard let name = notification.userInfo!["name"] else { return }
+        lawyers = name as! [[String]]
         lawyers = lawyersGlobal
         lawyers.remove(at: 0)
         lawyers.sort { ($0[29]) < ($1[29]) }
         if let name = defaults.string(forKey: "filterMesto")
         {
             lawyers = lawyers.filter { $0[5].contains(name) }
-
+            
         }
         if let name = defaults.string(forKey: "filterCollegia")
         {
@@ -134,18 +170,8 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
             self.tableView.reloadData()
         }
     }
-    func catchNotification(notification:Notification) -> Void {
-       
-        guard let name = notification.userInfo!["name"] else { return }
-        lawyers = name as! [[String]]
-        lawyers.remove(at: 0)
-        lawyers.sort { ($0[29]) < ($1[29]) }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-    }
     func catchNotificationNetwork(notification:Notification) -> Void {
-       
+        
     }
 }
 
@@ -218,7 +244,7 @@ extension LawyerViewController{
     }
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         let detailVC = LawyerViewControllerFilter()
-       
+        
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
@@ -227,5 +253,5 @@ extension LawyerViewController{
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)
     }
-   
+    
 }

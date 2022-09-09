@@ -186,10 +186,9 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .white
-        if lawyers.count == 0
-        {
+        
             lawyers = lawyersGlobal
-        }
+        
         filteredlawyers = lawyers
         setup()
         
@@ -197,10 +196,9 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        if lawyers.count == 0
-        {
+        
             lawyers = lawyersGlobal
-        }
+        
         filteredlawyers = lawyers
         setup()
     }
@@ -339,7 +337,13 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedSbros))
     }
         else{
+            workBut.removeFromSuperview()
+             collegionBut.removeFromSuperview()
+             otraskiBut.removeFromSuperview()
+             onlineBut.removeFromSuperview()
+             mediatorBut.removeFromSuperview()
             
+             primenitBut  = UIButton()
             noconnection.text = "нет данных"
         }
     }

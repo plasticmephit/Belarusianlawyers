@@ -39,6 +39,7 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
     var lawyers: [[String]]=[]
     var filteredlawyers: [[String]]=[]
     var lawyersFilterSave:[[String]] = []
+    var filter = String()
     //    let tab = TabBar()
     
     override func viewDidLoad() {
@@ -55,11 +56,7 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        if lawyers.count == 0
-        {
-            lawyers = lawyersGlobal
-        }
-        print(lawyers.count)
+        
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
@@ -95,7 +92,14 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        
+        print(filter)
+        if lawyers.count == 0
+        {
+            lawyers = lawyersGlobal.filter { $0[4].contains(filter)}
+            
+            lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filter)}
+        }
+       
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
@@ -104,6 +108,11 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
     func catchNotification(notification:Notification) -> Void {
         guard let name = notification.userInfo!["name"] else { return }
         lawyers = name as! [[String]]
+     
+        lawyers = lawyersGlobal.filter { $0[4].contains(filter)}
+        lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filter)}
+        lawyers = lawyersGlobal.filter { $0[18].contains(filter)}
+        lawyersFilterSave = lawyersGlobal.filter { $0[18].contains(filter)}
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

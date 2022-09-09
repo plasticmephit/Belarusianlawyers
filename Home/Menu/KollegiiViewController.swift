@@ -32,9 +32,9 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = MenuTableViewController()
-        detailVC.lawyers = lawyersGlobal.filter { $0[4].contains(filteredPreset[indexPath.row][0])
-        }
-        detailVC.lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filteredPreset[indexPath.row][0]) }
+
+//        }
+        detailVC.filter = filteredPreset[indexPath.row][0]
         navigationController?.pushViewController(detailVC, animated: true)
     }
     
@@ -43,7 +43,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
+        NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKeyCollegion),
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
@@ -72,7 +72,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         }
     }
     func catchNotification(notification:Notification) -> Void {
-        guard let name = notification.userInfo!["name"] else { return }
+//        guard let name = notification.userInfo!["name"] else { return }
 //        filteredPreset = name as! [[String]]
         filteredPreset = collegionssGlobal
         DispatchQueue.main.async {

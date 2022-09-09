@@ -67,18 +67,19 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         mapView.addAnnotations(mapLawyers)
     }
     var placemark:[String] = [""]
-    
+    let potokzagr = OperationQueue()
     var selectedPin:MKPlacemark? = nil
     var mapLawyers: [MapLawyer] = []
     let mapView = MKMapView()
     var lawyers:[[String]] = []
-    let potokzagr = OperationQueue()
     
     var lawyersForTableView:[[String]] = []
     let initialLocation = CLLocation(latitude: 53.906374, longitude: 27.485447)
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
+     
+        potokzagr.maxConcurrentOperationCount = 1
         let locationSearchTable = LocationSearchTable()
         locationSearchTable.mapView?.backgroundColor = .clear
         resultSearchController = UISearchController(searchResultsController: locationSearchTable)
@@ -100,7 +101,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
                                                using:catchNotification)
         
         setupMapViewController()
-        potokzagr.maxConcurrentOperationCount = 1
         if lawyersGlobal.count > 2{
             //            let queue = DispatchQueue.global(qos: .utility)
             //            queue.async
@@ -114,7 +114,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         
     }
     override func viewWillAppear(_ animated: Bool) {
-       
+        mapView.removeAnnotations(mapView.annotations)
         
         potokzagr.addOperation
         { [self] in
@@ -122,6 +122,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
             
             mapLawyers.removeAll()
             lawyers = lawyersGlobal
+            if lawyers.count > 0{
             lawyers.remove(at: 0)
             if let name = defaults.string(forKey: "filterMesto")
             {
@@ -144,10 +145,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
             {
                 lawyers = lawyers.filter { $0[18].contains(name) }
             }
-            DispatchQueue.main.async { [self] in
-                mapView.removeAnnotations(mapView.annotations)
-            }
+            
             loadInitialData()
+        }
         }
     }
     
@@ -204,7 +204,6 @@ extension MapViewController{
     }
     func loadInitialData() {
         if lawyers != [] {
-            
             for i in 0...lawyers.count-1{
                 let gps: [String] = lawyers[i][20].components(separatedBy: ",")
                 if gps[0] != ""{
@@ -214,27 +213,28 @@ extension MapViewController{
                         discipline: lawyers[i][1],
                         coordinate: CLLocationCoordinate2D(latitude: Double(gps[0])!, longitude: Double(gps[1])!), image: lawyers[i][19])
                     mapLawyers.append(geoLawyer)
+                    mapView.addAnnotation(geoLawyer)
                 }
-                mapView.addAnnotations(mapLawyers)
+//                mapView.addAnnotations(mapLawyers)
             }
         }
     }
     
     func catchNotification(notification:Notification) -> Void {
-        
-        potokzagr.addOperation  { [self] in
-        lawyers.removeAll()
-       
-        mapLawyers.removeAll()
-        lawyers = lawyersGlobal
-        lawyers.remove(at: 0)
-      
-            DispatchQueue.main.async { [self] in
-                mapView.removeAnnotations(mapView.annotations)
-            }
-            loadInitialData()
-            //            self.mapLawyer.addAnnotations(self.mapLawyers)
-        }
+        //        DispatchQueue.main.async { [self] in
+        //        mapView.removeAnnotations(mapView.annotations)
+        //        }
+        //        lawyers.removeAll()
+        //
+        //        mapLawyers.removeAll()
+        //        guard let name = notification.userInfo!["name"] else { return }
+        //        let queue = DispatchQueue.global(qos: .utility)
+        //        queue.async {
+        //            self.lawyers = name as! [[String]]
+        //
+        //            self.loadInitialData()
+        //            //            self.mapLawyer.addAnnotations(self.mapLawyers)
+        //        }
     }
 }
 extension MapViewController {

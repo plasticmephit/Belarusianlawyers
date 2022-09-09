@@ -8,9 +8,6 @@
 import UIKit
 
 
-let myNotificationKey = "com.bobthedeveloper.notificationKey"
-let myNotificationKey2 = "com.bobthedeveloper.notificationKey2"
-let myNotificationKeyNetwork = "com.bobthedeveloper.notificationKey23"
 
 class TabBar: UITabBarController {
     

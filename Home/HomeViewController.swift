@@ -4,7 +4,10 @@
 //
 //  Created by Maksimilian on 9.08.22.
 //
-
+let myNotificationKey = "com.bobthedeveloper.notificationKey"
+let myNotificationKey2 = "com.bobthedeveloper.notificationKey2"
+let myNotificationKeyNetwork = "com.bobthedeveloper.notificationKey23"
+let myNotificationKeyCollegion = "com.bobthedeveloper.notificationKey234"
 import UIKit
 var flagPerehod: Int = 0
 var lawyersGlobal: [[String]]=[]
@@ -64,7 +67,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         label.font = UIFont.systemFont(ofSize: 16)
         return label
     }()
-    
+    let potokzagr = OperationQueue()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -78,12 +81,17 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                                                selector: #selector(doThisWhenNotify),
                                                name: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil)
+        NotificationCenter.default.addObserver(self,
+                                               selector: #selector(doThisWhenCollegionDownloaded),
+                                               name: NSNotification.Name(rawValue: myNotificationKeyCollegion),
+                                               object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
         onlineLawyersText.text = "0"
-        lawyersGlobal = parseLawyersUserDefaults()
-        consultsGlobal = parseConsultsUserDefaults()
-        collegionssGlobal = parseCollegionUserDefaults()
-        print(lawyersGlobal.count)
+//        lawyersGlobal = parseLawyersUserDefaults()
+//        consultsGlobal = parseConsultsUserDefaults()
+//        collegionssGlobal = parseCollegionUserDefaults()
+        
+        potokzagr.maxConcurrentOperationCount = 1
         loadLawyersConsultsAnd()
         
         // Do any additional setup after loading the view.
@@ -91,27 +99,28 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     
     @objc func doThisWhenNotify() { print("I've sent a spark!")
     }
+    
+    @objc func doThisWhenCollegionDownloaded() { print("I've sent a spark2!")
+    }
     override func viewWillAppear(_ animated: Bool) {
+        if lawyersGlobal.count<10
+        {
+        loadLawyersConsultsAnd()
+        }
         if flagPerehod == 1{
             flagPerehod = 0
             let detailVC = LawyerViewController()
             navigationController?.pushViewController(detailVC, animated: true)
             
         }
-        print("aa")
     }
     func catchNotificationNetwork(notification:Notification) -> Void {
         loadLawyersConsultsAnd()
-        print(NetworkMonitor.shared.isConnected)
-        
+//        print(NetworkMonitor.shared.isConnected)
     }
     func loadLawyersConsultsAnd(){
-        
-        let queue = DispatchQueue.global(qos: .utility)
-      
             if lawyersGlobal.count > 10{
-                
-                queue.async{ [self] in
+                potokzagr.addOperation{ [self] in
                     indexOnline.removeAll()
                     for i in 1...lawyersGlobal.count-1
                     {
@@ -121,22 +130,21 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                         }
                     }
                     //            print(lawyersGlobal[885][19])
-                    
-                    
                 }
-            
         }
         if NetworkMonitor.shared.isConnected{
-            queue.async{
+            potokzagr.addOperation{
                 print("work")
                 let kostil = parseLawyers()
                 
                 if kostil.count > 10
                 {
                     lawyersGlobal = kostil
+                    
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
                     consultsGlobal = parseConsults()
                     collegionssGlobal = parseCollegion()
-                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKey), object: nil, userInfo: ["name":lawyersGlobal])
+                    NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKeyCollegion), object: nil, userInfo: ["name":collegionssGlobal])
                     self.indexOnline.removeAll()
                     for i in 0...lawyersGlobal.count-1
                     {
@@ -150,7 +158,6 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                             onlineLawyersText.text = String(indexOnline.count)
                         }
                     //            print(lawyersGlobal[885][19])
-                    
                 }
             }
         }
