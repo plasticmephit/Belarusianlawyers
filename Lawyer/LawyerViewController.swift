@@ -21,10 +21,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     }
     
     func update(text: [[String]]) {
-        lawyers = text
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
+//        lawyers = text
+//        DispatchQueue.main.async {
+//            self.tableView.reloadData()
+//        }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -94,6 +94,9 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
             {
                 lawyers = lawyers.filter { $0[18].contains(name) }
             }
+            if lawyers.count == 0 {
+                lawyers = lawyersGlobal
+            }
             DispatchQueue.main.async {
                 
                 self.tableView.reloadData()
@@ -126,6 +129,9 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         if let name = defaults.string(forKey: "filterotrasli")
         {
             lawyers = lawyers.filter { $0[18].contains(name) }
+        }
+        if lawyers.count == 0 {
+            lawyers = lawyersGlobal
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
@@ -164,6 +170,7 @@ extension LawyerViewController:UITableViewDelegate
             }
             else
             {
+               
                 cell.configure(lawyers: lawyers[indexPath.row])
             }
         }

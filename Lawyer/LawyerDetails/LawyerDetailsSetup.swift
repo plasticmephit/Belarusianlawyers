@@ -278,14 +278,14 @@ extension LawyerDetailsViewController{
     }
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         
-        if about.numberOfLines == 7 {
+        if about.numberOfLines == 6 {
             about.numberOfLines = 0
             buttonRazver.snp.removeConstraints()
             about.snp.removeConstraints()
             setupLawyerDetailsViewController(height: 1200, heightScrroll: CGFloat(Double(about.maxNumberOfLines)*14.4))
             buttonRazver.setImage(UIImage(systemName: "chevron.up"), for: .normal)
         } else {
-            about.numberOfLines = 7
+            about.numberOfLines = 6
             buttonRazver.snp.removeConstraints()
             about.snp.removeConstraints()
             

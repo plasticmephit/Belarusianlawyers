@@ -27,6 +27,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     var lawyers:[[String]] = []
     var filteredlawyers:[[String]] = []
     var filteringlawyers:[[String]] = []
+    var countlawyers:[[String]] = []
     var filterCollegii:String = ""
     var filterOtrasli:String = ""
     var filterMesto:String = ""
@@ -190,6 +191,31 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
 //            lawyers = lawyersGlobal
         
 //        filteredlawyers = lawyers
+//        print(filteredlawyers.count)
+//        if filteredlawyers.count == 0{
+//        countlawyers = lawyersGlobal
+//        countlawyers.remove(at: 0)
+//        if let name = defaults.string(forKey: "filterMesto")
+//        {
+//            countlawyers = lawyers.filter { $0[5].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterCollegia")
+//        {
+//            countlawyers = lawyers.filter { $0[4].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterOnline")
+//        {
+//            countlawyers = lawyers.filter { $0[29].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterMediator")
+//        {
+//            countlawyers = lawyers.filter { $0[24].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterotrasli")
+//        {
+//            countlawyers = lawyers.filter { $0[18].contains(name) }
+//        }
+//        }
         setup()
         
         // Do any additional setup after loading the view.
@@ -210,6 +236,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
                 delegate?.update(text: filteredlawyers)
             }
             else{
+                
                 print("yte")
             }
         }
@@ -317,13 +344,14 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             make.height.equalTo(20)
         }
         view.addSubview(primenitBut)
-        if let name = defaults.string(forKey: "filterCount")
-        {
-            primenitBut.setTitle(name, for: .normal)
-        }
-        else{
-            primenitBut.setTitle("Применить", for: .normal)
-        }
+//        if let name = defaults.string(forKey: "filterCount")
+//        {
+//            primenitBut.setTitle(name, for: .normal)
+//        }
+//        else{
+//            primenitBut.setTitle("Применить", for: .normal)
+//        }
+            primenitBut.setTitle("Применить " + String(countlawyers.count), for: .normal)
         primenitBut.backgroundColor = .white
         primenitBut.setTitleColor(.systemBlue, for: .normal)
         

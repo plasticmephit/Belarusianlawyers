@@ -17,25 +17,38 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
     }
     
     func update(text: [[String]]) {
-        if rejim == 1
-        {
-            lawyers = text.filter { $0[18].contains(filter)}
-            lawyersFilterSave = text.filter { $0[18].contains(filter)}
-            print(lawyers.count)
-        }
-        if rejim == 2
-        {
-            lawyers = text.filter { $0[4].contains(filter)}
-            lawyersFilterSave = text.filter { $0[4].contains(filter)}
-            print(lawyers.count)
-            
-//          print(lawyers.count)
-        }
-       
-        DispatchQueue.main.async {
-            
-            self.tableView.reloadData()
-        }
+//        if let name = defaults.string(forKey: "filterMesto")
+//        {
+//            lawyers = lawyers.filter { $0[5].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterOnline")
+//        {
+//            lawyers = lawyers.filter { $0[29].contains(name) }
+//        }
+//        if let name = defaults.string(forKey: "filterMediator")
+//        {
+//            lawyers = lawyers.filter { $0[24].contains(name) }
+//        }
+        
+//        if rejim == 1
+//        {
+//            lawyers = text.filter { $0[18].contains(filter)}
+//            lawyersFilterSave = text.filter { $0[18].contains(filter)}
+//            print(lawyers.count)
+//        }
+//        if rejim == 2
+//        {
+//            lawyers = text.filter { $0[4].contains(filter)}
+//            lawyersFilterSave = text.filter { $0[4].contains(filter)}
+//            print(lawyers.count)
+//
+////          print(lawyers.count)
+//        }
+//
+//        DispatchQueue.main.async {
+//
+//            self.tableView.reloadData()
+//        }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -105,28 +118,65 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         
     }
     override func viewWillAppear(_ animated: Bool) {
-//        print(filter)
+       lawyers = lawyersGlobal
+        if let name = defaults.string(forKey: "filterMesto")
+         {
+             lawyers = lawyers.filter { $0[5].contains(name) }
+         }
+         if let name = defaults.string(forKey: "filterOnline")
+         {
+             lawyers = lawyers.filter { $0[29].contains(name) }
+         }
+         if let name = defaults.string(forKey: "filterMediator")
+         {
+             lawyers = lawyers.filter { $0[24].contains(name) }
+         }
+        if rejim == 1
+        {
+            lawyers = lawyers.filter { $0[18].contains(filter)}
+            lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
+        }
+        if rejim == 2
+        {
+            lawyers = lawyers.filter { $0[4].contains(filter)}
+            lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
+
+//        print(lawyers.count)
+        }
+        if lawyers.count == 0 {
+            lawyers = lawyersGlobal
+            if rejim == 1
+            {
+                lawyers = lawyers.filter { $0[18].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
+            }
+            if rejim == 2
+            {
+                lawyers = lawyers.filter { $0[4].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
+            }
+
+        }
         
-//        if rejim == 1
-//        {
-//            lawyers = lawyersGlobal.filter { $0[18].contains(filter)}
-//            lawyersFilterSave = lawyersGlobal.filter { $0[18].contains(filter)}
-//        }
-//        if rejim == 2
-//        {
-//            lawyers = lawyersGlobal.filter { $0[4].contains(filter)}
-//            lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filter)}
-//
-////        print(lawyers.count)
-//        }
-//
-//        DispatchQueue.main.async {
-//
-//            self.tableView.reloadData()
-//        }
+        DispatchQueue.main.async {
+
+            self.tableView.reloadData()
+        }
     }
     func catchNotification(notification:Notification) -> Void {
-        
+        if let name = defaults.string(forKey: "filterMesto")
+               {
+                   lawyers = lawyers.filter { $0[5].contains(name) }
+               }
+               if let name = defaults.string(forKey: "filterOnline")
+               {
+                   lawyers = lawyers.filter { $0[29].contains(name) }
+               }
+               if let name = defaults.string(forKey: "filterMediator")
+               {
+                   lawyers = lawyers.filter { $0[24].contains(name) }
+               }
+               
         if rejim == 1
         {
             lawyers = lawyersGlobal.filter { $0[18].contains(filter)}
@@ -138,6 +188,20 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
             lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filter)}
             
 //        print(lawyers.count)
+        }
+        if lawyers.count == 0 {
+            lawyers = lawyersGlobal
+            if rejim == 1
+            {
+                lawyers = lawyers.filter { $0[18].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
+            }
+            if rejim == 2
+            {
+                lawyers = lawyers.filter { $0[4].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
+            }
+
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()

@@ -107,7 +107,7 @@ class LawyerDetailsViewController: UIViewController  {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.lineBreakMode = .byWordWrapping
-        label.numberOfLines = 7
+        label.numberOfLines = 6
         return label
     }()
     var view1 = UILabel()
