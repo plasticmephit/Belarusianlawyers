@@ -65,6 +65,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         //        print(lawyers.count)
         
         mapView.addAnnotations(mapLawyers)
+       
     }
     var placemark:[String] = [""]
     let potokzagr = OperationQueue()
@@ -113,6 +114,10 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         
         
     }
+
+   
+
+    
     override func viewWillAppear(_ animated: Bool) {
         mapView.removeAnnotations(mapView.annotations)
         
@@ -127,7 +132,6 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
             if let name = defaults.string(forKey: "filterMesto")
             {
                 lawyers = lawyers.filter { $0[5].contains(name) }
-                
             }
             if let name = defaults.string(forKey: "filterCollegia")
             {
@@ -281,7 +285,7 @@ extension MapViewController {
             else {
                 let detailVC = LawyerDetailsViewController()
                 detailVC.lawyersDetails = lawyersForTableView[0]
-                
+               
                 navigationController?.pushViewController(detailVC, animated: true)
                 
             }
@@ -321,6 +325,7 @@ extension MapViewController {
                 if placemark[0] != ""
                 {
                     self.lawyersForTableView.append(self.placemark)
+                    placemark[0] = ""
                 }
                 else{
                     self.lawyersForTableView.append(lawyersGlobal[index])

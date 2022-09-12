@@ -35,7 +35,7 @@ extension LawyerDetailsViewController{
         //            make.right.equalToSuperview().inset(0)
         //            make.bottom.equalToSuperview().inset(0)
         //        }
-        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specialization, view1, view3, view2, view4, avatar, buttonMarscrut, buttonChat, buttonZvonok, obadvokate, address, otvetitext, blagodarnostitext , statiitext].forEach{
+        [name, status, mainNumber, otveti, blagodarnost, statii, about, kollegion, mestoRaboti, specializations, specializationsdetails, view1, view3, view2, view4, avatar, buttonMarscrut, buttonChat, buttonZvonok, obadvokate, address, otvetitext, blagodarnostitext , statiitext].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             scroll.addSubview($0)
         }
@@ -47,15 +47,11 @@ extension LawyerDetailsViewController{
         status.textColor = UIColor(red: 0.984, green: 0.682, blue: 0.008, alpha: 1)
         status.snp.makeConstraints { make in
             
-            make.top.equalTo(name).inset(35)
+            make.top.equalTo(name).inset(31)
             make.left.equalTo(name).inset(0)
         }
         
-        mainNumber.snp.makeConstraints { make in
-            
-            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/5.5)
-            make.left.equalToSuperview().offset(154)
-        }
+        
         
         otveti.snp.makeConstraints { make in
             
@@ -107,11 +103,6 @@ extension LawyerDetailsViewController{
             make.top.equalTo(otvetitext).inset(0)
             make.left.equalTo(view3).inset(14)
         }
-        specialization.snp.makeConstraints { make in
-            
-            make.top.equalToSuperview().inset(550)
-            make.right.equalToSuperview().inset(0)
-        }
         
         avatar.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(33)
@@ -122,6 +113,12 @@ extension LawyerDetailsViewController{
         avatar.layer.masksToBounds = true
         avatar.layer.borderWidth = 3
         avatar.layer.cornerRadius = 12
+        
+        mainNumber.snp.makeConstraints { make in
+            
+            make.top.equalTo(name).inset(51)
+            make.left.equalTo(avatar).offset(137)
+        }
         
         about.snp.makeConstraints { make in
             
@@ -161,6 +158,21 @@ extension LawyerDetailsViewController{
                 make.left.equalToSuperview().inset(61)
                 make.width.equalTo(320)
             }
+        }
+        address.text = lawyersDetails[5]+"\n"+lawyersDetails[10]+" "+lawyersDetails[11]+" "+lawyersDetails[12]+" "+lawyersDetails[13]+" "+lawyersDetails[14]+" "+lawyersDetails[15]+" "+lawyersDetails[16]
+        specializations.snp.makeConstraints { make in
+            
+            make.top.equalTo(address).offset((address.maxNumberOfLines+1)*13+32)
+            make.left.equalTo(obadvokate).inset(0)
+            make.width.equalTo(320)
+        }
+        print(address.maxNumberOfLines)
+        
+        specializationsdetails.snp.makeConstraints { make in
+            
+            make.top.equalTo(specializations).inset(35)
+            make.left.equalTo(specializations).inset(0)
+            make.width.equalTo(UIScreen.main.bounds.width*0.8)
         }
         buttonMarscrut.setTitle("Маршрут", for: .normal)
         buttonMarscrut.backgroundColor = UIColor(red: 0.067, green: 0.027, blue: 0.298, alpha: 1)
@@ -236,17 +248,24 @@ extension LawyerDetailsViewController{
         configureLawyersDetails()
     }
     func configureLawyersDetails(){
-        name.text = lawyersDetails[1]
+        name.text = lawyersDetails[1].components(separatedBy: " ").dropLast().joined(separator: " ")
         status.text = lawyersDetails[29].replacingOccurrences(of: "нет", with: "Офлайн").replacingOccurrences(of: "да", with: "Онлайн")
         mainNumber.text = formatPhoneNumber(number: "+"+lawyersDetails[6])
         otveti.text = lawyersDetails[27]
-        blagodarnost.text = lawyersDetails[26]
+        if lawyersDetails[26] != ""
+        {
+            blagodarnost.text = lawyersDetails[26]
+        }
+        else{
+        blagodarnost.text = "0"
+        }
         statii.text = lawyersDetails[28]
         about.text = lawyersDetails[30].replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
         //        kollegion.text = lawyersDetails[1]
         //        mestoRaboti.text = lawyersDetails[1]
         //        specialization.text = lawyersDetails[1]
-        address.text = lawyersDetails[5]+"\n"+lawyersDetails[10]+" "+lawyersDetails[11]+" "+lawyersDetails[12]+" "+lawyersDetails[13]+" "+lawyersDetails[14]+" "+lawyersDetails[15]+" "+lawyersDetails[16]
+       
+        specializationsdetails.text = lawyersDetails[23].replacingOccurrences(of: "#", with: ", ", options: .regularExpression, range: nil)
         if let url = URL(string: lawyersDetails[19])
         {
             avatar.kf.setImage(with: url)

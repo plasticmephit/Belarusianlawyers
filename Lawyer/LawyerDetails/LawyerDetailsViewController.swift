@@ -11,6 +11,7 @@ class LawyerDetailsViewController: UIViewController  {
   
     var lawyersDetails:[String] = []
     let menuView = UIView()
+   
    lazy var scroll = UIScrollView()
     var avatar = UIImageView()
     var buttonRazver = UIButton()
@@ -64,11 +65,6 @@ class LawyerDetailsViewController: UIViewController  {
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
-    let specialization : UILabel = {
-        let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 12)
-        return label
-    }()
     let obadvokate : UILabel = {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 16)
@@ -98,10 +94,22 @@ class LawyerDetailsViewController: UIViewController  {
         let label = UILabel()
         label.font = UIFont.systemFont(ofSize: 12)
         label.lineBreakMode = .byWordWrapping
+        label.numberOfLines = 0
+        return label
+    }()
+    let specializations : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 16)
+        label.text = "Специализации"
+        return label
+    }()
+    let specializationsdetails : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        label.lineBreakMode = .byWordWrapping
         label.numberOfLines = 7
         return label
     }()
-    
     var view1 = UILabel()
     var view2 = UILabel()
     var view3 = UILabel()

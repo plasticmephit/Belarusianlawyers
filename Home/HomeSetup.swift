@@ -9,7 +9,7 @@ import UIKit
 extension HomeViewController{
     
     func setupHomeViewController(){
-        [menuView, onlineLawyers, onlineLawyersText].forEach{
+        [menuView, onlineLawyers, onlineLawyersText, viewforbeuty1, viewforbeuty2].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
@@ -21,6 +21,21 @@ extension HomeViewController{
             make.right.equalToSuperview().inset(0)
             make.bottom.equalTo(view).inset(0)
         }
+        viewforbeuty1.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.7)
+        viewforbeuty1.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(7)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/3-7)
+        }
+        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+        viewforbeuty2.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-40)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(14)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/3-14)
+        }
+        
         [lawyersBut, otrasli, kollegii, brka].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             menuView.addSubview($0)
@@ -38,7 +53,7 @@ extension HomeViewController{
         lawyersBut.addSubview(lawyersText)
         lawyersText.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(90)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width/3.8)
         }
         otrasli.backgroundColor = .white
         otrasli.layer.cornerRadius = 10
@@ -52,7 +67,7 @@ extension HomeViewController{
         otrasli.addSubview(otrasliText)
         otrasliText.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(90)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width/3.8)
         }
         kollegii.backgroundColor = .white
         kollegii.layer.cornerRadius = 10
@@ -66,7 +81,7 @@ extension HomeViewController{
         kollegii.addSubview(kollegiiText)
         kollegiiText.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(90)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width/3.8)
         }
         brka.backgroundColor = .white
         brka.layer.cornerRadius = 10
@@ -80,14 +95,14 @@ extension HomeViewController{
         brka.addSubview(brkaText)
         brkaText.snp.makeConstraints { make in
             make.centerY.equalToSuperview()
-            make.left.equalToSuperview().inset(90)
+            make.left.equalToSuperview().inset(UIScreen.main.bounds.width/3.8)
         }
         onlineLawyers.backgroundColor = .clear
         onlineLawyers.layer.cornerRadius = 10
         onlineLawyers.snp.makeConstraints { make in
             make.right.left.equalToSuperview().inset(50)
             make.height.equalTo(UIScreen.main.bounds.height/10+10)
-            make.top.equalToSuperview().inset(50)
+            make.top.equalToSuperview().inset(UIScreen.main.bounds.height/10-10)
             make.centerX.equalToSuperview()
         }
         onlineLawyers.translatesAutoresizingMaskIntoConstraints = false
@@ -98,7 +113,7 @@ extension HomeViewController{
         }
         onlineLawyers.addSubview(onlineLawyersTextLawyer)
         onlineLawyersTextLawyer.snp.makeConstraints { make in
-            make.top.equalTo(onlineLawyersText).inset(100)
+            make.top.equalTo(onlineLawyersText).inset(UIScreen.main.bounds.height/7.5+12)
             make.centerX.equalToSuperview()
         }
         lawyersBut.addTarget(self, action: #selector(buttonTappedLawyers(_:)), for: .touchUpInside)

@@ -23,7 +23,6 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     func update(text: [[String]]) {
         lawyers = text
         DispatchQueue.main.async {
-            
             self.tableView.reloadData()
         }
     }
@@ -37,7 +36,9 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         }
     }
     
-    
+    let menuView = UIView()
+    let viewforbeuty1 = UIView()
+    let viewforbeuty2 = UIView()
     let searchController = UISearchController(searchResultsController: nil)
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
@@ -47,24 +48,15 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        //        lawyers = lawyersGlobal
-        
         searchController.searchResultsUpdater = self
         searchController.obscuresBackgroundDuringPresentation = false
         searchController.searchBar.placeholder = "Type something here to search"
         navigationItem.searchController = searchController
         view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
-        
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        //        if lawyers.count == 0
-        //        {
-        //            lawyers = lawyersGlobal
-        //            lawyers.remove(at: 0)
-        //            lawyers.sort { ($0[29]) < ($1[29]) }
-        //        }
         print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
@@ -74,35 +66,6 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
                                                object: nil,
                                                queue: nil,
                                                using:catchNotificationNetwork)
-        //        if let name = defaults.string(forKey: "filterMesto")
-        //        {
-        //            lawyers = lawyers.filter { $0[5].contains(name) }
-        //
-        //        }
-        //        if let name = defaults.string(forKey: "filterCollegia")
-        //        {
-        //            lawyers = lawyers.filter { $0[4].contains(name) }
-        //        }
-        //        if let name = defaults.string(forKey: "filterOnline")
-        //        {
-        //            lawyers = lawyers.filter { $0[29].contains(name) }
-        //        }
-        //        if let name = defaults.string(forKey: "filterMediator")
-        //        {
-        //            lawyers = lawyers.filter { $0[24].contains(name) }
-        //        }
-        //        if let name = defaults.string(forKey: "filterotrasli")
-        //        {
-        //            lawyers = lawyers.filter { $0[18].contains(name) }
-        //        }
-        //        defaults.removeObject(forKey: "filterCollegia")
-        //        defaults.removeObject(forKey: "filterotrasli")
-        //        defaults.removeObject(forKey: "filterMesto")
-        //        defaults.removeObject(forKey: "filterCount")
-        //        defaults.removeObject(forKey: "filterOnline")
-        //        defaults.removeObject(forKey: "filterMediator")
-        // Do any additional setup after loading the view.
-        
     }
     override func viewWillAppear(_ animated: Bool) {
         
@@ -147,7 +110,6 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         if let name = defaults.string(forKey: "filterMesto")
         {
             lawyers = lawyers.filter { $0[5].contains(name) }
-            
         }
         if let name = defaults.string(forKey: "filterCollegia")
         {
@@ -166,7 +128,6 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
             lawyers = lawyers.filter { $0[18].contains(name) }
         }
         DispatchQueue.main.async {
-            
             self.tableView.reloadData()
         }
     }
@@ -228,8 +189,20 @@ extension LawyerViewController:UITableViewDelegate
 
 extension LawyerViewController{
     func setupTableView(){
-        
+//        view.addSubview(menuView)
+//        menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
+//        menuView.snp.makeConstraints { make in
+//
+//            make.top.equalToSuperview().inset(90)
+//            make.left.equalToSuperview().inset(0)
+//            make.right.equalToSuperview().inset(0)
+//            make.bottom.equalTo(view).inset(0)
+//        }
         view.addSubview(tableView)
+        
+//        searchController
+//        view.addSubview(viewforbeuty1)
+//        view.addSubview(viewforbeuty2)
         self.tableView.rowHeight = 142
         self.tableView.separatorColor = .clear
         self.tableView.backgroundColor = .clear
@@ -241,6 +214,20 @@ extension LawyerViewController{
             make.bottom.equalToSuperview().inset(0)
             navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
         }
+//        viewforbeuty1.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.7)
+//        viewforbeuty1.snp.makeConstraints { make in
+//            make.width.equalTo(UIScreen.main.bounds.width-20)
+//            make.centerX.equalToSuperview()
+//            make.height.equalTo(7)
+//            make.top.equalToSuperview().inset(90-7)
+//        }
+//        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+//        viewforbeuty2.snp.makeConstraints { make in
+//            make.width.equalTo(UIScreen.main.bounds.width-40)
+//            make.centerX.equalToSuperview()
+//            make.height.equalTo(14)
+//            make.top.equalToSuperview().inset(90-14)
+//        }
     }
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         let detailVC = LawyerViewControllerFilter()

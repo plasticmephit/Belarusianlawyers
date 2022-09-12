@@ -33,6 +33,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = MenuTableViewController()
         detailVC.filter = filteredPreset[indexPath.row]
+        detailVC.rejim = 1
         navigationController?.pushViewController(detailVC, animated: true)
     }
     

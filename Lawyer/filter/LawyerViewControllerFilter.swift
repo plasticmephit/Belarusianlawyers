@@ -187,9 +187,9 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         super.viewDidLoad()
         view.backgroundColor = .white
         
-            lawyers = lawyersGlobal
+//            lawyers = lawyersGlobal
         
-        filteredlawyers = lawyers
+//        filteredlawyers = lawyers
         setup()
         
         // Do any additional setup after loading the view.
@@ -197,7 +197,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     
     override func viewWillAppear(_ animated: Bool) {
         
-            lawyers = lawyersGlobal
+//            lawyers = lawyersGlobal
         
         filteredlawyers = lawyers
         setup()

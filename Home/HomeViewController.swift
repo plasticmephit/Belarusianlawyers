@@ -30,41 +30,42 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     var online:Int = 0
     var indexOnline:[[String]] = []
     let menuView = UIView()
-    
+    let viewforbeuty1 = UIView()
+    let viewforbeuty2 = UIView()
     let lawyersBut = UIButton()
     let lawyersText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
         return label
     }()
     
     let otrasli = UIButton()
     let otrasliText: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
         return label
     }()
     let kollegii = UIButton()
     let kollegiiText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
         return label
     }()
     let brka = UIButton()
     let brkaText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
         return label
     }()
     let onlineLawyers = UIButton()
     var onlineLawyersText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 80)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/7.5)
         return label
     }()
     var onlineLawyersTextLawyer : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/50)
         return label
     }()
     let potokzagr = OperationQueue()
@@ -87,9 +88,9 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                                                object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
         onlineLawyersText.text = "0"
-//        lawyersGlobal = parseLawyersUserDefaults()
-//        consultsGlobal = parseConsultsUserDefaults()
-//        collegionssGlobal = parseCollegionUserDefaults()
+        lawyersGlobal = parseLawyersUserDefaults()
+        consultsGlobal = parseConsultsUserDefaults()
+        collegionssGlobal = parseCollegionUserDefaults()
         
         potokzagr.maxConcurrentOperationCount = 1
         loadLawyersConsultsAnd()

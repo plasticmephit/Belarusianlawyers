@@ -34,6 +34,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         let detailVC = MenuTableViewController()
 
 //        }
+        detailVC.rejim = 2
         detailVC.filter = filteredPreset[indexPath.row][0]
         navigationController?.pushViewController(detailVC, animated: true)
     }
