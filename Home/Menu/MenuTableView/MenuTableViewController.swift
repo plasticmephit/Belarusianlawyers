@@ -118,6 +118,7 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        if lawyers.count == 0 {
        lawyers = lawyersGlobal
         if let name = defaults.string(forKey: "filterMesto")
          {
@@ -161,6 +162,7 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         DispatchQueue.main.async {
 
             self.tableView.reloadData()
+        }
         }
     }
     func catchNotification(notification:Notification) -> Void {

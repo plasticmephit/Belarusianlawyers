@@ -87,7 +87,7 @@ extension LawyerDetailsViewController{
             make.top.equalTo(view4).inset(30)
             make.left.equalToSuperview().inset(14)
         }
-       
+        
         otvetitext.snp.makeConstraints { make in
             
             make.top.equalTo(otveti).inset(20)
@@ -129,27 +129,27 @@ extension LawyerDetailsViewController{
         }
         about.text = lawyersDetails[30].replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
         
-        if (about.text?.count) ?? 0 > 70 
+        if (about.text?.count) ?? 0 > 70
         {
-        scroll.addSubview(buttonRazver)
-        //        buttonRazver.setTitleColor(.black, for: .normal)
-        buttonRazver.setImage(UIImage(systemName: "chevron.down"), for: .normal)
-        buttonRazver.backgroundColor = .clear
-        buttonRazver.addTarget(self, action: #selector(buttonTappedRzzvernut(_:)), for: .touchUpInside)
-       
-        buttonRazver.snp.makeConstraints { make in
-            make.top.equalTo(about).inset(heightScrroll)
-            make.width.equalTo(300)
-            make.height.equalTo(20)
-            make.centerX.equalTo(about).inset(0)
-        }
-        
-        address.snp.makeConstraints { make in
+            scroll.addSubview(buttonRazver)
+            //        buttonRazver.setTitleColor(.black, for: .normal)
+            buttonRazver.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+            buttonRazver.backgroundColor = .clear
+            buttonRazver.addTarget(self, action: #selector(buttonTappedRzzvernut(_:)), for: .touchUpInside)
             
-            make.top.equalTo(buttonRazver).inset(34)
-            make.left.equalToSuperview().inset(61)
-            make.width.equalTo(UIScreen.main.bounds.width*0.75)
-        }
+            buttonRazver.snp.makeConstraints { make in
+                make.top.equalTo(about).inset(heightScrroll)
+                make.width.equalTo(300)
+                make.height.equalTo(20)
+                make.centerX.equalTo(about).inset(0)
+            }
+            
+            address.snp.makeConstraints { make in
+                
+                make.top.equalTo(buttonRazver).inset(34)
+                make.left.equalToSuperview().inset(61)
+                make.width.equalTo(UIScreen.main.bounds.width*0.75)
+            }
         }
         else{
             address.snp.makeConstraints { make in
@@ -166,7 +166,7 @@ extension LawyerDetailsViewController{
             make.left.equalTo(obadvokate).inset(0)
             make.width.equalTo(320)
         }
-        print(address.maxNumberOfLines)
+//        print(address.maxNumberOfLines)
         
         specializationsdetails.snp.makeConstraints { make in
             
@@ -239,7 +239,7 @@ extension LawyerDetailsViewController{
             
             make.top.equalToSuperview().inset(226)
             make.left.equalToSuperview().inset(UIScreen.main.bounds.width*5/7)
-//            print(UIScreen.main.bounds.height)
+            //            print(UIScreen.main.bounds.height)
             make.width.equalTo(1)
             make.height.equalTo(35)
         }
@@ -257,14 +257,14 @@ extension LawyerDetailsViewController{
             blagodarnost.text = lawyersDetails[26]
         }
         else{
-        blagodarnost.text = "0"
+            blagodarnost.text = "0"
         }
         statii.text = lawyersDetails[28]
         about.text = lawyersDetails[30].replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
         //        kollegion.text = lawyersDetails[1]
         //        mestoRaboti.text = lawyersDetails[1]
         //        specialization.text = lawyersDetails[1]
-       
+        
         specializationsdetails.text = lawyersDetails[23].replacingOccurrences(of: "#", with: ", ", options: .regularExpression, range: nil)
         if let url = URL(string: lawyersDetails[19])
         {
@@ -279,18 +279,26 @@ extension LawyerDetailsViewController{
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         
         if about.numberOfLines == 6 {
+            
             about.numberOfLines = 0
             buttonRazver.snp.removeConstraints()
             about.snp.removeConstraints()
+           
             setupLawyerDetailsViewController(height: 1200, heightScrroll: CGFloat(Double(about.maxNumberOfLines)*14.4))
+            UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+            }
             buttonRazver.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+           
         } else {
             about.numberOfLines = 6
             buttonRazver.snp.removeConstraints()
             about.snp.removeConstraints()
             
             setupLawyerDetailsViewController(height: 1200, heightScrroll: 100)
-            
+            UIView.animate(withDuration: 0.3) {
+                    self.view.layoutIfNeeded()
+            }
             
         }
     }

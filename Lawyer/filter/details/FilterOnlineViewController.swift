@@ -34,7 +34,7 @@ class FilterOnlineViewController:UIViewController, UITableViewDataSource, UITabl
         view.backgroundColor = .white
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellFiltersOnline")
-        print(filteredPreset.count)
+//        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
         setup()

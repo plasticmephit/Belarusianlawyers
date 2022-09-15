@@ -24,7 +24,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     
     
     func perehod() {
-        print("sscddf")
+//        print("sscddf")
     }
     
     var online:Int = 0
@@ -35,32 +35,32 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     let lawyersBut = UIButton()
     let lawyersText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/43)
         return label
     }()
     
     let otrasli = UIButton()
     let otrasliText: UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/43)
         return label
     }()
     let kollegii = UIButton()
     let kollegiiText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/43)
         return label
     }()
     let brka = UIButton()
     let brkaText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/40)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/43)
         return label
     }()
     let onlineLawyers = UIButton()
     var onlineLawyersText : UILabel = {
         let label = UILabel()
-        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/7.5)
+        label.font = UIFont.systemFont(ofSize: UIScreen.main.bounds.height/8.5)
         return label
     }()
     var onlineLawyersTextLawyer : UILabel = {
@@ -72,6 +72,13 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+
+
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         
         setupHomeViewController()
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: NSNotification.Name.connectivityStatus.rawValue),
@@ -88,7 +95,9 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                                                object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
         onlineLawyersText.text = "0"
+//        defaults.removeObject(forKey: "lawyersGlobal")
         lawyersGlobal = parseLawyersUserDefaults()
+       
         consultsGlobal = parseConsultsUserDefaults()
         collegionssGlobal = parseCollegionUserDefaults()
         
@@ -114,6 +123,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
             navigationController?.pushViewController(detailVC, animated: true)
             
         }
+        
     }
     func catchNotificationNetwork(notification:Notification) -> Void {
         loadLawyersConsultsAnd()
@@ -135,7 +145,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         }
         if NetworkMonitor.shared.isConnected{
             potokzagr.addOperation{
-                print("work")
+//                print("work")
                 let kostil = parseLawyers()
                 
                 if kostil.count > 10

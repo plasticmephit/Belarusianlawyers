@@ -48,12 +48,11 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         otraskiBut.setTitle(text, for: .normal)
         defaults.removeObject(forKey: "filterotrasli")
         defaults.set(text, forKey: "filterotrasli")
-        filterOtrasli = text
+        filterOtrasli = text 
         filteredlawyers = filteredlawyers.filter { $0[18].contains(text) }
         if let name = defaults.string(forKey: "filterMesto")
         {
             filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
-            
         }
         if let name = defaults.string(forKey: "filterCollegia")
         {
@@ -188,46 +187,24 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         super.viewDidLoad()
         view.backgroundColor = .white
         
+//
 //            lawyers = lawyersGlobal
-        
+//
 //        filteredlawyers = lawyers
 //        print(filteredlawyers.count)
-//        if filteredlawyers.count == 0{
-//        countlawyers = lawyersGlobal
-//        countlawyers.remove(at: 0)
-//        if let name = defaults.string(forKey: "filterMesto")
-//        {
-//            countlawyers = lawyers.filter { $0[5].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterCollegia")
-//        {
-//            countlawyers = lawyers.filter { $0[4].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterOnline")
-//        {
-//            countlawyers = lawyers.filter { $0[29].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterMediator")
-//        {
-//            countlawyers = lawyers.filter { $0[24].contains(name) }
-//        }
-//        if let name = defaults.string(forKey: "filterotrasli")
-//        {
-//            countlawyers = lawyers.filter { $0[18].contains(name) }
-//        }
-//        }
-        setup()
         
+       
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
 //            lawyers = lawyersGlobal
-        
         filteredlawyers = lawyers
         setup()
+       
     }
+    
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         
@@ -237,18 +214,25 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             }
             else{
                 
-                print("yte")
+//                print("yte")
             }
         }
     }
     func setup()
     {
-        view.addSubview(noconnection)
-        noconnection.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(50)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        
+        
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        
+        let titleLabel = UILabel()
+        titleLabel.textColor = .systemBlue
+        titleLabel.text = "Фильтр"
+        navigationItem.titleView = titleLabel
+        
         if lawyersGlobal.count > 10{
         view.addSubview(workBut)
         if let name = defaults.string(forKey: "filterMesto")
@@ -365,11 +349,15 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedSbros))
     }
         else{
-            workBut.removeFromSuperview()
-             collegionBut.removeFromSuperview()
-             otraskiBut.removeFromSuperview()
-             onlineBut.removeFromSuperview()
-             mediatorBut.removeFromSuperview()
+            
+               
+                        view.addSubview(noconnection)
+                        noconnection.snp.makeConstraints { make in
+                            make.centerY.equalToSuperview()
+                            make.centerX.equalToSuperview()
+                            make.height.equalTo(20)
+                        }
+                noconnection.text = "нет данных"
             
              primenitBut  = UIButton()
             noconnection.text = "нет данных"
@@ -421,14 +409,15 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
  }
  */
 @objc func buttonTappedPrimenit(_ sender: Any) {
+    
     if self.isMovingFromParent {
-        
+       
         if filteredlawyers.count != 0{
             delegate?.update(text: filteredlawyers)
             
         }
         else{
-            print("yte")
+//            print("yte")
         }
     }
     

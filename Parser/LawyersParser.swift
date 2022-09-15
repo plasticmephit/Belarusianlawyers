@@ -11,7 +11,7 @@ let defaults = UserDefaults.standard
 func readStringFromURL(stringURL:String)-> String!{
     if let url = NSURL(string: stringURL) {
         do {
-            print("1")
+//            print("1")
             return try String(contentsOf: url as URL, encoding: .utf8)
         } catch {
             print("Cannot load contents")

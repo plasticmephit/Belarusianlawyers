@@ -1,6 +1,6 @@
 //
 //  LawyerViewController.swift
-//  
+//
 //
 //  Created by Maksimilian on 9.08.22.
 //
@@ -21,10 +21,10 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     }
     
     func update(text: [[String]]) {
-//        lawyers = text
-//        DispatchQueue.main.async {
-//            self.tableView.reloadData()
-//        }
+        //        lawyers = text
+        //        DispatchQueue.main.async {
+        //            self.tableView.reloadData()
+        //        }
     }
     
     func updateSearchResults(for searchController: UISearchController) {
@@ -35,7 +35,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
             self.tableView.reloadData()
         }
     }
-    
+    var noconnection = UILabel()
     let menuView = UIView()
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
@@ -48,16 +48,14 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        searchController.searchResultsUpdater = self
-        searchController.obscuresBackgroundDuringPresentation = false
-        searchController.searchBar.placeholder = "Type something here to search"
-        navigationItem.searchController = searchController
+        
+       
         view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
         tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-        print(lawyers.count)
+//        print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
@@ -150,10 +148,10 @@ extension LawyerViewController:UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchController.isActive {
-            print(filteredlawyers.count)
+//            print(filteredlawyers.count)
             return filteredlawyers.count
         } else {
-            print(lawyers.count)
+//            print(lawyers.count)
             return lawyers.count
         }
     }
@@ -170,7 +168,7 @@ extension LawyerViewController:UITableViewDelegate
             }
             else
             {
-               
+                
                 cell.configure(lawyers: lawyers[indexPath.row])
             }
         }
@@ -196,46 +194,68 @@ extension LawyerViewController:UITableViewDelegate
 
 extension LawyerViewController{
     func setupTableView(){
-//        view.addSubview(menuView)
-//        menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
-//        menuView.snp.makeConstraints { make in
-//
-//            make.top.equalToSuperview().inset(90)
-//            make.left.equalToSuperview().inset(0)
-//            make.right.equalToSuperview().inset(0)
-//            make.bottom.equalTo(view).inset(0)
-//        }
-        view.addSubview(tableView)
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
         
-//        searchController
-//        view.addSubview(viewforbeuty1)
-//        view.addSubview(viewforbeuty2)
-        self.tableView.rowHeight = 142
-        self.tableView.separatorColor = .clear
-        self.tableView.backgroundColor = .clear
-        tableView.snp.makeConstraints {
-            make in
-            make.right.equalToSuperview().inset(10)
-            make.left.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(55)
-            make.bottom.equalToSuperview().inset(0)
-            navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
+        
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        
+        let titleLabel = UILabel()
+        titleLabel.textColor = .systemBlue
+        titleLabel.text = "Адвокаты"
+        navigationItem.titleView = titleLabel
+        
+
+        if lawyersGlobal.count > 10{
+            searchController.searchResultsUpdater = self
+            searchController.obscuresBackgroundDuringPresentation = false
+            searchController.searchBar.placeholder = "Type something here to search"
+            navigationItem.searchController = searchController
+            view.addSubview(tableView)
+            
+            //        searchController
+            //        view.addSubview(viewforbeuty1)
+            //        view.addSubview(viewforbeuty2)
+            self.tableView.rowHeight = 142
+            self.tableView.separatorColor = .clear
+            self.tableView.backgroundColor = .clear
+            tableView.snp.makeConstraints {
+                make in
+                make.right.equalToSuperview().inset(10)
+                make.left.equalToSuperview().inset(10)
+                make.top.equalToSuperview().inset(55)
+                make.bottom.equalToSuperview().inset(0)
+                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
+            }
         }
-//        viewforbeuty1.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.7)
-//        viewforbeuty1.snp.makeConstraints { make in
-//            make.width.equalTo(UIScreen.main.bounds.width-20)
-//            make.centerX.equalToSuperview()
-//            make.height.equalTo(7)
-//            make.top.equalToSuperview().inset(90-7)
-//        }
-//        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
-//        viewforbeuty2.snp.makeConstraints { make in
-//            make.width.equalTo(UIScreen.main.bounds.width-40)
-//            make.centerX.equalToSuperview()
-//            make.height.equalTo(14)
-//            make.top.equalToSuperview().inset(90-14)
-//        }
+        else{
+           
+                    view.addSubview(noconnection)
+                    noconnection.snp.makeConstraints { make in
+                        make.centerY.equalToSuperview()
+                        make.centerX.equalToSuperview()
+                        make.height.equalTo(20)
+                    }
+            noconnection.text = "нет данных"
+        }
     }
+    //        viewforbeuty1.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.7)
+    //        viewforbeuty1.snp.makeConstraints { make in
+    //            make.width.equalTo(UIScreen.main.bounds.width-20)
+    //            make.centerX.equalToSuperview()
+    //            make.height.equalTo(7)
+    //            make.top.equalToSuperview().inset(90-7)
+    //        }
+    //        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+    //        viewforbeuty2.snp.makeConstraints { make in
+    //            make.width.equalTo(UIScreen.main.bounds.width-40)
+    //            make.centerX.equalToSuperview()
+    //            make.height.equalTo(14)
+    //            make.top.equalToSuperview().inset(90-14)
+    //        }
+    
     @objc func buttonTappedRzzvernut(_ sender: Any) {
         let detailVC = LawyerViewControllerFilter()
         

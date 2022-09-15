@@ -21,6 +21,7 @@ class TabBar: UITabBarController {
         let navController = UINavigationController(rootViewController: rootViewController)
         navController.tabBarItem.title = title
         navController.tabBarItem.image = image
+       
 //        navController.navigationBar.prefersLargeTitles = true
 //        rootViewController.navigationItem.title = title
         return navController
@@ -34,6 +35,7 @@ class TabBar: UITabBarController {
             createNavController(for: HomeViewController(), title: NSLocalizedString("Чат", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: MapViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
         ]
+       
     }
 //    override func viewDidLayoutSubviews() {
 //        tabBar.frame = CGRect(x: 0,y: UIScreen.main.bounds.height*0.85,width: UIScreen.main.bounds.width,height: tabBar.bounds.height +  view.frame.size.height/80 * 2)

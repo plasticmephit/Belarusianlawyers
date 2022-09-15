@@ -42,7 +42,7 @@ class FilterCollegiaViewController:UIViewController, UITableViewDataSource, UITa
         {
             filteredPreset = collegionssGlobal
         }
-        print(filteredPreset.count)
+//        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
         setup()

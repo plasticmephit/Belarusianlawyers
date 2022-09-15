@@ -33,7 +33,7 @@ class FilterMediatorViewController:UIViewController, UITableViewDataSource, UITa
         view.backgroundColor = .white
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellFiltersMediator")
-        print(filteredPreset.count)
+//        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
         setup()

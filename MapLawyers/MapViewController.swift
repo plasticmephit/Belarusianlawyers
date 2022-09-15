@@ -276,6 +276,7 @@ extension MapViewController {
                 //*** Need array list of annotation inside cluster here ***
                 let detailVC = MenuTableViewController()
                 lawyersForTableView.sort { ($0[29]) < ($1[29]) }
+                detailVC.rejim = 0
                 detailVC.lawyers = lawyersForTableView
                 detailVC.lawyersFilterSave = lawyersForTableView
                 detailVC.modalPresentationStyle = .formSheet

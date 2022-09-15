@@ -15,6 +15,7 @@
 import UIKit
 
 class KollegiiViewController:UIViewController, UITableViewDataSource, UITableViewDelegate {
+    var noconnection = UILabel()
     var filteredPreset:[[String]] = []
     var filteredforlawyers:[[String]] = []
     let tableView: UITableView = .init()
@@ -32,8 +33,8 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = MenuTableViewController()
-
-//        }
+        
+        //        }
         detailVC.rejim = 2
         detailVC.filter = filteredPreset[indexPath.row][0]
         navigationController?.pushViewController(detailVC, animated: true)
@@ -52,6 +53,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         if filteredPreset.count == 0
         {
             filteredPreset = collegionssGlobal
+            filteredPreset.remove(at: 0)
         }
         print(filteredPreset.count)
         tableView.dataSource = self
@@ -61,21 +63,50 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
     }
     func setup()
     {
-        view.addSubview(tableView)
-        self.tableView.rowHeight = 60
-        self.tableView.backgroundColor = .clear
-        tableView.snp.makeConstraints {
-            make in
-            make.right.equalToSuperview().inset(10)
-            make.left.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(55)
-            make.bottom.equalToSuperview().inset(20)
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        
+        
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        
+        let titleLabel = UILabel()
+        titleLabel.textColor = .systemBlue
+        titleLabel.text = "Коллегии"
+        navigationItem.titleView = titleLabel
+        
+        if lawyersGlobal.count > 10{
+            noconnection.text = ""
+            view.addSubview(tableView)
+            self.tableView.rowHeight = 60
+            self.tableView.backgroundColor = .clear
+            tableView.snp.makeConstraints {
+                make in
+                make.right.equalToSuperview().inset(10)
+                make.left.equalToSuperview().inset(10)
+                make.top.equalToSuperview().inset(55)
+                make.bottom.equalToSuperview().inset(20)
+            }
+        }
+        else{
+            
+               
+                        view.addSubview(noconnection)
+                        noconnection.snp.makeConstraints { make in
+                            make.centerY.equalToSuperview()
+                            make.centerX.equalToSuperview()
+                            make.height.equalTo(20)
+                        }
+               
+            noconnection.text = "нет данных"
         }
     }
     func catchNotification(notification:Notification) -> Void {
-//        guard let name = notification.userInfo!["name"] else { return }
-//        filteredPreset = name as! [[String]]
+        //        guard let name = notification.userInfo!["name"] else { return }
+        //        filteredPreset = name as! [[String]]
         filteredPreset = collegionssGlobal
+        filteredPreset.remove(at: 0)
         DispatchQueue.main.async {
             self.tableView.reloadData()
         }

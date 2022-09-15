@@ -42,7 +42,7 @@ class FilterWorksViewController: UIViewController, UITableViewDataSource, UITabl
         {
             filteredPreset = consultsGlobal
         }
-        print(filteredPreset.count)
+//        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
         setup()

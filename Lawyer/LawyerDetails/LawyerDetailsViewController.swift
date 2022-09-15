@@ -115,6 +115,11 @@ class LawyerDetailsViewController: UIViewController  {
     var view3 = UILabel()
     var view4 = UILabel()
     override func viewDidLoad() {
+        let titleLabel = UILabel()
+        titleLabel.textColor = .systemBlue
+            titleLabel.text = lawyersDetails[1]
+            navigationItem.titleView = titleLabel
+        
         setupLawyerDetailsViewController(height: 1200, heightScrroll: 100)
     }
 }
