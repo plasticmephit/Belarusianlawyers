@@ -45,6 +45,7 @@ class BRKAViewController: UIViewController {
       var view1 = UILabel()
       
       override func viewDidLoad() {
+          view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
           setupBRkAViewController()
       }
   }

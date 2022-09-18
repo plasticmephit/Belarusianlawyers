@@ -10,11 +10,11 @@ import UIKit
 import SnapKit
 extension LawyerDetailsViewController{
     
-    func setupLawyerDetailsViewController(height: CGFloat, heightScrroll: CGFloat){
+    func setupLawyerDetailsViewController(height: CGFloat, heightScrroll: CGFloat, textpoints: String, textreadmore: String){
         view.addSubview(scroll)
         
         scroll.contentSize = CGSize(width: view.frame.width, height: height+heightScrroll)
-        view.backgroundColor = .blue
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         scroll.backgroundColor = .white
         scroll.snp.makeConstraints { make in
             
@@ -47,7 +47,7 @@ extension LawyerDetailsViewController{
         status.textColor = UIColor(red: 0.984, green: 0.682, blue: 0.008, alpha: 1)
         status.snp.makeConstraints { make in
             
-            make.top.equalTo(name).inset(31)
+            make.top.equalTo(name.snp.bottom).offset(7)
             make.left.equalTo(name).inset(0)
         }
         
@@ -116,7 +116,7 @@ extension LawyerDetailsViewController{
         
         mainNumber.snp.makeConstraints { make in
             
-            make.top.equalTo(name).inset(51)
+            make.top.equalTo(status.snp.bottom).offset(10)
             make.left.equalTo(avatar).offset(137)
         }
         
@@ -131,13 +131,28 @@ extension LawyerDetailsViewController{
         
         if (about.text?.count) ?? 0 > 70
         {
+            let readmoreFont = UIFont(name: "Helvetica-Oblique", size: 11.0)
+            let readmoreFontColor = UIColor.blue
+            DispatchQueue.main.async {
+                self.about.addTrailing(with: textpoints, moreText: textreadmore, moreTextFont: readmoreFont!, moreTextColor: readmoreFontColor)
+            }
             scroll.addSubview(buttonRazver)
+            scroll.addSubview(view5)
             //        buttonRazver.setTitleColor(.black, for: .normal)
-            buttonRazver.setImage(UIImage(systemName: "chevron.down"), for: .normal)
+//            buttonRazver.setImage(UIImage(systemName: "chevron.down"), for: .normal)
             buttonRazver.backgroundColor = .clear
             buttonRazver.addTarget(self, action: #selector(buttonTappedRzzvernut(_:)), for: .touchUpInside)
-            
             buttonRazver.snp.makeConstraints { make in
+              
+                    
+                    make.top.equalToSuperview().inset(345)
+                    make.width.equalTo(UIScreen.main.bounds.width*0.88)
+                    make.height.equalTo(heightScrroll)
+                    make.left.equalToSuperview().inset(14)
+                
+            }
+//            view5.backgroundColor = .black
+            view5.snp.makeConstraints { make in
                 make.top.equalTo(about).inset(heightScrroll)
                 make.width.equalTo(300)
                 make.height.equalTo(20)
@@ -146,7 +161,7 @@ extension LawyerDetailsViewController{
             
             address.snp.makeConstraints { make in
                 
-                make.top.equalTo(buttonRazver).inset(34)
+                make.top.equalTo(view5).inset(34)
                 make.left.equalToSuperview().inset(61)
                 make.width.equalTo(UIScreen.main.bounds.width*0.75)
             }
@@ -154,7 +169,7 @@ extension LawyerDetailsViewController{
         else{
             address.snp.makeConstraints { make in
                 
-                make.top.equalTo(about).inset(16)
+                make.top.equalToSuperview().inset(345)
                 make.left.equalToSuperview().inset(61)
                 make.width.equalTo(320)
             }
@@ -162,7 +177,7 @@ extension LawyerDetailsViewController{
         address.text = lawyersDetails[5]+"\n"+lawyersDetails[10]+" "+lawyersDetails[11]+" "+lawyersDetails[12]+" "+lawyersDetails[13]+" "+lawyersDetails[14]+" "+lawyersDetails[15]+" "+lawyersDetails[16]
         specializations.snp.makeConstraints { make in
             
-            make.top.equalTo(address).offset((address.maxNumberOfLines+1)*13+32)
+            make.top.equalTo(address.snp.bottom).offset(32)
             make.left.equalTo(obadvokate).inset(0)
             make.width.equalTo(320)
         }
@@ -282,21 +297,24 @@ extension LawyerDetailsViewController{
             
             about.numberOfLines = 0
             buttonRazver.snp.removeConstraints()
+            view5.snp.removeConstraints()
             about.snp.removeConstraints()
-           
-            setupLawyerDetailsViewController(height: 1200, heightScrroll: CGFloat(Double(about.maxNumberOfLines)*14.4))
-            UIView.animate(withDuration: 0.3) {
+            about.text = lawyersDetails[30].replacingOccurrences(of: "[\\s\n]+", with: " ", options: .regularExpression, range: nil)
+            
+            setupLawyerDetailsViewController(height: 1200, heightScrroll: CGFloat(Double(about.maxNumberOfLines)*14.4), textpoints: "", textreadmore: "")
+            
+            UIView.animate(withDuration: 0.4) {
                     self.view.layoutIfNeeded()
             }
-            buttonRazver.setImage(UIImage(systemName: "chevron.up"), for: .normal)
+//            buttonRazver.setImage(UIImage(systemName: "chevron.up"), for: .normal)
            
         } else {
             about.numberOfLines = 6
             buttonRazver.snp.removeConstraints()
             about.snp.removeConstraints()
-            
-            setupLawyerDetailsViewController(height: 1200, heightScrroll: 100)
-            UIView.animate(withDuration: 0.3) {
+            view5.snp.removeConstraints()
+            setupLawyerDetailsViewController(height: 1200, heightScrroll: 100, textpoints: "...", textreadmore: "читать далее")
+            UIView.animate(withDuration: 0.4) {
                     self.view.layoutIfNeeded()
             }
             
@@ -312,3 +330,47 @@ extension LawyerDetailsViewController{
         navigationController?.pushViewController(detailVC, animated: true)
     }
 }
+extension UILabel {
+
+        func addTrailing(with trailingText: String, moreText: String, moreTextFont: UIFont, moreTextColor: UIColor) {
+            let readMoreText: String = trailingText + moreText
+
+            let lengthForVisibleString: Int = self.vissibleTextLength
+            let mutableString: String = self.text!
+            let trimmedString: String? = (mutableString as NSString).replacingCharacters(in: NSRange(location: lengthForVisibleString, length: ((self.text?.count)! - lengthForVisibleString)), with: "")
+            let readMoreLength: Int = (readMoreText.count)
+            let trimmedForReadMore: String = (trimmedString! as NSString).replacingCharacters(in: NSRange(location: ((trimmedString?.count ?? 0) - readMoreLength), length: readMoreLength), with: "") + trailingText
+            let answerAttributed = NSMutableAttributedString(string: trimmedForReadMore, attributes: [NSAttributedString.Key.font: self.font])
+            let readMoreAttributed = NSMutableAttributedString(string: moreText, attributes: [NSAttributedString.Key.font: moreTextFont, NSAttributedString.Key.foregroundColor: moreTextColor])
+            answerAttributed.append(readMoreAttributed)
+            self.attributedText = answerAttributed
+        }
+
+        var vissibleTextLength: Int {
+            let font: UIFont = self.font
+            let mode: NSLineBreakMode = self.lineBreakMode
+            let labelWidth: CGFloat = self.frame.size.width
+            let labelHeight: CGFloat = self.frame.size.height
+            let sizeConstraint = CGSize(width: labelWidth, height: CGFloat.greatestFiniteMagnitude)
+
+            let attributes: [AnyHashable: Any] = [NSAttributedString.Key.font: font]
+            let attributedText = NSAttributedString(string: self.text!, attributes: attributes as? [NSAttributedString.Key : Any])
+            let boundingRect: CGRect = attributedText.boundingRect(with: sizeConstraint, options: .usesLineFragmentOrigin, context: nil)
+
+            if boundingRect.size.height > labelHeight {
+                var index: Int = 0
+                var prev: Int = 0
+                let characterSet = CharacterSet.whitespacesAndNewlines
+                repeat {
+                    prev = index
+                    if mode == NSLineBreakMode.byCharWrapping {
+                        index += 1
+                    } else {
+                        index = (self.text! as NSString).rangeOfCharacter(from: characterSet, options: [], range: NSRange(location: index + 1, length: self.text!.count - index - 1)).location
+                    }
+                } while index != NSNotFound && index < self.text!.count && (self.text! as NSString).substring(to: index).boundingRect(with: sizeConstraint, options: .usesLineFragmentOrigin, attributes: attributes as? [NSAttributedString.Key : Any], context: nil).size.height <= labelHeight
+                return prev
+            }
+            return self.text!.count
+        }
+    }

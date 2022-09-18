@@ -41,7 +41,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellOtrasli")
         print(filteredPreset.count)
@@ -61,7 +61,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         
         let titleLabel = UILabel()
-        titleLabel.textColor = .systemBlue
+        titleLabel.textColor = .white
         titleLabel.text = "Отрасли"
         navigationItem.titleView = titleLabel
      

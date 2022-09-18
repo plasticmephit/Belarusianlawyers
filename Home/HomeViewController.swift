@@ -72,6 +72,9 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+    
+        
         self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
 
 
@@ -94,7 +97,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                                                name: NSNotification.Name(rawValue: myNotificationKeyCollegion),
                                                object: nil)
         onlineLawyersTextLawyer.text = "адвокатов онлайн"
-        onlineLawyersText.text = "0"
+        onlineLawyersText.text = "загрузка"
 //        defaults.removeObject(forKey: "lawyersGlobal")
         lawyersGlobal = parseLawyersUserDefaults()
        
@@ -133,17 +136,14 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
             if lawyersGlobal.count > 10{
                 potokzagr.addOperation{ [self] in
                     indexOnline.removeAll()
-                    for i in 1...lawyersGlobal.count-1
-                    {
-                        if lawyersGlobal[i][29] == "да"
-                        {
-                            self.indexOnline.append(lawyersGlobal[i])
-                        }
-                    }
+                    indexOnline = lawyersGlobal.filter { $0[29].contains("да") }
                     //            print(lawyersGlobal[885][19])
                 }
         }
         if NetworkMonitor.shared.isConnected{
+            DispatchQueue.main.async { [self] in
+                onlineLawyersText.text = "загрузка"
+            }
             potokzagr.addOperation{
 //                print("work")
                 let kostil = parseLawyers()
@@ -157,28 +157,31 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
                     collegionssGlobal = parseCollegion()
                     NotificationCenter.default.post(name: NSNotification.Name(rawValue: myNotificationKeyCollegion), object: nil, userInfo: ["name":collegionssGlobal])
                     self.indexOnline.removeAll()
-                    for i in 0...lawyersGlobal.count-1
-                    {
-                        if lawyersGlobal[i][29] == "да"
-                        {
-                            self.indexOnline.append(lawyersGlobal[i])
-                        }
-                    }
+                    self.indexOnline = lawyersGlobal.filter { $0[29].contains("да") }
                     DispatchQueue.main.async { [self] in
-                       
+                        if indexOnline.count == 0{
+                            onlineLawyersText.text = "загрузка"
+                        }
+                        else{
                             onlineLawyersText.text = String(indexOnline.count)
                         }
-                    //            print(lawyersGlobal[885][19])
+                    }
                 }
             }
         }
         DispatchQueue.main.async { [self] in
             if NetworkMonitor.shared.isConnected{
-                onlineLawyersText.text = String(indexOnline.count)
+                if indexOnline.count == 0{
+                    onlineLawyersText.text = "загрузка"
+                }
+                else{
+                    onlineLawyersText.text = String(indexOnline.count)
+                }
             }
-            else{
-                onlineLawyersText.text = "нет сети"
-            }
+                else{
+                    onlineLawyersText.text = "нет сети"
+                }
+           
         }
     }
 }

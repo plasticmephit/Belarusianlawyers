@@ -31,8 +31,7 @@ class FilterOtraslViewController:UIViewController, UITableViewDataSource, UITabl
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellFilters")
 //        print(filteredPreset.count)
         tableView.dataSource = self

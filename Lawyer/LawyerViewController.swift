@@ -11,7 +11,7 @@ protocol LawyerViewControllerForFilterDelegate: AnyObject {
     func update(text: [[String]])
 }
 
-class LawyerViewController: UIViewController, UITableViewDataSource, UISearchResultsUpdating, LawyerViewControllerForFilterDelegate  {
+class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewControllerForFilterDelegate, UISearchBarDelegate  {
     func sbros() {
         lawyers.removeAll()
         lawyers = lawyersGlobal
@@ -26,9 +26,38 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         //            self.tableView.reloadData()
         //        }
     }
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Stop doing the search stuff
+        // and clear the text in the search bar
+        searchBar.text = ""
+        filteredlawyers.removeAll()
+        // Hide the cancel button
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
+        searchIsActive = false
+        DispatchQueue.main.async {
+            self.tableView.reloadData()
+        }
+        // You could also change the position, frame etc of the searchBar
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        searchIsActive = true
+        //write other necessary statements
+    }
     
-    func updateSearchResults(for searchController: UISearchController) {
-        guard let searchText = searchController.searchBar.text else { return }
+    //
+    
+    //    func updateSearchResults(for searchController: UISearchController) {
+    //        guard let searchText = searchController.searchBar.text else { return }
+    //        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+    //        DispatchQueue.main.async {
+    //
+    //            self.tableView.reloadData()
+    //        }
+    //    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Filter the data you have. For instance:
         filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
         DispatchQueue.main.async {
             
@@ -39,23 +68,28 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
     let menuView = UIView()
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
-    let searchController = UISearchController(searchResultsController: nil)
+    let onlinelabel : UILabel = {
+        let label = UILabel()
+        label.font = UIFont.systemFont(ofSize: 12)
+        return label
+    }()
+    let searchBar = UISearchBar()
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
     var filteredlawyers: [[String]]=[]
     var lawyersFilterSave:[[String]] = []
     //    let tab = TabBar()
-    
+    var searchIsActive:Bool = false
     override func viewDidLoad() {
         super.viewDidLoad()
         
-       
-        view.backgroundColor = UIColor(red: 1, green: 1, blue: 1, alpha: 1)
+        self.extendedLayoutIncludesOpaqueBars = true
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         tableView.register(LawyersTableViewCell.self, forCellReuseIdentifier: "LawyersTableViewCell")
         tableView.dataSource = self
         tableView.delegate = self
         setupTableView()
-//        print(lawyers.count)
+        //        print(lawyers.count)
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
                                                queue: nil,
@@ -95,10 +129,13 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
             if lawyers.count == 0 {
                 lawyers = lawyersGlobal
             }
-            DispatchQueue.main.async {
+            DispatchQueue.main.async { [self] in
+                onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
+                tableView.reloadData()
                 
-                self.tableView.reloadData()
+                tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
             }
+            //            searchController.definesPresentationContext = false
         }
     }
     func catchNotification(notification:Notification) -> Void {
@@ -133,6 +170,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, UISearchRes
         }
         DispatchQueue.main.async {
             self.tableView.reloadData()
+            //            self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
         }
     }
     func catchNotificationNetwork(notification:Notification) -> Void {
@@ -147,11 +185,12 @@ extension LawyerViewController:UITableViewDelegate
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if searchController.isActive {
-//            print(filteredlawyers.count)
+        if searchIsActive
+        {
+            //            print(filteredlawyers.count)
             return filteredlawyers.count
         } else {
-//            print(lawyers.count)
+            //            print(lawyers.count)
             return lawyers.count
         }
     }
@@ -162,7 +201,7 @@ extension LawyerViewController:UITableViewDelegate
             fatalError()
         }
         if lawyersGlobal.count > 10{
-            if searchController.isActive
+            if  searchIsActive
             {
                 cell.configure(lawyers: filteredlawyers[indexPath.row])
             }
@@ -180,7 +219,8 @@ extension LawyerViewController:UITableViewDelegate
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
-        if searchController.isActive{
+        if  searchIsActive
+        {
             detailVC.lawyersDetails = filteredlawyers[indexPath.row]
         }
         else{
@@ -201,19 +241,70 @@ extension LawyerViewController{
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
-        
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         let titleLabel = UILabel()
-        titleLabel.textColor = .systemBlue
+        titleLabel.textColor = .white
         titleLabel.text = "Адвокаты"
         navigationItem.titleView = titleLabel
+        //        navigationController?.navigationBar.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
-
         if lawyersGlobal.count > 10{
-            searchController.searchResultsUpdater = self
-            searchController.obscuresBackgroundDuringPresentation = false
-            searchController.searchBar.placeholder = "Type something here to search"
-            navigationItem.searchController = searchController
-            view.addSubview(tableView)
+            noconnection.removeFromSuperview()
+            //            searchController.searchResultsUpdater = self
+            searchBar.delegate = self
+            searchBar.placeholder = "Type something here to search"
+            
+            //            searchController.hidesNavigationBarDuringPresentation = false
+            
+            
+            
+            searchBar.isTranslucent = true
+            searchBar.sizeToFit()
+            searchBar.barTintColor = UIColor.clear
+            searchBar.backgroundColor = UIColor.clear
+            searchBar.isTranslucent = true
+            searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+            
+            
+            
+            //            searchController.edgesForExtendedLayout = .bottom
+            tableView.tableHeaderView = searchBar
+            //            searchController.definesPresentationContext = true
+            
+            //            tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+            //
+            
+            view.addSubview(menuView)
+            view.addSubview(viewforbeuty1)
+            view.addSubview(viewforbeuty2)
+            
+            menuView.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
+            menuView.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(104)
+                make.bottom.right.left.equalToSuperview().inset(0)
+            }
+            
+            viewforbeuty1.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 0.5)
+            viewforbeuty1.snp.makeConstraints { make in
+                make.width.equalTo(UIScreen.main.bounds.width-20)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(7)
+                make.bottom.equalTo(menuView.snp.top).offset(0)
+            }
+            viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+            viewforbeuty2.snp.makeConstraints { make in
+                make.width.equalTo(UIScreen.main.bounds.width-40)
+                make.centerX.equalToSuperview()
+                make.height.equalTo(14)
+                make.bottom.equalTo(menuView.snp.top).offset(0)
+            }
+            menuView.addSubview(onlinelabel)
+            onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
+            onlinelabel.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(21)
+                make.left.equalToSuperview().inset(14)
+            }
+            menuView.addSubview(tableView)
             
             //        searchController
             //        view.addSubview(viewforbeuty1)
@@ -225,19 +316,19 @@ extension LawyerViewController{
                 make in
                 make.right.equalToSuperview().inset(10)
                 make.left.equalToSuperview().inset(10)
-                make.top.equalToSuperview().inset(55)
+                make.top.equalToSuperview().inset(50)
                 make.bottom.equalToSuperview().inset(0)
                 navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
             }
         }
         else{
-           
-                    view.addSubview(noconnection)
-                    noconnection.snp.makeConstraints { make in
-                        make.centerY.equalToSuperview()
-                        make.centerX.equalToSuperview()
-                        make.height.equalTo(20)
-                    }
+            
+            view.addSubview(noconnection)
+            noconnection.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.height.equalTo(20)
+            }
             noconnection.text = "нет данных"
         }
     }

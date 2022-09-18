@@ -31,7 +31,7 @@ class FilterCollegiaViewController:UIViewController, UITableViewDataSource, UITa
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKey),
                                                object: nil,
@@ -62,7 +62,7 @@ class FilterCollegiaViewController:UIViewController, UITableViewDataSource, UITa
         }
     }
     func catchNotification(notification:Notification) -> Void {
-        guard let name = notification.userInfo!["name"] else { return }
+//        guard let name = notification.userInfo!["name"] else { return }
 //        filteredPreset = name as! [[String]]
         filteredPreset = collegionssGlobal
         DispatchQueue.main.async {

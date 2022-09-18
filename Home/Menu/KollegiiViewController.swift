@@ -43,7 +43,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
         NotificationCenter.default.addObserver(forName: NSNotification.Name(rawValue: myNotificationKeyCollegion),
                                                object: nil,
@@ -72,7 +72,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         
         let titleLabel = UILabel()
-        titleLabel.textColor = .systemBlue
+        titleLabel.textColor = .white
         titleLabel.text = "Коллегии"
         navigationItem.titleView = titleLabel
         

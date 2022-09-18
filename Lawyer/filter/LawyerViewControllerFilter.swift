@@ -185,7 +185,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
+        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
 //
 //            lawyers = lawyersGlobal
@@ -229,7 +229,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         
         let titleLabel = UILabel()
-        titleLabel.textColor = .systemBlue
+        titleLabel.textColor = .white
         titleLabel.text = "Фильтр"
         navigationItem.titleView = titleLabel
         
@@ -245,8 +245,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             workBut.setTitle("Место работы", for: .normal)
             
         }
-        workBut.backgroundColor = .white
-        workBut.setTitleColor(.systemBlue, for: .normal)
+        workBut.backgroundColor = .clear
+        workBut.setTitleColor(.black, for: .normal)
         
         workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
         workBut.snp.makeConstraints { make in
@@ -264,8 +264,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             collegionBut.setTitle("Коллегия", for: .normal)
         }
         
-        collegionBut.backgroundColor = .white
-        collegionBut.setTitleColor(.systemBlue, for: .normal)
+        collegionBut.backgroundColor = .clear
+        collegionBut.setTitleColor(.black, for: .normal)
         
         collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
         collegionBut.snp.makeConstraints { make in
@@ -282,8 +282,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         else{
             otraskiBut.setTitle("Отрасль", for: .normal)
         }
-        otraskiBut.backgroundColor = .white
-        otraskiBut.setTitleColor(.systemBlue, for: .normal)
+        otraskiBut.backgroundColor = .clear
+        otraskiBut.setTitleColor(.black, for: .normal)
         
         otraskiBut.addTarget(self, action: #selector(buttonTappedPravo(_:)), for: .touchUpInside)
         otraskiBut.snp.makeConstraints { make in
@@ -300,8 +300,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         else{
             onlineBut.setTitle("Онлайн", for: .normal)
         }
-        onlineBut.backgroundColor = .white
-        onlineBut.setTitleColor(.systemBlue, for: .normal)
+        onlineBut.backgroundColor = .clear
+        onlineBut.setTitleColor(.black, for: .normal)
         
         onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
         onlineBut.snp.makeConstraints { make in
@@ -318,8 +318,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         else{
             mediatorBut.setTitle("Медиатор", for: .normal)
         }
-        mediatorBut.backgroundColor = .white
-        mediatorBut.setTitleColor(.systemBlue, for: .normal)
+        mediatorBut.backgroundColor = .clear
+        mediatorBut.setTitleColor(.black, for: .normal)
         
         mediatorBut.addTarget(self, action: #selector(buttonTappedMediator(_:)), for: .touchUpInside)
         mediatorBut.snp.makeConstraints { make in
@@ -336,8 +336,8 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
 //            primenitBut.setTitle("Применить", for: .normal)
 //        }
             primenitBut.setTitle("Применить " + String(countlawyers.count), for: .normal)
-        primenitBut.backgroundColor = .white
-        primenitBut.setTitleColor(.systemBlue, for: .normal)
+        primenitBut.backgroundColor = .clear
+        primenitBut.setTitleColor(.black, for: .normal)
         
         primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
         primenitBut.snp.makeConstraints { make in

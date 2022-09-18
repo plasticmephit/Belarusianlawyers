@@ -113,21 +113,20 @@ extension MapDetailsViewController {
             }
             let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
             queueConc.async {
-                for i in 0...cluster.memberAnnotations.count-1
-                {
-                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
+               
+//                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
                     self.lawyersForTableView.append(self.lawyers)
-                }
+                
             }
         }
         else {
-            if let annotation = view.annotation as? MapLawyer{
+            if view.annotation is MapLawyer{
                 let currentSpan = mapView.region.span
                 let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
                 let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
                 let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
                 mapView.setRegion(zoomed, animated: true)
-                let index = (self.mapView.annotations as NSArray).index(of: annotation)
+//                let index = (self.mapView.annotations as NSArray).index(of: annotation)
                
                
                     self.lawyersForTableView.append(self.lawyers)

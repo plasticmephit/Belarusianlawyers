@@ -9,11 +9,14 @@ import UIKit
 extension HomeViewController{
     
     func setupHomeViewController(){
+        
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
+        
         [menuView, onlineLawyers, onlineLawyersText, viewforbeuty1, viewforbeuty2].forEach{
             $0.translatesAutoresizingMaskIntoConstraints = false
             view.addSubview($0)
         }
-        menuView.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 1)
+        menuView.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         menuView.snp.makeConstraints { make in
             
             make.top.equalToSuperview().inset(UIScreen.main.bounds.height/3)
@@ -21,7 +24,7 @@ extension HomeViewController{
             make.right.equalToSuperview().inset(0)
             make.bottom.equalTo(view).inset(0)
         }
-        viewforbeuty1.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.7)
+        viewforbeuty1.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 0.5)
         viewforbeuty1.snp.makeConstraints { make in
             make.width.equalTo(UIScreen.main.bounds.width-20)
             make.centerX.equalToSuperview()
@@ -116,6 +119,8 @@ extension HomeViewController{
             make.top.equalTo(onlineLawyersText).inset(UIScreen.main.bounds.height/7.5+12)
             make.centerX.equalToSuperview()
         }
+        onlineLawyersText.textColor = .white
+        onlineLawyersTextLawyer.textColor = .white
         lawyersBut.addTarget(self, action: #selector(buttonTappedLawyers(_:)), for: .touchUpInside)
         otrasli.addTarget(self, action: #selector(buttonTappedOtrasli(_:)), for: .touchUpInside)
         kollegii.addTarget(self, action: #selector(buttonTappedKollegii(_:)), for: .touchUpInside)
