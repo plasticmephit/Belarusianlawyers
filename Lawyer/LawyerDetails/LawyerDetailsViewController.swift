@@ -11,7 +11,9 @@ class LawyerDetailsViewController: UIViewController  {
   
     var lawyersDetails:[String] = []
     let menuView = UIView()
-   
+    
+    let viewforbeuty1 = UIView()
+    let viewforbeuty2 = UIView()
    lazy var scroll = UIScrollView()
     var avatar = UIImageView()
     var buttonRazver = UIButton()

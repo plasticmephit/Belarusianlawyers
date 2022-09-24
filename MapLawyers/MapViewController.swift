@@ -4,7 +4,7 @@
 //
 //  Created by Maksimilian on 11.08.22.
 //
-
+//print
 import UIKit
 import Kingfisher
 import MapKit
@@ -63,9 +63,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     
     func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
         //        print(lawyers.count)
-        
+        mapView.removeAnnotations(mapView.annotations)
         mapView.addAnnotations(mapLawyers)
-       
+        
     }
     var placemark:[String] = [""]
     let potokzagr = OperationQueue()
@@ -79,7 +79,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-     
+        
         potokzagr.maxConcurrentOperationCount = 1
         let locationSearchTable = LocationSearchTable()
         locationSearchTable.mapView?.backgroundColor = .clear
@@ -114,9 +114,9 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
         
         
     }
-
-   
-
+    
+    
+    
     
     override func viewWillAppear(_ animated: Bool) {
         mapView.removeAnnotations(mapView.annotations)
@@ -128,30 +128,30 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
             mapLawyers.removeAll()
             lawyers = lawyersGlobal
             if lawyers.count > 0{
-            lawyers.remove(at: 0)
-            if let name = defaults.string(forKey: "filterMesto")
-            {
-                lawyers = lawyers.filter { $0[5].contains(name) }
+                lawyers.remove(at: 0)
+                if let name = defaults.string(forKey: "filterMesto")
+                {
+                    lawyers = lawyers.filter { $0[5].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterCollegia")
+                {
+                    lawyers = lawyers.filter { $0[4].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterOnline")
+                {
+                    lawyers = lawyers.filter { $0[29].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterMediator")
+                {
+                    lawyers = lawyers.filter { $0[24].contains(name) }
+                }
+                if let name = defaults.string(forKey: "filterotrasli")
+                {
+                    lawyers = lawyers.filter { $0[18].contains(name) }
+                }
+                
+                loadInitialData()
             }
-            if let name = defaults.string(forKey: "filterCollegia")
-            {
-                lawyers = lawyers.filter { $0[4].contains(name) }
-            }
-            if let name = defaults.string(forKey: "filterOnline")
-            {
-                lawyers = lawyers.filter { $0[29].contains(name) }
-            }
-            if let name = defaults.string(forKey: "filterMediator")
-            {
-                lawyers = lawyers.filter { $0[24].contains(name) }
-            }
-            if let name = defaults.string(forKey: "filterotrasli")
-            {
-                lawyers = lawyers.filter { $0[18].contains(name) }
-            }
-            
-            loadInitialData()
-        }
         }
     }
     
@@ -195,6 +195,13 @@ extension MapViewController: HandleMapSearch {
 extension MapViewController{
     
     func setupMapViewController(){
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+
+
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
         view.addSubview(mapView)
         mapView.centerToLocation(initialLocation)
         mapView.translatesAutoresizingMaskIntoConstraints = false
@@ -219,7 +226,7 @@ extension MapViewController{
                     mapLawyers.append(geoLawyer)
                     mapView.addAnnotation(geoLawyer)
                 }
-//                mapView.addAnnotations(mapLawyers)
+                //                mapView.addAnnotations(mapLawyers)
             }
         }
     }
@@ -286,7 +293,7 @@ extension MapViewController {
             else {
                 let detailVC = LawyerDetailsViewController()
                 detailVC.lawyersDetails = lawyersForTableView[0]
-               
+                
                 navigationController?.pushViewController(detailVC, animated: true)
                 
             }
@@ -304,16 +311,14 @@ extension MapViewController {
                 let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
                 mapView.setRegion(zoomed, animated: true)
             }
+            let buffer = String(cluster.memberAnnotations[0].title!!)
             let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
             queueConc.async { [self] in
-                for i in 0...cluster.memberAnnotations.count-1
-                {
-                    let j = Int(cluster.memberAnnotations[i].subtitle!!)!
-                    self.lawyersForTableView.append(lawyersGlobal[j])
-                    //                    print(j)
-                }
+                
+                lawyersForTableView = lawyers.filter { $0[5].contains(buffer) }
             }
         }
+        //    }
         else {
             if let annotation = view.annotation as? MapLawyer{
                 let currentSpan = mapView.region.span
@@ -334,9 +339,9 @@ extension MapViewController {
                 
             }
         }
-        
     }
 }
+
 
 
 

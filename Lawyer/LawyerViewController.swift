@@ -35,8 +35,13 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
         searchBar.setShowsCancelButton(false, animated: true)
         searchBar.endEditing(true)
         searchIsActive = false
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [self] in
+          
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+           
         }
         // You could also change the position, frame etc of the searchBar
     }
@@ -59,9 +64,13 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // Filter the data you have. For instance:
         filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
-        DispatchQueue.main.async {
-            
-            self.tableView.reloadData()
+        DispatchQueue.main.async { [self] in
+          
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+           
         }
     }
     var noconnection = UILabel()
@@ -102,7 +111,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
     override func viewWillAppear(_ animated: Bool) {
         
         lawyers = lawyersGlobal
-        if lawyers.count > 0{
+        if lawyersGlobal.count > 10{
             lawyers.remove(at: 0)
             lawyers.sort { ($0[29]) < ($1[29]) }
             if let name = defaults.string(forKey: "filterMesto")
@@ -168,9 +177,13 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
         if lawyers.count == 0 {
             lawyers = lawyersGlobal
         }
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-            //            self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+        DispatchQueue.main.async { [self] in
+          
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+           
         }
     }
     func catchNotificationNetwork(notification:Notification) -> Void {
@@ -234,10 +247,11 @@ extension LawyerViewController:UITableViewDelegate
 
 extension LawyerViewController{
     func setupTableView(){
-        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         
-        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
@@ -318,7 +332,9 @@ extension LawyerViewController{
                 make.left.equalToSuperview().inset(10)
                 make.top.equalToSuperview().inset(50)
                 make.bottom.equalToSuperview().inset(0)
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
+                
+                
+                navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3")?.withTintColor(.white, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
             }
         }
         else{

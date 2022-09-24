@@ -11,8 +11,45 @@ import SnapKit
 extension LawyerDetailsViewController{
     
     func setupLawyerDetailsViewController(height: CGFloat, heightScrroll: CGFloat, textpoints: String, textreadmore: String){
-        view.addSubview(scroll)
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
+        
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
+        
+        /*** If needed Assign Title Here ***/
+        self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
+        let titleLabel = UILabel()
+        titleLabel.textColor = .white
+        titleLabel.text = lawyersDetails[1]
+        navigationItem.titleView = titleLabel
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        view.addSubview(menuView)
+        view.addSubview(viewforbeuty1)
+        view.addSubview(viewforbeuty2)
+        
+        menuView.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
+        menuView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(104)
+            make.bottom.right.left.equalToSuperview().inset(0)
+        }
+        
+        viewforbeuty1.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 0.5)
+        viewforbeuty1.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(7)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
+        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+        viewforbeuty2.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-40)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(14)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
+        menuView.addSubview(scroll)
         scroll.contentSize = CGSize(width: view.frame.width, height: height+heightScrroll)
         view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         scroll.backgroundColor = .white

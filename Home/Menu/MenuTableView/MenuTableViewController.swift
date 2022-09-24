@@ -22,25 +22,54 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         //            self.tableView.reloadData()
         //        }
     }
-    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-        // Stop doing the search stuff
-        // and clear the text in the search bar
-        searchBar.text = ""
-        filteredlawyers.removeAll()
-        // Hide the cancel button
-        searchBar.setShowsCancelButton(false, animated: true)
-        searchBar.endEditing(true)
-        searchIsActive = false
-        DispatchQueue.main.async {
-            self.tableView.reloadData()
-        }
-        // You could also change the position, frame etc of the searchBar
+
+func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+    // Stop doing the search stuff
+    // and clear the text in the search bar
+    searchBar.text = ""
+    filteredlawyers.removeAll()
+    // Hide the cancel button
+    searchBar.setShowsCancelButton(false, animated: true)
+    searchBar.endEditing(true)
+    searchIsActive = false
+    DispatchQueue.main.async { [self] in
+      
+        UIView.transition(with: tableView,
+                          duration: 0.1,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+       
     }
-    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-        searchBar.setShowsCancelButton(true, animated: true)
-        searchIsActive = true
-        //write other necessary statements
+    // You could also change the position, frame etc of the searchBar
+}
+func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+    searchBar.setShowsCancelButton(true, animated: true)
+    searchIsActive = true
+    //write other necessary statements
+}
+
+//
+
+//    func updateSearchResults(for searchController: UISearchController) {
+//        guard let searchText = searchController.searchBar.text else { return }
+//        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+//        DispatchQueue.main.async {
+//
+//            self.tableView.reloadData()
+//        }
+//    }
+func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+    // Filter the data you have. For instance:
+    filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+    DispatchQueue.main.async { [self] in
+      
+        UIView.transition(with: tableView,
+                          duration: 0.1,
+                          options: .transitionCrossDissolve,
+                          animations: { self.tableView.reloadData() })
+       
     }
+}
     
     
     let tableView: UITableView = .init()
@@ -213,10 +242,10 @@ extension MenuTableViewController:UITableViewDelegate
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchIsActive {
-            print(filteredlawyers.count)
+//            print(filteredlawyers.count)
             return filteredlawyers.count
         } else {
-            print(lawyers.count)
+//            print(lawyers.count)
             return lawyers.count
         }
     }
@@ -259,10 +288,10 @@ extension MenuTableViewController:UITableViewDelegate
 extension MenuTableViewController{
     func setupTableView(){
         
-        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         
-        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
@@ -344,7 +373,7 @@ extension MenuTableViewController{
                 make.left.equalToSuperview().inset(10)
                 make.top.equalToSuperview().inset(50)
                 make.bottom.equalToSuperview().inset(0)
-                navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Фильтр", style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
+                navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "slider.horizontal.3")?.withTintColor(.white, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(buttonTappedRzzvernut))
             }
         }
     }

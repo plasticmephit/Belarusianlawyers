@@ -185,8 +185,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
-        
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
 //
 //            lawyers = lawyersGlobal
 //
@@ -220,10 +219,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     }
     func setup()
     {
-        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         
-        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)

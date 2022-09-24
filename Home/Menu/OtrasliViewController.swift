@@ -19,6 +19,9 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     var filteredforlawyers:[[String]] = []
     var noconnection = UILabel()
     let tableView: UITableView = .init()
+    let menuView = UIView()
+    let viewforbeuty1 = UIView()
+    let viewforbeuty2 = UIView()
     weak var delegate: LawyerViewControllerFilterOtraslDelegate?
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return filteredPreset.count
@@ -44,7 +47,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
         view.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
         
         tableView.register(UITableViewCell.self, forCellReuseIdentifier: "CellOtrasli")
-        print(filteredPreset.count)
+//        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
         setup()
@@ -52,29 +55,55 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     }
     func setup()
     {
-        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         
-        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")!
+        self.navigationController?.navigationBar.backIndicatorTransitionMaskImage = UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
-        
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         let titleLabel = UILabel()
         titleLabel.textColor = .white
         titleLabel.text = "Отрасли"
         navigationItem.titleView = titleLabel
-     
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        view.addSubview(menuView)
+        view.addSubview(viewforbeuty1)
+        view.addSubview(viewforbeuty2)
+        
+        menuView.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
+        menuView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(104)
+            make.bottom.right.left.equalToSuperview().inset(0)
+        }
+        
+        viewforbeuty1.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 0.5)
+        viewforbeuty1.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(7)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
+        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+        viewforbeuty2.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-40)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(14)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
+        
         if lawyersGlobal.count > 10{
             noconnection.text = ""
-        view.addSubview(tableView)
+            menuView.addSubview(tableView)
        tableView.rowHeight = 60
         tableView.backgroundColor = .clear
         tableView.snp.makeConstraints {
             make in
             make.right.equalToSuperview().inset(10)
             make.left.equalToSuperview().inset(10)
-            make.top.equalToSuperview().inset(55)
+            make.top.equalToSuperview().inset(15)
             make.bottom.equalToSuperview().inset(20)
         }
         }
