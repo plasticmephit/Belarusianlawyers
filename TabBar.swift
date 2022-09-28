@@ -38,7 +38,7 @@ class TabBar: UITabBarController, UITabBarControllerDelegate {
         viewControllers = [
             createNavController(for: HomeViewController(), title: NSLocalizedString("Главная", comment: ""), image: UIImage(systemName: "house")!),
             createNavController(for: LawyerViewControllerFilter(), title: NSLocalizedString("Фильтр", comment: ""), image: UIImage(systemName: "slider.horizontal.3")!),
-//            createNavController(for: HomeViewController(), title: NSLocalizedString("Чат", comment: ""), image: UIImage(systemName: "house")!),
+            
             createNavController(for: MapViewController(), title: NSLocalizedString("Карты", comment: ""), image: UIImage(systemName: "map")!)
         ]
        

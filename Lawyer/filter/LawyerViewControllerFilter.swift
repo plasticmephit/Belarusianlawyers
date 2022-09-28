@@ -25,9 +25,11 @@ protocol LawyerViewControllerFilterMediatorDelegate: AnyObject{
 class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWorkDelegate, LawyerViewControllerFilterCollegiaDelegate, LawyerViewControllerFilterOtraslDelegate, LawyerViewControllerFilterOnlineDelegate, LawyerViewControllerFilterMediatorDelegate{
     var noconnection = UILabel()
     var lawyers:[[String]] = []
+    let menuView = UIView()
+    let viewforbeuty1 = UIView()
+    let viewforbeuty2 = UIView()
     var filteredlawyers:[[String]] = []
     var filteringlawyers:[[String]] = []
-    var countlawyers:[[String]] = []
     var filterCollegii:String = ""
     var filterOtrasli:String = ""
     var filterMesto:String = ""
@@ -48,7 +50,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         otraskiBut.setTitle(text, for: .normal)
         defaults.removeObject(forKey: "filterotrasli")
         defaults.set(text, forKey: "filterotrasli")
-        filterOtrasli = text 
+        filterOtrasli = text
         filteredlawyers = filteredlawyers.filter { $0[18].contains(text) }
         if let name = defaults.string(forKey: "filterMesto")
         {
@@ -186,22 +188,22 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
-//
-//            lawyers = lawyersGlobal
-//
-//        filteredlawyers = lawyers
-//        print(filteredlawyers.count)
+        //
+        //            lawyers = lawyersGlobal
+        //
+        //        filteredlawyers = lawyers
+        //        print(filteredlawyers.count)
         
-       
+        
         // Do any additional setup after loading the view.
     }
     
     override func viewWillAppear(_ animated: Bool) {
         
-//            lawyers = lawyersGlobal
+                    lawyers = lawyersGlobal
         filteredlawyers = lawyers
         setup()
-       
+        
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -213,7 +215,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             }
             else{
                 
-//                print("yte")
+                //                print("yte")
             }
         }
     }
@@ -226,229 +228,260 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         
         /*** If needed Assign Title Here ***/
         self.navigationItem.backBarButtonItem = UIBarButtonItem(title: "", style: UIBarButtonItem.Style.plain, target: nil, action: nil)
-        
+        view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         let titleLabel = UILabel()
         titleLabel.textColor = .white
         titleLabel.text = "Фильтр"
         navigationItem.titleView = titleLabel
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        view.addSubview(menuView)
+        view.addSubview(viewforbeuty1)
+        view.addSubview(viewforbeuty2)
         
+        menuView.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 1)
+        menuView.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(104)
+            make.bottom.right.left.equalToSuperview().inset(0)
+        }
+        
+        viewforbeuty1.backgroundColor = UIColor(red: 0.741, green: 0.882, blue: 0.996, alpha: 0.5)
+        viewforbeuty1.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-20)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(7)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
+        viewforbeuty2.backgroundColor = UIColor(red: 0.918, green: 0.925, blue: 0.973, alpha: 0.5)
+        viewforbeuty2.snp.makeConstraints { make in
+            make.width.equalTo(UIScreen.main.bounds.width-40)
+            make.centerX.equalToSuperview()
+            make.height.equalTo(14)
+            make.bottom.equalTo(menuView.snp.top).offset(0)
+        }
         if lawyersGlobal.count > 10{
-        view.addSubview(workBut)
-        if let name = defaults.string(forKey: "filterMesto")
-        {
-            filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
-            workBut.setTitle(name, for: .normal)
+            menuView.addSubview(workBut)
+            if let name = defaults.string(forKey: "filterMesto")
+            {
+                filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
+                workBut.setTitle(name, for: .normal)
+                
+            }
+            else{
+                workBut.setTitle("Место работы", for: .normal)
+                
+            }
+            workBut.layer.cornerRadius = 10
+            workBut.backgroundColor = .white
+            workBut.setTitleColor(.black, for: .normal)
             
-        }
-        else{
-            workBut.setTitle("Место работы", for: .normal)
+            workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
+            workBut.snp.makeConstraints { make in
+                make.top.equalToSuperview().inset(50)
+                make.left.right.equalToSuperview().inset(10)
+                make.height.equalTo(UIScreen.main.bounds.height/11)
+            }
+            menuView.addSubview(collegionBut)
+            if let name = defaults.string(forKey: "filterCollegia")
+            {
+                collegionBut.setTitle(name, for: .normal)
+                filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
+            }
+            else{
+                collegionBut.setTitle("Коллегия", for: .normal)
+            }
+            collegionBut.layer.cornerRadius = 10
+            collegionBut.backgroundColor = .white
+            collegionBut.setTitleColor(.black, for: .normal)
             
-        }
-        workBut.backgroundColor = .clear
-        workBut.setTitleColor(.black, for: .normal)
-        
-        workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
-        workBut.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(100)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
-        view.addSubview(collegionBut)
-        if let name = defaults.string(forKey: "filterCollegia")
-        {
-            collegionBut.setTitle(name, for: .normal)
-            filteredlawyers = filteredlawyers.filter { $0[4].contains(name) }
-        }
-        else{
-            collegionBut.setTitle("Коллегия", for: .normal)
-        }
-        
-        collegionBut.backgroundColor = .clear
-        collegionBut.setTitleColor(.black, for: .normal)
-        
-        collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
-        collegionBut.snp.makeConstraints { make in
-            make.top.equalTo(workBut).inset(50)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
-        view.addSubview(otraskiBut)
-        if let name = defaults.string(forKey: "filterotrasli")
-        {
-            otraskiBut.setTitle(name, for: .normal)
-            filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
-        }
-        else{
-            otraskiBut.setTitle("Отрасль", for: .normal)
-        }
-        otraskiBut.backgroundColor = .clear
-        otraskiBut.setTitleColor(.black, for: .normal)
-        
-        otraskiBut.addTarget(self, action: #selector(buttonTappedPravo(_:)), for: .touchUpInside)
-        otraskiBut.snp.makeConstraints { make in
-            make.top.equalTo(collegionBut).inset(50)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
-        view.addSubview(onlineBut)
-        if let name = defaults.string(forKey: "filterOnline")
-        {
-            onlineBut.setTitle(name, for: .normal)
-            filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
-        }
-        else{
-            onlineBut.setTitle("Онлайн", for: .normal)
-        }
-        onlineBut.backgroundColor = .clear
-        onlineBut.setTitleColor(.black, for: .normal)
-        
-        onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
-        onlineBut.snp.makeConstraints { make in
-            make.top.equalTo(otraskiBut).inset(50)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
-        view.addSubview(mediatorBut)
-        if let name = defaults.string(forKey: "filterMediator")
-        {
-            mediatorBut.setTitle(name, for: .normal)
-            filteredlawyers = filteredlawyers.filter { $0[19].contains(name) }
-        }
-        else{
-            mediatorBut.setTitle("Медиатор", for: .normal)
-        }
-        mediatorBut.backgroundColor = .clear
-        mediatorBut.setTitleColor(.black, for: .normal)
-        
-        mediatorBut.addTarget(self, action: #selector(buttonTappedMediator(_:)), for: .touchUpInside)
-        mediatorBut.snp.makeConstraints { make in
-            make.top.equalTo(onlineBut).inset(50)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
-        view.addSubview(primenitBut)
-//        if let name = defaults.string(forKey: "filterCount")
-//        {
-//            primenitBut.setTitle(name, for: .normal)
-//        }
-//        else{
-//            primenitBut.setTitle("Применить", for: .normal)
-//        }
-            primenitBut.setTitle("Применить " + String(countlawyers.count), for: .normal)
-        primenitBut.backgroundColor = .clear
-        primenitBut.setTitleColor(.black, for: .normal)
-        
-        primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
-        primenitBut.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(100)
-            make.left.right.equalToSuperview().inset(10)
-            make.height.equalTo(20)
-        }
+            collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
+            collegionBut.snp.makeConstraints { make in
+                make.top.equalTo(workBut).inset(UIScreen.main.bounds.height/11+10)
+                make.left.right.equalToSuperview().inset(10)
+                make.height.equalTo(UIScreen.main.bounds.height/11)
+            }
+            menuView.addSubview(otraskiBut)
+            if let name = defaults.string(forKey: "filterotrasli")
+            {
+                otraskiBut.setTitle(name, for: .normal)
+                filteredlawyers = filteredlawyers.filter { $0[18].contains(name) }
+            }
+            else{
+                otraskiBut.setTitle("Отрасль", for: .normal)
+            }
+            otraskiBut.layer.cornerRadius = 10
+            otraskiBut.backgroundColor = .white
+            otraskiBut.setTitleColor(.black, for: .normal)
+            
+            otraskiBut.addTarget(self, action: #selector(buttonTappedPravo(_:)), for: .touchUpInside)
+            otraskiBut.snp.makeConstraints { make in
+                make.top.equalTo(collegionBut).inset(UIScreen.main.bounds.height/11+10)
+                make.left.right.equalToSuperview().inset(10)
+                make.height.equalTo(UIScreen.main.bounds.height/11)
+            }
+            menuView.addSubview(onlineBut)
+            if let name = defaults.string(forKey: "filterOnline")
+            {
+                onlineBut.setTitle(name, for: .normal)
+                filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
+            }
+            else{
+                onlineBut.setTitle("Онлайн", for: .normal)
+            }
+            onlineBut.layer.cornerRadius = 10
+            onlineBut.backgroundColor = .white
+            onlineBut.setTitleColor(.black, for: .normal)
+            
+            onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
+            onlineBut.snp.makeConstraints { make in
+                make.top.equalTo(otraskiBut).inset(UIScreen.main.bounds.height/11+10)
+                make.left.right.equalToSuperview().inset(10)
+                make.height.equalTo(UIScreen.main.bounds.height/11)
+            }
+            menuView.addSubview(mediatorBut)
+            if let name = defaults.string(forKey: "filterMediator")
+            {
+                mediatorBut.setTitle(name, for: .normal)
+                filteredlawyers = filteredlawyers.filter { $0[19].contains(name) }
+            }
+            else{
+                mediatorBut.setTitle("Медиатор", for: .normal)
+            }
+            mediatorBut.layer.cornerRadius = 10
+            mediatorBut.backgroundColor = .white
+            mediatorBut.setTitleColor(.black, for: .normal)
+            
+            mediatorBut.addTarget(self, action: #selector(buttonTappedMediator(_:)), for: .touchUpInside)
+            mediatorBut.snp.makeConstraints { make in
+                make.top.equalTo(onlineBut).inset(UIScreen.main.bounds.height/11+10)
+                make.left.right.equalToSuperview().inset(10)
+                make.height.equalTo(UIScreen.main.bounds.height/11)
+            }
+            menuView.addSubview(primenitBut)
+            //        if let name = defaults.string(forKey: "filterCount")
+            //        {
+            //            primenitBut.setTitle(name, for: .normal)
+            //        }
+            //        else{
+            //            primenitBut.setTitle("Применить", for: .normal)
+            //        }
+            primenitBut.setTitle("Применить "+String(filteredlawyers.count), for: .normal)
+            primenitBut.backgroundColor = .white
+            primenitBut.setTitleColor(.black, for: .normal)
+            primenitBut.layer.cornerRadius = 10
+            primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
+            primenitBut.snp.makeConstraints { make in
+                make.bottom.equalToSuperview().inset(100)
+                make.left.right.equalToSuperview().inset(20)
+                make.height.equalTo(30)
+            }
             noconnection.text = ""
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Сброс", style: .plain, target: self, action: #selector(buttonTappedSbros))
-    }
+            
+            navigationItem.rightBarButtonItem = UIBarButtonItem(image: UIImage(systemName: "trash")?.withTintColor(.white, renderingMode: .alwaysOriginal), style: .plain, target: self, action: #selector(buttonTappedSbros))
+            self.navigationItem.rightBarButtonItem?.tintColor = UIColor.white
+        }
         else{
             
-               
-                        view.addSubview(noconnection)
-                        noconnection.snp.makeConstraints { make in
-                            make.centerY.equalToSuperview()
-                            make.centerX.equalToSuperview()
-                            make.height.equalTo(20)
-                        }
-                noconnection.text = "нет данных"
             
-             primenitBut  = UIButton()
+            view.addSubview(noconnection)
+            noconnection.snp.makeConstraints { make in
+                make.centerY.equalToSuperview()
+                make.centerX.equalToSuperview()
+                make.height.equalTo(20)
+            }
+            noconnection.text = "нет данных"
+            
+            primenitBut  = UIButton()
             noconnection.text = "нет данных"
         }
     }
-
-@objc func buttonTappedWork(_ sender: Any) {
-    let detailVC = FilterWorksViewController()
-    detailVC.delegate = self
-    filteredlawyers = lawyers
-    //        filteredlawyers = filteringlawyers
-    showDetailViewController(detailVC, sender: self)
-}
-@objc func buttonTappedCollegia(_ sender: Any) {
-    let detailVC = FilterCollegiaViewController()
-    detailVC.delegate = self
-    filteredlawyers = lawyers
-    //       filteredlawyers = filteringlawyers
-    showDetailViewController(detailVC, sender: self)
-}
-@objc func buttonTappedPravo(_ sender: Any) {
-    let detailVC = FilterOtraslViewController()
-    filteredlawyers = lawyers
-    detailVC.delegate = self
-    //        filteredlawyers = filteringlawyers
-    showDetailViewController(detailVC, sender: self)
-}
-@objc func buttonTappedOnline(_ sender: Any) {
-    let detailVC = FilterOnlineViewController()
-    filteredlawyers = lawyers
-    detailVC.delegate = self
-    //        filteredlawyers = filteringlawyers
-    showDetailViewController(detailVC, sender: self)
-}
-@objc func buttonTappedMediator(_ sender: Any) {
-    let detailVC = FilterMediatorViewController()
-    filteredlawyers = lawyers
-    detailVC.delegate = self
-    //        filteredlawyers = filteringlawyers
-    showDetailViewController(detailVC, sender: self)
-}
-/*
- // MARK: - Navigation
- 
- // In a storyboard-based application, you will often want to do a little preparation before navigation
- override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
- // Get the new view controller using segue.destination.
- // Pass the selected object to the new view controller.
- }
- */
-@objc func buttonTappedPrimenit(_ sender: Any) {
     
-    if self.isMovingFromParent {
-       
-        if filteredlawyers.count != 0{
-            delegate?.update(text: filteredlawyers)
+    @objc func buttonTappedWork(_ sender: Any) {
+        let detailVC = FilterWorksViewController()
+        detailVC.delegate = self
+        filteredlawyers = lawyers
+        //        filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
+    @objc func buttonTappedCollegia(_ sender: Any) {
+        let detailVC = FilterCollegiaViewController()
+        detailVC.delegate = self
+        filteredlawyers = lawyers
+        //       filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
+    @objc func buttonTappedPravo(_ sender: Any) {
+        let detailVC = FilterOtraslViewController()
+        filteredlawyers = lawyers
+        detailVC.delegate = self
+        //        filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
+    @objc func buttonTappedOnline(_ sender: Any) {
+        let detailVC = FilterOnlineViewController()
+        filteredlawyers = lawyers
+        detailVC.delegate = self
+        //        filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
+    @objc func buttonTappedMediator(_ sender: Any) {
+        let detailVC = FilterMediatorViewController()
+        filteredlawyers = lawyers
+        detailVC.delegate = self
+        //        filteredlawyers = filteringlawyers
+        showDetailViewController(detailVC, sender: self)
+    }
+    /*
+     // MARK: - Navigation
+     
+     // In a storyboard-based application, you will often want to do a little preparation before navigation
+     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+     // Get the new view controller using segue.destination.
+     // Pass the selected object to the new view controller.
+     }
+     */
+    @objc func buttonTappedPrimenit(_ sender: Any) {
+        
+        if self.isMovingFromParent {
+            
+            if filteredlawyers.count != 0{
+                delegate?.update(text: filteredlawyers)
+                
+            }
+            else{
+                //            print("yte")
+            }
+        }
+        
+        if let tabBarController = self.navigationController?.tabBarController  {
+            flagPerehod = 1
+            tabBarController.selectedIndex = 0
+            
             
         }
-        else{
-//            print("yte")
-        }
+        
+        navigationController?.popViewController(animated: true)
+        
+        //            let detailVC = LawyerViewController()
+        //            detailVC.lawyers = filteredlawyers
+        //            detailVC.lawyersFilterSave = filteredlawyers
+        //            navigationController?.pushViewController(detailVC, animated: true)
     }
     
-    if let tabBarController = self.navigationController?.tabBarController  {
-        flagPerehod = 1
-        tabBarController.selectedIndex = 0
-        
-        
+    @objc func buttonTappedSbros(_ sender: Any) {
+        filteredlawyers = lawyers
+        collegionBut.setTitle("Коллегия", for: .normal)
+        workBut.setTitle("Место работы", for: .normal)
+        otraskiBut.setTitle("Отрасль", for: .normal)
+        onlineBut.setTitle("Онлайн", for: .normal)
+        mediatorBut.setTitle("Медиатор", for: .normal)
+        primenitBut.setTitle("Применить "+String(filteredlawyers.count), for: .normal)
+        defaults.removeObject(forKey: "filterCollegia")
+        defaults.removeObject(forKey: "filterotrasli")
+        defaults.removeObject(forKey: "filterMesto")
+        defaults.removeObject(forKey: "filterOnline")
+        defaults.removeObject(forKey: "filterMediator")
+        defaults.removeObject(forKey: "filterCount")
     }
-    
-    navigationController?.popViewController(animated: true)
-    
-    //            let detailVC = LawyerViewController()
-    //            detailVC.lawyers = filteredlawyers
-    //            detailVC.lawyersFilterSave = filteredlawyers
-    //            navigationController?.pushViewController(detailVC, animated: true)
-}
-
-@objc func buttonTappedSbros(_ sender: Any) {
-    filteredlawyers = lawyers
-    collegionBut.setTitle("Коллегия", for: .normal)
-    workBut.setTitle("Место работы", for: .normal)
-    otraskiBut.setTitle("Отрасль", for: .normal)
-    onlineBut.setTitle("Онлайн", for: .normal)
-    mediatorBut.setTitle("Медиатор", for: .normal)
-    primenitBut.setTitle("Применить", for: .normal)
-    defaults.removeObject(forKey: "filterCollegia")
-    defaults.removeObject(forKey: "filterotrasli")
-    defaults.removeObject(forKey: "filterMesto")
-    defaults.removeObject(forKey: "filterOnline")
-    defaults.removeObject(forKey: "filterMediator")
-    defaults.removeObject(forKey: "filterCount")
-}
 }
 
