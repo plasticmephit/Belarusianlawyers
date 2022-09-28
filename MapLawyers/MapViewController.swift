@@ -149,7 +149,8 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
                 {
                     lawyers = lawyers.filter { $0[18].contains(name) }
                 }
-                
+                lawyers = lawyers.filter{$0[20] != ""}
+                print(lawyers.count)
                 loadInitialData()
             }
         }
@@ -255,21 +256,21 @@ extension MapViewController {
             let annotationView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker")
             annotationView.annotation = item
             annotationView.image = UIImage(named: "annotation")
-            annotationView.canShowCallout = true
+//            annotationView.canShowCallout = true
             annotationView.subtitleVisibility = .hidden
             annotationView.clusteringIdentifier = "mapItemClustered"
             annotationView.rightCalloutAccessoryView = UIButton(type: .detailDisclosure)
-            annotationView.animatesWhenAdded = true
+//            annotationView.animatesWhenAdded = true
             return annotationView
         } else if let cluster = annotation as? MKClusterAnnotation {
             // 4
             let clusterView = MKMarkerAnnotationView(annotation: annotation, reuseIdentifier: "MyMarker2")
-            if cluster.memberAnnotations.count < 100{
-                clusterView.canShowCallout = true}
-            clusterView.annotation = cluster
-            clusterView.rightCalloutAccessoryView = UIButton(type: .infoDark)
+//            if cluster.memberAnnotations.count < 100{
+//                clusterView.canShowCallout = true}
+//            clusterView.annotation = cluster
+//            clusterView.rightCalloutAccessoryView = UIButton(type: .infoDark)
             clusterView.animatesWhenAdded = true
-            clusterView.calloutOffset = CGPoint(x: -5, y: 5)
+//            clusterView.calloutOffset = CGPoint(x: -5, y: 5)
             return clusterView
         } else {
             return nil
@@ -303,20 +304,59 @@ extension MapViewController {
         lawyersForTableView.removeAll()
         //        print(mapView.camera.centerCoordinateDistance )
         if let cluster = view.annotation as? MKClusterAnnotation {
-            if mapView.camera.centerCoordinateDistance > 3000{
-                
-                let currentSpan = mapView.region.span
-                let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
-                let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
-                let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
-                mapView.setRegion(zoomed, animated: true)
+            
+            var buffer2:[String] = []
+            for i in 0...cluster.memberAnnotations.count-1{
+                buffer2.append(String(cluster.memberAnnotations[i].title!!))
             }
-            let buffer = String(cluster.memberAnnotations[0].title!!)
-            let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
-            queueConc.async { [self] in
+            
+                buffer2 = Array(Set(buffer2))
+           print(buffer2)
+            var filter:[[String]] = []
+            for i in 0...buffer2.count-1{
+                filter = filter + lawyers.filter { $0[5]==(buffer2[i]) }
                 
-                lawyersForTableView = lawyers.filter { $0[5].contains(buffer) }
             }
+            for i in 0...filter.count-1{
+                
+                print(filter[i][5])
+            }
+            print(filter.count)
+           
+           
+           
+//            print(filter.count)
+//            print(cluster.memberAnnotations.count)
+//            if cluster.memberAnnotations.count != filter.count{
+//
+//                let currentSpan = mapView.region.span
+//                let zoomSpan = MKCoordinateSpan(latitudeDelta: currentSpan.latitudeDelta / 2.0, longitudeDelta: currentSpan.longitudeDelta / 2.0)
+//                let zoomCoordinate = view.annotation?.coordinate ?? mapView.region.center
+//                let zoomed = MKCoordinateRegion(center: zoomCoordinate, span: zoomSpan)
+//                mapView.setRegion(zoomed, animated: true)
+//            }
+//            if cluster.memberAnnotations.count == filter.count{
+        
+//              view.canShowCallout = true
+//                view.annotation = cluster
+//                view.rightCalloutAccessoryView = UIButton(type: .infoDark)
+//                view.animatesWhenAdded = true
+//                view.calloutOffset = CGPoint(x: -5, y: 5)
+                lawyersForTableView = filter
+            let detailVC = MenuTableViewController()
+            lawyersForTableView.sort { ($0[29]) < ($1[29]) }
+            detailVC.rejim = 0
+            detailVC.lawyers = lawyersForTableView
+            detailVC.lawyersFilterSave = lawyersForTableView
+            detailVC.modalPresentationStyle = .formSheet
+            navigationController?.pushViewController(detailVC, animated: true)
+//            }
+//            let buffer = String(cluster.memberAnnotations[0].title!!)
+//            let queueConc = DispatchQueue(label: "lawyers", attributes: .concurrent)
+//            queueConc.async { [self] in
+//
+//                lawyersForTableView = lawyers.filter { $0[5].contains(buffer) }
+//            }
         }
         //    }
         else {
@@ -336,7 +376,10 @@ extension MapViewController {
                 else{
                     self.lawyersForTableView.append(lawyersGlobal[index])
                 }
+                let detailVC = LawyerDetailsViewController()
+                detailVC.lawyersDetails = lawyersForTableView[0]
                 
+                navigationController?.pushViewController(detailVC, animated: true)
             }
         }
     }
