@@ -1,13 +1,6 @@
-//
-//  MenuTableViewController.swift
-//  Belarusianlawyers
-//
-//  Created by Maksimilian on 1.09.22.
-//
-
-
+import SnapKit
 import UIKit
-class MenuTableViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate, LawyerViewControllerForFilterDelegate  {
+class MapTableViewController: UIViewController, UITableViewDataSource, UISearchBarDelegate, LawyerViewControllerForFilterDelegate  {
     func sbros() {
         lawyers.removeAll()
         lawyers = lawyersGlobal
@@ -22,56 +15,57 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
         //            self.tableView.reloadData()
         //        }
     }
-
-func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
-    // Stop doing the search stuff
-    // and clear the text in the search bar
-    searchBar.text = ""
-    filteredlawyers.removeAll()
-    // Hide the cancel button
-    searchBar.setShowsCancelButton(false, animated: true)
-    searchBar.endEditing(true)
-    searchIsActive = false
-    DispatchQueue.main.async { [self] in
-      
-        UIView.transition(with: tableView,
-                          duration: 0.1,
-                          options: .transitionCrossDissolve,
-                          animations: { self.tableView.reloadData() })
-       
-    }
-    // You could also change the position, frame etc of the searchBar
-}
-func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
-    searchBar.setShowsCancelButton(true, animated: true)
-    searchIsActive = true
-    //write other necessary statements
-}
-
-//
-
-//    func updateSearchResults(for searchController: UISearchController) {
-//        guard let searchText = searchController.searchBar.text else { return }
-//        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
-//        DispatchQueue.main.async {
-//
-//            self.tableView.reloadData()
-//        }
-//    }
-func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
-    // Filter the data you have. For instance:
-    filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
-    DispatchQueue.main.async { [self] in
-      
-        UIView.transition(with: tableView,
-                          duration: 0.1,
-                          options: .transitionCrossDissolve,
-                          animations: { self.tableView.reloadData() })
-       
-    }
-}
     
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Stop doing the search stuff
+        // and clear the text in the search bar
+        searchBar.text = ""
+        filteredlawyers.removeAll()
+        // Hide the cancel button
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
+        searchIsActive = false
+        DispatchQueue.main.async { [self] in
+            
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+            
+        }
+        // You could also change the position, frame etc of the searchBar
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        searchIsActive = true
+        //write other necessary statements
+    }
     
+    //
+    
+    //    func updateSearchResults(for searchController: UISearchController) {
+    //        guard let searchText = searchController.searchBar.text else { return }
+    //        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+    //        DispatchQueue.main.async {
+    //
+    //            self.tableView.reloadData()
+    //        }
+    //    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Filter the data you have. For instance:
+        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+        DispatchQueue.main.async { [self] in
+            
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+            
+        }
+    }
+    
+    var kostil:Int = 0
+    var works:[String] = []
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
     var filteredlawyers: [[String]]=[]
@@ -106,21 +100,49 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        if lawyersGlobal.count > 10{
+        if lawyers.count == 0 {
+            lawyers = lawyersGlobal
             if rejim == 1
             {
-                lawyers = lawyersGlobal.filter { $0[18].contains(filter)}
-                lawyersFilterSave = lawyersGlobal.filter { $0[18].contains(filter)}
+                lawyers = lawyers.filter { $0[18].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
             }
             if rejim == 2
             {
-                lawyers = lawyersGlobal.filter { $0[4].contains(filter)}
-                lawyersFilterSave = lawyersGlobal.filter { $0[4].contains(filter)}
-                
-                //        print(lawyers.count)
+                lawyers = lawyers.filter { $0[4].contains(filter)}
+                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
             }
+            
+        }
+        works.sort()
+        lawyers.sort { ($0[5]) < ($1[5]) }
+        if let name = defaults.string(forKey: "filterMesto")
+        {
+            lawyers = lawyers.filter { $0[5].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterOnline")
+        {
+            lawyers = lawyers.filter { $0[29].contains(name) }
+        }
+        if let name = defaults.string(forKey: "filterMediator")
+        {
+            lawyers = lawyers.filter { $0[24].contains(name) }
+        }
+        if rejim == 1
+        {
+            lawyers = lawyers.filter { $0[18].contains(filter)}
+            lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
+        }
+        if rejim == 2
+        {
+            lawyers = lawyers.filter { $0[4].contains(filter)}
+            lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
+            
+            //        print(lawyers.count)
         }
         
+        
+       
         DispatchQueue.main.async {
             
             self.tableView.reloadData()
@@ -136,56 +158,11 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
     }
     override func viewWillAppear(_ animated: Bool) {
-        if lawyers.count == 0 {
-            lawyers = lawyersGlobal
-        }
-            if let name = defaults.string(forKey: "filterMesto")
-            {
-                lawyers = lawyers.filter { $0[5].contains(name) }
-            }
-            if let name = defaults.string(forKey: "filterOnline")
-            {
-                lawyers = lawyers.filter { $0[29].contains(name) }
-            }
-            if let name = defaults.string(forKey: "filterMediator")
-            {
-                lawyers = lawyers.filter { $0[24].contains(name) }
-            }
-            if rejim == 1
-            {
-                lawyers = lawyers.filter { $0[18].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
-            }
-            if rejim == 2
-            {
-                lawyers = lawyers.filter { $0[4].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
-                
-                //        print(lawyers.count)
-            }
-            if lawyers.count == 0 {
-                lawyers = lawyersGlobal
-                if rejim == 1
-                {
-                    lawyers = lawyers.filter { $0[18].contains(filter)}
-                    lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
-                }
-                if rejim == 2
-                {
-                    lawyers = lawyers.filter { $0[4].contains(filter)}
-                    lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
-                }
-                
-            }
-            
-            DispatchQueue.main.async {
-                
-                self.tableView.reloadData()
-                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
-            }
         
     }
     func catchNotification(notification:Notification) -> Void {
+        works.sort()
+        lawyers.sort { ($0[5]) < ($1[5]) }
         if let name = defaults.string(forKey: "filterMesto")
         {
             lawyers = lawyers.filter { $0[5].contains(name) }
@@ -225,29 +202,59 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
             }
             
         }
+        
         DispatchQueue.main.async { [self] in
             onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
             
-                tableView.reloadData()
+            tableView.reloadData()
         }
         
         
     }
 }
 
-extension MenuTableViewController:UITableViewDelegate
+extension MapTableViewController:UITableViewDelegate
 {
+    func numberOfSections(in tableView: UITableView) -> Int {
+        
+        return works.count
+    }
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let label: UILabel = {
+              let lb = UILabel()
+               lb.translatesAutoresizingMaskIntoConstraints = false
+            lb.font = UIFont.systemFont(ofSize: 12)
+               lb.text = works[section]
+               lb.textColor = .black
+               lb.backgroundColor = .clear
+               lb.numberOfLines = 0
+               return lb
+           }()
+
+           let header: UIView = {
+               let hd = UIView()
+               hd.backgroundColor = .clear
+               hd.addSubview(label)
+               label.leadingAnchor.constraint(equalTo: hd.leadingAnchor, constant: 5).isActive = true
+               label.topAnchor.constraint(equalTo: hd.topAnchor, constant: 1).isActive = true
+               label.trailingAnchor.constraint(equalTo: hd.trailingAnchor, constant: -5).isActive = true
+               label.bottomAnchor.constraint(equalTo: hd.bottomAnchor, constant: -5).isActive = true
+               return hd
+           }()
+           return header
+    }
+
     func tableView(_ tableView: UITableView, willDisplay cell: UITableViewCell, forRowAt indexPath: IndexPath) {
         cell.contentView.layer.masksToBounds = true
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchIsActive {
-//            print(filteredlawyers.count)
-            return filteredlawyers.count
+            //            print(filteredlawyers.count)
+            return filteredlawyers.filter { $0[5].contains(works[section]) }.count
         } else {
-//            print(lawyers.count)
-            return lawyers.count
+            //                print(lawyers.filter { $0[5].contains(works[section]) }.count)
+            return lawyers.filter { $0[5].contains(works[section]) }.count
         }
     }
     
@@ -259,13 +266,14 @@ extension MenuTableViewController:UITableViewDelegate
         if lawyersGlobal.count > 10{
             if searchIsActive
             {
-                cell.configure(lawyers: filteredlawyers[indexPath.row])
+                cell.configure(lawyers: filteredlawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row])
             }
             else
             {
-                cell.configure(lawyers: lawyers[indexPath.row])
+                cell.configure(lawyers: lawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row])
             }
         }
+        
         return cell
     }
     
@@ -275,10 +283,10 @@ extension MenuTableViewController:UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
         if searchIsActive{
-            detailVC.lawyersDetails = filteredlawyers[indexPath.row]
+            detailVC.lawyersDetails = filteredlawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row]
         }
         else{
-            detailVC.lawyersDetails = lawyers[indexPath.row]
+            detailVC.lawyersDetails = lawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row]
         }
         
         //        detailVC.modalPresentationStyle = .popover
@@ -286,7 +294,7 @@ extension MenuTableViewController:UITableViewDelegate
     }
 }
 
-extension MenuTableViewController{
+extension MapTableViewController{
     func setupTableView(){
         
         self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
@@ -387,3 +395,4 @@ extension MenuTableViewController{
     }
     
 }
+

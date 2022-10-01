@@ -46,8 +46,7 @@ func parseCollegion()->([[String]]){
 func parseConsults()->([[String]]){
    
     
-        let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv"
-)
+        let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv")
         let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? consultsGlobal
     defaults.removeObject(forKey: "lawyersConsults")
     defaults.set(content, forKey: "lawyersConsults")

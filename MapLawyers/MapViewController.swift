@@ -150,7 +150,7 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
                     lawyers = lawyers.filter { $0[18].contains(name) }
                 }
                 lawyers = lawyers.filter{$0[20] != ""}
-                print(lawyers.count)
+//                print(lawyers.count)
                 loadInitialData()
             }
         }
@@ -311,17 +311,12 @@ extension MapViewController {
             }
             
                 buffer2 = Array(Set(buffer2))
-           print(buffer2)
+          
             var filter:[[String]] = []
             for i in 0...buffer2.count-1{
                 filter = filter + lawyers.filter { $0[5]==(buffer2[i]) }
                 
             }
-            for i in 0...filter.count-1{
-                
-                print(filter[i][5])
-            }
-            print(filter.count)
            
            
            
@@ -343,11 +338,12 @@ extension MapViewController {
 //                view.animatesWhenAdded = true
 //                view.calloutOffset = CGPoint(x: -5, y: 5)
                 lawyersForTableView = filter
-            let detailVC = MenuTableViewController()
+            let detailVC = MapTableViewController()
             lawyersForTableView.sort { ($0[29]) < ($1[29]) }
             detailVC.rejim = 0
             detailVC.lawyers = lawyersForTableView
             detailVC.lawyersFilterSave = lawyersForTableView
+            detailVC.works = buffer2
             detailVC.modalPresentationStyle = .formSheet
             navigationController?.pushViewController(detailVC, animated: true)
 //            }
