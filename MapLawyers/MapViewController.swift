@@ -339,7 +339,7 @@ extension MapViewController {
 //                view.calloutOffset = CGPoint(x: -5, y: 5)
                 lawyersForTableView = filter
             let detailVC = MapTableViewController()
-            lawyersForTableView.sort { ($0[29]) < ($1[29]) }
+//            lawyersForTableView.sort { ($0[29]) < ($1[29]) }
             detailVC.rejim = 0
             detailVC.lawyers = lawyersForTableView
             detailVC.lawyersFilterSave = lawyersForTableView

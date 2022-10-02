@@ -53,7 +53,21 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
     //    }
     func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         // Filter the data you have. For instance:
+        filteredlawyers.removeAll()
+       
         filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+//        filteredsection = works.filter
+        for i in filteredlawyers{
+            print(i[5])
+        }
+        filteredsection.removeAll()
+        for i in filteredlawyers{
+            filteredsection.append(i[5])
+        }
+        filteredsection = Array(Set(filteredsection))
+//        filteredsection.sort()
+        print(filteredsection)
+       
         DispatchQueue.main.async { [self] in
             
             UIView.transition(with: tableView,
@@ -63,7 +77,7 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
             
         }
     }
-    
+    var filteredsection:[String] = []
     var kostil:Int = 0
     var works:[String] = []
     let tableView: UITableView = .init()
@@ -216,15 +230,27 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
 extension MapTableViewController:UITableViewDelegate
 {
     func numberOfSections(in tableView: UITableView) -> Int {
-        
-        return works.count
+        if searchIsActive
+        {
+            return filteredsection.count
+        }
+        else{
+            return works.count
+            
+        }
     }
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         let label: UILabel = {
               let lb = UILabel()
                lb.translatesAutoresizingMaskIntoConstraints = false
             lb.font = UIFont.systemFont(ofSize: 12)
-               lb.text = works[section]
+            if searchIsActive
+            {
+                lb.text = filteredsection[section]
+            }
+            else{
+                lb.text = works[section]
+            }
                lb.textColor = .black
                lb.backgroundColor = .clear
                lb.numberOfLines = 0
@@ -251,7 +277,7 @@ extension MapTableViewController:UITableViewDelegate
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searchIsActive {
             //            print(filteredlawyers.count)
-            return filteredlawyers.filter { $0[5].contains(works[section]) }.count
+            return filteredlawyers.filter { $0[5].contains(filteredsection[section]) }.count
         } else {
             //                print(lawyers.filter { $0[5].contains(works[section]) }.count)
             return lawyers.filter { $0[5].contains(works[section]) }.count
@@ -266,7 +292,7 @@ extension MapTableViewController:UITableViewDelegate
         if lawyersGlobal.count > 10{
             if searchIsActive
             {
-                cell.configure(lawyers: filteredlawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row])
+                cell.configure(lawyers: filteredlawyers.filter { $0[5].contains(filteredsection[indexPath.section])}[indexPath.row])
             }
             else
             {
@@ -283,7 +309,7 @@ extension MapTableViewController:UITableViewDelegate
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = LawyerDetailsViewController()
         if searchIsActive{
-            detailVC.lawyersDetails = filteredlawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row]
+            detailVC.lawyersDetails = filteredlawyers.filter { $0[5].contains(filteredsection[indexPath.section])}[indexPath.row]
         }
         else{
             detailVC.lawyersDetails = lawyers.filter { $0[5].contains(works[indexPath.section])}[indexPath.row]
