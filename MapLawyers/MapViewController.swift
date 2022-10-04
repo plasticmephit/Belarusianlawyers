@@ -283,7 +283,7 @@ extension MapViewController {
             if view.annotation is MKClusterAnnotation {
                 //*** Need array list of annotation inside cluster here ***
                 let detailVC = MenuTableViewController()
-                lawyersForTableView.sort { ($0[29]) < ($1[29]) }
+                
                 detailVC.rejim = 0
                 detailVC.lawyers = lawyersForTableView
                 detailVC.lawyersFilterSave = lawyersForTableView
@@ -343,7 +343,7 @@ extension MapViewController {
             detailVC.rejim = 0
             detailVC.lawyers = lawyersForTableView
             detailVC.lawyersFilterSave = lawyersForTableView
-            detailVC.works = buffer2
+          
             detailVC.modalPresentationStyle = .formSheet
             navigationController?.pushViewController(detailVC, animated: true)
 //            }

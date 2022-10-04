@@ -151,8 +151,15 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
             
             //        print(lawyers.count)
         }
-        
-        
+        for i in lawyers{
+            print(i[5])
+        }
+        works.removeAll()
+        for i in lawyers{
+            works.append(i[5])
+        }
+        works = Array(Set(works))
+        print(works)
        
         DispatchQueue.main.async { [self] in
             
@@ -235,10 +242,18 @@ extension MapTableViewController:UITableViewDelegate
 
            let header: UIView = {
                let hd = UIView()
-               hd.backgroundColor = .clear
+               hd.backgroundColor = .white
+//               hd.backgroundColor = .clear // very important
+               hd.layer.masksToBounds = false
+               hd.layer.shadowOpacity = 0.2
+               hd.layer.shadowRadius = 7
+               hd.layer.shadowOffset = CGSize(width: 0, height: 0)
+               hd.layer.shadowColor = UIColor.black.cgColor
+//               hd.contentView.backgroundColor = .white
+               hd.layer.cornerRadius = 12
                hd.addSubview(label)
-               label.leadingAnchor.constraint(equalTo: hd.leadingAnchor, constant: 5).isActive = true
-               label.topAnchor.constraint(equalTo: hd.topAnchor, constant: 1).isActive = true
+               label.leadingAnchor.constraint(equalTo: hd.leadingAnchor, constant: 8).isActive = true
+               label.topAnchor.constraint(equalTo: hd.topAnchor, constant: 5).isActive = true
                label.trailingAnchor.constraint(equalTo: hd.trailingAnchor, constant: -5).isActive = true
                label.bottomAnchor.constraint(equalTo: hd.bottomAnchor, constant: -5).isActive = true
                return hd

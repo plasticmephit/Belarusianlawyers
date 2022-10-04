@@ -71,10 +71,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
-        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+        primenitBut.setTitle("Применить " + String(filteredlawyers.count), for: .normal)
     }
     func updateOnline(text: String) {
-        onlineBut.setTitle(text, for: .normal)
+        onlineBut.setTitle("Онлайн: " + text, for: .normal)
         defaults.removeObject(forKey: "filterOnline")
         defaults.set(text, forKey: "filterOnline")
         filterOnline = text
@@ -98,10 +98,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
-        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+        primenitBut.setTitle("Применить " + String(filteredlawyers.count), for: .normal)
     }
     func updateMediator(text: String) {
-        mediatorBut.setTitle(text, for: .normal)
+        mediatorBut.setTitle("Медиатор: " + text, for: .normal)
         defaults.removeObject(forKey: "filterMediator")
         defaults.set(text, forKey: "filterMediator")
         filterMediator = text
@@ -125,7 +125,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
-        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+        primenitBut.setTitle("Применить " + String(filteredlawyers.count), for: .normal)
     }
     
     func updateCollegia(text: String) {
@@ -154,7 +154,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
-        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+        primenitBut.setTitle("Применить " + String(filteredlawyers.count), for: .normal)
     }
     
     func updateMesto(text: String) {
@@ -181,7 +181,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         }
         defaults.removeObject(forKey: "filterCount")
         defaults.set(filteredlawyers.count, forKey: "filterCount")
-        primenitBut.setTitle(String(filteredlawyers.count), for: .normal)
+        primenitBut.setTitle("Применить " + String(filteredlawyers.count), for: .normal)
     }
     
     
@@ -206,9 +206,12 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             setup(height: 1200)
         }
         else{
+     
             lawyers = lawyersGlobal
         }
         
+            filteredlawyers = lawyers
+            setup(height: 1200)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -359,7 +362,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             if let name = defaults.string(forKey: "filterMediator")
             {
                 mediatorBut.setTitle(name, for: .normal)
-                filteredlawyers = filteredlawyers.filter { $0[19].contains(name) }
+                filteredlawyers = filteredlawyers.filter { $0[24].contains(name) }
             }
             else{
                 mediatorBut.setTitle("Медиатор", for: .normal)
