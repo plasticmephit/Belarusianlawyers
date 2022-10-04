@@ -136,6 +136,7 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
         
     }
     override func viewWillAppear(_ animated: Bool) {
+        
         if lawyers.count == 0 {
             lawyers = lawyersGlobal
         }
@@ -177,9 +178,9 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
                 }
                 
             }
-            
+        lawyers.sort { ($0[29]) < ($1[29]) }
             DispatchQueue.main.async {
-                
+                self.onlinelabel.text = String( self.lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
                 self.tableView.reloadData()
                 self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
             }
@@ -211,20 +212,22 @@ func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
             
             //        print(lawyers.count)
         }
-        if lawyers.count == 0 {
-            lawyers = lawyersGlobal
-            if rejim == 1
-            {
-                lawyers = lawyers.filter { $0[18].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
-            }
-            if rejim == 2
-            {
-                lawyers = lawyers.filter { $0[4].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
-            }
+       
+//        if lawyers.count == 0 {
+//            lawyers = lawyersGlobal
+//            if rejim == 1
+//            {
+//                lawyers = lawyers.filter { $0[18].contains(filter)}
+//                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
+//            }
+//            if rejim == 2
+//            {
+//                lawyers = lawyers.filter { $0[4].contains(filter)}
+//                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
+//            }
             
-        }
+//        }
+        lawyers.sort { ($0[29]) < ($1[29]) }
         DispatchQueue.main.async { [self] in
             onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
             
@@ -381,6 +384,7 @@ extension MenuTableViewController{
             
             self.tableView.reloadData()
         }
+        detailVC.flag = 1
         detailVC.lawyers = lawyersFilterSave
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)

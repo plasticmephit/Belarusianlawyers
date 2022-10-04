@@ -30,7 +30,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
     var filteredlawyers:[[String]] = []
-   
+    var flag:Int = 0
     var filterCollegii:String = ""
     var filterOtrasli:String = ""
     var filterMesto:String = ""
@@ -188,6 +188,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
         view.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
         //
         //            lawyers = lawyersGlobal
@@ -200,7 +201,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     }
     
     override func viewWillAppear(_ animated: Bool) {
-        
+      
         if lawyers.count > 0
         {  filteredlawyers = lawyers
             setup(height: 1200)
@@ -342,7 +343,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             scroll.addSubview(onlineBut)
             if let name = defaults.string(forKey: "filterOnline")
             {
-                onlineBut.setTitle(name, for: .normal)
+                onlineBut.setTitle("Онлайн: " + name, for: .normal)
                 filteredlawyers = filteredlawyers.filter { $0[29].contains(name) }
             }
             else{
@@ -361,7 +362,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             scroll.addSubview(mediatorBut)
             if let name = defaults.string(forKey: "filterMediator")
             {
-                mediatorBut.setTitle(name, for: .normal)
+                mediatorBut.setTitle("Медиатор: " + name, for: .normal)
                 filteredlawyers = filteredlawyers.filter { $0[24].contains(name) }
             }
             else{
@@ -391,7 +392,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             primenitBut.layer.cornerRadius = 10
             primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
             primenitBut.snp.makeConstraints { make in
-                make.top.equalTo(menuView.snp.bottom).inset(120)
+                make.top.equalTo(view.safeAreaLayoutGuide.snp.bottom).inset(50)
                 make.left.right.equalTo(menuView).inset(40)
                 make.height.equalTo(30)
             }
@@ -461,7 +462,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
      }
      */
     @objc func buttonTappedPrimenit(_ sender: Any) {
-        
+       
         if self.isMovingFromParent {
             
             if filteredlawyers.count != 0{
@@ -469,17 +470,25 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
                 
             }
             else{
-                //            print("yte")
+              
             }
         }
-        
-//        if let tabBarController = self.navigationController?.tabBarController  {
-//            flagPerehod = 1
-//            tabBarController.selectedIndex = 0
-//
-//
-//        }
-        
+        flagwillappearmap = 1
+        if flagprehodmap == 1
+         { if let tabBarController = self.navigationController?.tabBarController  {
+             tabBarController.selectedIndex = 2
+         }
+        }
+        else {
+        if flag == 0
+            { if let tabBarController = self.navigationController?.tabBarController  {
+                flagPerehod = 1
+                tabBarController.selectedIndex = 0
+            }
+        }
+            
+         
+        }
         navigationController?.popViewController(animated: true)
         
         //            let detailVC = LawyerViewController()

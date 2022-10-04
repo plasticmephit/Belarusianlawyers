@@ -107,11 +107,12 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
                                                using:catchNotificationNetwork)
     }
     override func viewWillAppear(_ animated: Bool) {
-        
         lawyers = lawyersGlobal
+        flagprehodmap = 0
+        flagPerehod = 0
         if lawyersGlobal.count > 10{
             lawyers.remove(at: 0)
-            lawyers.sort { ($0[29]) < ($1[29]) }
+          
             if let name = defaults.string(forKey: "filterMesto")
             {
                 lawyers = lawyers.filter { $0[5].contains(name) }
@@ -136,6 +137,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
 //            if lawyers.count == 0 {
 //                lawyers = lawyersGlobal
 //            }
+            lawyers.sort { ($0[29]) < ($1[29]) }
             DispatchQueue.main.async { [self] in
                 onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
                 tableView.reloadData()
@@ -371,6 +373,7 @@ extension LawyerViewController{
             
             self.tableView.reloadData()
         }
+        detailVC.flag = 1
         detailVC.lawyers = lawyersGlobal
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)

@@ -66,7 +66,7 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
         }
         filteredsection = Array(Set(filteredsection))
 //        filteredsection.sort()
-        print(filteredsection)
+       
        
         DispatchQueue.main.async { [self] in
             
@@ -151,15 +151,13 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
             
             //        print(lawyers.count)
         }
-        for i in lawyers{
-            print(i[5])
-        }
+     
         works.removeAll()
         for i in lawyers{
             works.append(i[5])
         }
         works = Array(Set(works))
-        print(works)
+//        print(works)
        
         DispatchQueue.main.async { [self] in
             
@@ -406,6 +404,7 @@ extension MapTableViewController{
             
             self.tableView.reloadData()
         }
+        detailVC.flag = 1
         detailVC.lawyers = lawyersFilterSave
         detailVC.delegate = self
         navigationController?.pushViewController(detailVC, animated: true)

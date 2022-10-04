@@ -119,45 +119,49 @@ class MapViewController: UIViewController, MKMapViewDelegate, UISearchBarDelegat
     
     
     override func viewWillAppear(_ animated: Bool) {
-        mapView.removeAnnotations(mapView.annotations)
+        flagprehodmap = 1
         
-        potokzagr.addOperation
-        { [self] in
-            lawyers.removeAll()
+        if flagwillappearmap == 1{
+            mapView.removeAnnotations(mapView.annotations)
             
-            mapLawyers.removeAll()
-            lawyers = lawyersGlobal
-            if lawyers.count > 0{
-                lawyers.remove(at: 0)
-                if let name = defaults.string(forKey: "filterMesto")
-                {
-                    lawyers = lawyers.filter { $0[5].contains(name) }
+            potokzagr.addOperation
+            { [self] in
+                lawyers.removeAll()
+                
+                mapLawyers.removeAll()
+                lawyers = lawyersGlobal
+                if lawyers.count > 0{
+                    lawyers.remove(at: 0)
+                    if let name = defaults.string(forKey: "filterMesto")
+                    {
+                        lawyers = lawyers.filter { $0[5].contains(name) }
+                    }
+                    if let name = defaults.string(forKey: "filterCollegia")
+                    {
+                        lawyers = lawyers.filter { $0[4].contains(name) }
+                    }
+                    if let name = defaults.string(forKey: "filterOnline")
+                    {
+                        lawyers = lawyers.filter { $0[29].contains(name) }
+                    }
+                    if let name = defaults.string(forKey: "filterMediator")
+                    {
+                        lawyers = lawyers.filter { $0[24].contains(name) }
+                    }
+                    if let name = defaults.string(forKey: "filterotrasli")
+                    {
+                        lawyers = lawyers.filter { $0[18].contains(name) }
+                    }
+                    lawyers = lawyers.filter{$0[20] != ""}
+                    //                print(lawyers.count)
+                    flagwillappearmap = 0
+                    loadInitialData()
+                    
                 }
-                if let name = defaults.string(forKey: "filterCollegia")
-                {
-                    lawyers = lawyers.filter { $0[4].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterOnline")
-                {
-                    lawyers = lawyers.filter { $0[29].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterMediator")
-                {
-                    lawyers = lawyers.filter { $0[24].contains(name) }
-                }
-                if let name = defaults.string(forKey: "filterotrasli")
-                {
-                    lawyers = lawyers.filter { $0[18].contains(name) }
-                }
-                lawyers = lawyers.filter{$0[20] != ""}
-//                print(lawyers.count)
-                loadInitialData()
             }
         }
+      
     }
-    
-    
-    
 }
 extension MapViewController: HandleMapSearch {
     func placeMarkFunc(placeMark: [String]) {

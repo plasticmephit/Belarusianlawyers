@@ -6,7 +6,8 @@
 //
 
 import UIKit
-
+var flagprehodmap: Int = 0
+var flagwillappearmap: Int = 1
 
 
 class TabBar: UITabBarController, UITabBarControllerDelegate {

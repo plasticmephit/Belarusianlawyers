@@ -69,6 +69,17 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
     var searchIsActive:Bool = false
+    
+    override func viewWillAppear(_ animated: Bool) {
+        DispatchQueue.main.async { [self] in
+        tableView.reloadData()
+        
+        if filteredPreset.count > 0
+            {
+            tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+        }
+        }
+    }
     weak var delegate: LawyerViewControllerFilterOtraslDelegate?
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         
