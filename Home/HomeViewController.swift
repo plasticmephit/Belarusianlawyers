@@ -120,12 +120,12 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         {
         loadLawyersConsultsAnd()
         }
-        if flagPerehod == 1{
-            flagPerehod = 0
-            let detailVC = LawyerViewController()
-            navigationController?.pushViewController(detailVC, animated: true)
-            
-        }
+//        if flagPerehod == 1{
+//            flagPerehod = 0
+//            let detailVC = LawyerViewController()
+//            navigationController?.pushViewController(detailVC, animated: true)
+//            
+//        }
         
     }
     func catchNotificationNetwork(notification:Notification) -> Void {

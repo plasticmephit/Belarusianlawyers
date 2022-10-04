@@ -66,13 +66,11 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
         filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
         DispatchQueue.main.async { [self] in
           
-            UIView.transition(with: tableView,
-                              duration: 0.1,
-                              options: .transitionCrossDissolve,
-                              animations: { self.tableView.reloadData() })
+         self.tableView.reloadData()
            
         }
     }
+    let searchBar = UISearchBar()
     var noconnection = UILabel()
     let menuView = UIView()
     let viewforbeuty1 = UIView()
@@ -82,7 +80,7 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
         label.font = UIFont.systemFont(ofSize: 12)
         return label
     }()
-    let searchBar = UISearchBar()
+    
     let tableView: UITableView = .init()
     var lawyers: [[String]]=[]
     var filteredlawyers: [[String]]=[]
@@ -135,14 +133,17 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
             {
                 lawyers = lawyers.filter { $0[18].contains(name) }
             }
-            if lawyers.count == 0 {
-                lawyers = lawyersGlobal
-            }
+//            if lawyers.count == 0 {
+//                lawyers = lawyersGlobal
+//            }
             DispatchQueue.main.async { [self] in
                 onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"
                 tableView.reloadData()
                 
-                tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+                if lawyers.count > 0
+                {
+                    tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+                }
             }
             //            searchController.definesPresentationContext = false
         }
@@ -213,7 +214,7 @@ extension LawyerViewController:UITableViewDelegate
         else{
             fatalError()
         }
-        if lawyersGlobal.count > 10{
+      
             if  searchIsActive
             {
                 cell.configure(lawyers: filteredlawyers[indexPath.row])
@@ -223,7 +224,7 @@ extension LawyerViewController:UITableViewDelegate
                 
                 cell.configure(lawyers: lawyers[indexPath.row])
             }
-        }
+        
         return cell
     }
     

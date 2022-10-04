@@ -114,20 +114,17 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
                                                object: nil,
                                                queue: nil,
                                                using:catchNotification)
-        if lawyers.count == 0 {
-            lawyers = lawyersGlobal
-            if rejim == 1
-            {
-                lawyers = lawyers.filter { $0[18].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
-            }
-            if rejim == 2
-            {
-                lawyers = lawyers.filter { $0[4].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
-            }
-            
-        }
+       
+        //        defaults.removeObject(forKey: "filterCollegia")
+        //        defaults.removeObject(forKey: "filterotrasli")
+        //        defaults.removeObject(forKey: "filterMesto")
+        //        defaults.removeObject(forKey: "filterCount")
+        //        defaults.removeObject(forKey: "filterOnline")
+        //        defaults.removeObject(forKey: "filterMediator")
+        // Do any additional setup after loading the view.
+        
+    }
+    override func viewWillAppear(_ animated: Bool) {
         works.sort()
         lawyers.sort { ($0[5]) < ($1[5]) }
         if let name = defaults.string(forKey: "filterMesto")
@@ -157,22 +154,14 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
         
         
        
-        DispatchQueue.main.async {
+        DispatchQueue.main.async { [self] in
             
-            self.tableView.reloadData()
-            self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+            tableView.reloadData()
+            if lawyers.count > 0
+            {
+                self.tableView.scrollToRow(at: NSIndexPath(row: 0, section: 0) as IndexPath, at: UITableView.ScrollPosition.top, animated: false)
+            }
         }
-        //        defaults.removeObject(forKey: "filterCollegia")
-        //        defaults.removeObject(forKey: "filterotrasli")
-        //        defaults.removeObject(forKey: "filterMesto")
-        //        defaults.removeObject(forKey: "filterCount")
-        //        defaults.removeObject(forKey: "filterOnline")
-        //        defaults.removeObject(forKey: "filterMediator")
-        // Do any additional setup after loading the view.
-        
-    }
-    override func viewWillAppear(_ animated: Bool) {
-        
     }
     func catchNotification(notification:Notification) -> Void {
         works.sort()
@@ -202,20 +191,7 @@ class MapTableViewController: UIViewController, UITableViewDataSource, UISearchB
             
             //        print(lawyers.count)
         }
-        if lawyers.count == 0 {
-            lawyers = lawyersGlobal
-            if rejim == 1
-            {
-                lawyers = lawyers.filter { $0[18].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[18].contains(filter)}
-            }
-            if rejim == 2
-            {
-                lawyers = lawyers.filter { $0[4].contains(filter)}
-                lawyersFilterSave = lawyers.filter { $0[4].contains(filter)}
-            }
-            
-        }
+        
         
         DispatchQueue.main.async { [self] in
             onlinelabel.text = String( lawyers.filter { $0[29].contains("да") }.count) + " Адвокатов онлайн"

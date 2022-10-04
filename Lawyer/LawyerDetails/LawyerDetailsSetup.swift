@@ -56,7 +56,7 @@ extension LawyerDetailsViewController{
         scroll.snp.makeConstraints { make in
             
             make.top.equalToSuperview().inset(0)
-            make.width.equalToSuperview().inset(0)
+            make.left.equalToSuperview().inset(0)
             make.right.equalToSuperview().inset(0)
             make.bottom.equalToSuperview().inset(0)
         }

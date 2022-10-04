@@ -14,28 +14,93 @@
 
 import UIKit
 
-class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewDelegate {
+class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate {
+    func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
+        // Stop doing the search stuff
+        // and clear the text in the search bar
+        searchBar.text = ""
+        filteredlawyers.removeAll()
+        // Hide the cancel button
+        searchBar.setShowsCancelButton(false, animated: true)
+        searchBar.endEditing(true)
+        searchIsActive = false
+        DispatchQueue.main.async { [self] in
+          
+            tableView.reloadData()
+           
+        }
+        // You could also change the position, frame etc of the searchBar
+    }
+    func searchBarTextDidBeginEditing(_ searchBar: UISearchBar) {
+        searchBar.setShowsCancelButton(true, animated: true)
+        searchIsActive = true
+        //write other necessary statements
+    }
+    
+    //
+    
+    //    func updateSearchResults(for searchController: UISearchController) {
+    //        guard let searchText = searchController.searchBar.text else { return }
+    //        filteredlawyers = lawyers.filter { $0[1].components(separatedBy: " ").dropLast().joined(separator: " ").contains(searchText) }
+    //        DispatchQueue.main.async {
+    //
+    //            self.tableView.reloadData()
+    //        }
+    //    }
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        // Filter the data you have. For instance:
+        filteredlawyers = filteredPreset.filter {$0.contains(searchText)}
+        DispatchQueue.main.async { [self] in
+          
+            UIView.transition(with: tableView,
+                              duration: 0.1,
+                              options: .transitionCrossDissolve,
+                              animations: { self.tableView.reloadData() })
+           
+        }
+    }
+    let searchBar = UISearchBar()
+    var filteredlawyers: [String]=[]
     var filteredPreset:[String] = ["Авто и ГАИ", "Авторское право","Административное право","Амнистия","Банковское право","Брачный контракт","Образование и распределение","Гражданское право","Жилищное право","Защита прав потребителей","Земельное право","Интеллектуальная собственность","Информационное право","Исполнительное производство","Конституционное право", "Корпоративное право","Медиация","Международное право","Миграционное право (беженцы)","Налоговое право","Наследственное право","Пенсионное обеспечение","Приватизация жилья","Призыв и прохождение воинской службы","Семейное право","Страховое право","Таможенное право","Трудовое право","Уголовное право","Финансовое право","Хозяйственное право","Экономическое право","Оформление наследственных прав граждан РБ по наследствам, открывшимся за границей" ,"Экономические споры","Недвижимое имущество","Защита прав несовершеннолетних","Банкротство","Спортивное право","Транспортное право","Медицинское право","Защита чести, достоинства, деловой репутации","Арбитражные споры","Интеграционное право","Образование и распределение"]
-    var filteredforlawyers:[[String]] = []
+    var filteredforlawyers:[String] = []
     var noconnection = UILabel()
     let tableView: UITableView = .init()
     let menuView = UIView()
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
+    var searchIsActive:Bool = false
     weak var delegate: LawyerViewControllerFilterOtraslDelegate?
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return filteredPreset.count
+        
+        if searchIsActive
+        {
+            //            print(filteredlawyers.count)
+            return filteredlawyers.count
+        } else {
+            return filteredPreset.count
+        }
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "CellOtrasli", for: indexPath as IndexPath)
-        cell.textLabel?.text = filteredPreset[indexPath.row]
+        
+            if  searchIsActive
+            {
+                cell.textLabel?.text = filteredlawyers[indexPath.row]
+            }
+            else
+            {
+                cell.textLabel?.text = filteredPreset[indexPath.row]
+                
+            }
+        
         cell.textLabel?.numberOfLines = 0
         cell.textLabel?.font = UIFont.systemFont(ofSize: 12)
         return cell
     }
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let detailVC = MenuTableViewController()
+        
         detailVC.filter = filteredPreset[indexPath.row]
         detailVC.rejim = 1
         navigationController?.pushViewController(detailVC, animated: true)
@@ -96,6 +161,26 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
         
         if lawyersGlobal.count > 10{
             noconnection.text = ""
+            searchBar.delegate = self
+            searchBar.placeholder = "Type something here to search"
+            
+            //            searchController.hidesNavigationBarDuringPresentation = false
+            
+            
+            
+            searchBar.isTranslucent = true
+            searchBar.sizeToFit()
+            searchBar.barTintColor = UIColor.clear
+            searchBar.backgroundColor = UIColor.clear
+            searchBar.isTranslucent = true
+            searchBar.setBackgroundImage(UIImage(), for: .any, barMetrics: .default)
+            
+            
+            
+            //            searchController.edgesForExtendedLayout = .bottom
+            tableView.tableHeaderView = searchBar
+            
+            
             menuView.addSubview(tableView)
        tableView.rowHeight = 60
         tableView.backgroundColor = .clear

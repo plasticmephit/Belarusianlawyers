@@ -24,12 +24,13 @@ protocol LawyerViewControllerFilterMediatorDelegate: AnyObject{
 }
 class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWorkDelegate, LawyerViewControllerFilterCollegiaDelegate, LawyerViewControllerFilterOtraslDelegate, LawyerViewControllerFilterOnlineDelegate, LawyerViewControllerFilterMediatorDelegate{
     var noconnection = UILabel()
+    lazy var scroll = UIScrollView()
     var lawyers:[[String]] = []
     let menuView = UIView()
     let viewforbeuty1 = UIView()
     let viewforbeuty2 = UIView()
     var filteredlawyers:[[String]] = []
-    var filteringlawyers:[[String]] = []
+   
     var filterCollegii:String = ""
     var filterOtrasli:String = ""
     var filterMesto:String = ""
@@ -200,9 +201,13 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
     
     override func viewWillAppear(_ animated: Bool) {
         
-                    lawyers = lawyersGlobal
-        filteredlawyers = lawyers
-        setup()
+        if lawyers.count > 0
+        {  filteredlawyers = lawyers
+            setup(height: 1200)
+        }
+        else{
+            lawyers = lawyersGlobal
+        }
         
     }
     
@@ -219,7 +224,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             }
         }
     }
-    func setup()
+    func setup(height: CGFloat)
     {
         self.navigationController?.navigationBar.backIndicatorImage =  UIImage(systemName: "arrow.left")?.withTintColor(.white, renderingMode: .alwaysOriginal)
         
@@ -236,6 +241,7 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         view.addSubview(menuView)
+        
         view.addSubview(viewforbeuty1)
         view.addSubview(viewforbeuty2)
         
@@ -259,8 +265,19 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             make.height.equalTo(14)
             make.bottom.equalTo(menuView.snp.top).offset(0)
         }
+        menuView.addSubview(scroll)
+       
+        scroll.snp.makeConstraints { make in
+            
+            make.top.equalToSuperview().inset(0)
+            make.left.equalToSuperview().inset(0)
+            make.right.equalToSuperview().inset(0)
+            make.bottom.equalToSuperview().inset(0)
+        }
+        scroll.contentSize = CGSize(width: UIScreen.main.bounds.width, height: UIScreen.main.bounds.height)
+        scroll.backgroundColor = .clear
         if lawyersGlobal.count > 10{
-            menuView.addSubview(workBut)
+            scroll.addSubview(workBut)
             if let name = defaults.string(forKey: "filterMesto")
             {
                 filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
@@ -278,10 +295,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             workBut.addTarget(self, action: #selector(buttonTappedWork(_:)), for: .touchUpInside)
             workBut.snp.makeConstraints { make in
                 make.top.equalToSuperview().inset(50)
-                make.left.right.equalToSuperview().inset(10)
+                make.left.right.equalTo(menuView).inset(10)
                 make.height.equalTo(UIScreen.main.bounds.height/11)
             }
-            menuView.addSubview(collegionBut)
+            scroll.addSubview(collegionBut)
             if let name = defaults.string(forKey: "filterCollegia")
             {
                 collegionBut.setTitle(name, for: .normal)
@@ -297,10 +314,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             collegionBut.addTarget(self, action: #selector(buttonTappedCollegia(_:)), for: .touchUpInside)
             collegionBut.snp.makeConstraints { make in
                 make.top.equalTo(workBut).inset(UIScreen.main.bounds.height/11+10)
-                make.left.right.equalToSuperview().inset(10)
+                make.left.right.equalTo(menuView).inset(10)
                 make.height.equalTo(UIScreen.main.bounds.height/11)
             }
-            menuView.addSubview(otraskiBut)
+            scroll.addSubview(otraskiBut)
             if let name = defaults.string(forKey: "filterotrasli")
             {
                 otraskiBut.setTitle(name, for: .normal)
@@ -316,10 +333,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             otraskiBut.addTarget(self, action: #selector(buttonTappedPravo(_:)), for: .touchUpInside)
             otraskiBut.snp.makeConstraints { make in
                 make.top.equalTo(collegionBut).inset(UIScreen.main.bounds.height/11+10)
-                make.left.right.equalToSuperview().inset(10)
+                make.left.right.equalTo(menuView).inset(10)
                 make.height.equalTo(UIScreen.main.bounds.height/11)
             }
-            menuView.addSubview(onlineBut)
+            scroll.addSubview(onlineBut)
             if let name = defaults.string(forKey: "filterOnline")
             {
                 onlineBut.setTitle(name, for: .normal)
@@ -335,10 +352,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             onlineBut.addTarget(self, action: #selector(buttonTappedOnline(_:)), for: .touchUpInside)
             onlineBut.snp.makeConstraints { make in
                 make.top.equalTo(otraskiBut).inset(UIScreen.main.bounds.height/11+10)
-                make.left.right.equalToSuperview().inset(10)
+                make.left.right.equalTo(menuView).inset(10)
                 make.height.equalTo(UIScreen.main.bounds.height/11)
             }
-            menuView.addSubview(mediatorBut)
+            scroll.addSubview(mediatorBut)
             if let name = defaults.string(forKey: "filterMediator")
             {
                 mediatorBut.setTitle(name, for: .normal)
@@ -354,10 +371,10 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             mediatorBut.addTarget(self, action: #selector(buttonTappedMediator(_:)), for: .touchUpInside)
             mediatorBut.snp.makeConstraints { make in
                 make.top.equalTo(onlineBut).inset(UIScreen.main.bounds.height/11+10)
-                make.left.right.equalToSuperview().inset(10)
+                make.left.right.equalTo(menuView).inset(10)
                 make.height.equalTo(UIScreen.main.bounds.height/11)
             }
-            menuView.addSubview(primenitBut)
+            scroll.addSubview(primenitBut)
             //        if let name = defaults.string(forKey: "filterCount")
             //        {
             //            primenitBut.setTitle(name, for: .normal)
@@ -366,13 +383,13 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             //            primenitBut.setTitle("Применить", for: .normal)
             //        }
             primenitBut.setTitle("Применить "+String(filteredlawyers.count), for: .normal)
-            primenitBut.backgroundColor = .white
-            primenitBut.setTitleColor(.black, for: .normal)
+            primenitBut.backgroundColor = UIColor(red: 0.153, green: 0.6, blue: 0.984, alpha: 1)
+            primenitBut.setTitleColor(.white, for: .normal)
             primenitBut.layer.cornerRadius = 10
             primenitBut.addTarget(self, action: #selector(buttonTappedPrimenit(_:)), for: .touchUpInside)
             primenitBut.snp.makeConstraints { make in
-                make.bottom.equalToSuperview().inset(100)
-                make.left.right.equalToSuperview().inset(20)
+                make.top.equalTo(menuView.snp.bottom).inset(120)
+                make.left.right.equalTo(menuView).inset(40)
                 make.height.equalTo(30)
             }
             noconnection.text = ""
@@ -453,12 +470,12 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             }
         }
         
-        if let tabBarController = self.navigationController?.tabBarController  {
-            flagPerehod = 1
-            tabBarController.selectedIndex = 0
-            
-            
-        }
+//        if let tabBarController = self.navigationController?.tabBarController  {
+//            flagPerehod = 1
+//            tabBarController.selectedIndex = 0
+//
+//
+//        }
         
         navigationController?.popViewController(animated: true)
         
