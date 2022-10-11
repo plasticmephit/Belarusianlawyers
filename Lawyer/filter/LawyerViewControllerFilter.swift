@@ -286,10 +286,14 @@ class LawyerViewControllerFilter: UIViewController, LawyerViewControllerFilterWo
             {
                 filteredlawyers = filteredlawyers.filter { $0[5].contains(name) }
                 workBut.setTitle(name, for: .normal)
-                
+//                workBut.titleLabel?.font = UIFont.systemFont(ofSize: 12)
+//                workBut.titleLabel?.numberOfLines = 7
+//                workBut.titleLabel?.text = name
             }
             else{
                 workBut.setTitle("Место работы", for: .normal)
+//                workBut.titleLabel?.font = UIFont.systemFont(ofSize: 16)
+//                workBut.titleLabel?.text = "Место работы"
                 
             }
             workBut.layer.cornerRadius = 10

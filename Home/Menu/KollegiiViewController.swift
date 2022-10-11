@@ -58,6 +58,7 @@ class KollegiiViewController:UIViewController, UITableViewDataSource, UITableVie
             filteredPreset = collegionssGlobal
             filteredPreset.remove(at: 0)
         }
+        flagprehodmap = 0
 //        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self

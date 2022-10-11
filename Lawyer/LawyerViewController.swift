@@ -181,7 +181,11 @@ class LawyerViewController: UIViewController, UITableViewDataSource, LawyerViewC
             lawyers = lawyersGlobal
         }
         DispatchQueue.main.async { [self] in
-          
+            
+          setupTableView()
+            UIView.animate(withDuration: 0.4) {
+                    self.view.layoutIfNeeded()
+            }
             UIView.transition(with: tableView,
                               duration: 0.1,
                               options: .transitionCrossDissolve,

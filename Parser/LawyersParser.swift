@@ -27,8 +27,11 @@ func parseLawyers()->([[String]]){
     
         let content = readStringFromURL(stringURL: "https://rka.by/upload/lawyers.csv")
     let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? lawyersGlobal
-    defaults.removeObject(forKey: "lawyersGlobal")
-    defaults.set(content, forKey: "lawyersGlobal")
+    if NetworkMonitor.shared.isConnected{
+        defaults.removeObject(forKey: "lawyersGlobal")
+        
+        defaults.set(content, forKey: "lawyersGlobal")
+    }
     
     return parsedCSV
 }
@@ -37,10 +40,10 @@ func parseCollegion()->([[String]]){
     
         let content = readStringFromURL(stringURL: "https://rka.by/upload/collegium.csv")
         let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? collegionssGlobal
-    
-    defaults.removeObject(forKey: "lawyersCollegion")
-    defaults.set(content, forKey: "lawyersCollegion")
-   
+    if NetworkMonitor.shared.isConnected{
+        defaults.removeObject(forKey: "lawyersCollegion")
+        defaults.set(content, forKey: "lawyersCollegion")
+    }
     return parsedCSV
 }
 func parseConsults()->([[String]]){
@@ -48,9 +51,10 @@ func parseConsults()->([[String]]){
     
         let content = readStringFromURL(stringURL:"https://rka.by/upload/lawConsultation.csv")
         let parsedCSV: [[String]] = content?.components(separatedBy: "\n").map{$0.components(separatedBy: ";")} ?? consultsGlobal
-    defaults.removeObject(forKey: "lawyersConsults")
-    defaults.set(content, forKey: "lawyersConsults")
-   
+    if NetworkMonitor.shared.isConnected{
+        defaults.removeObject(forKey: "lawyersConsults")
+        defaults.set(content, forKey: "lawyersConsults")
+    }
     return parsedCSV
 }
 func parseLawyersUserDefaults()->([[String]]){

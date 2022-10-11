@@ -126,6 +126,7 @@ class OtraslViewController:UIViewController, UITableViewDataSource, UITableViewD
 //        print(filteredPreset.count)
         tableView.dataSource = self
         tableView.delegate = self
+        flagprehodmap = 0
         setup()
         // Do any additional setup after loading the view.
     }

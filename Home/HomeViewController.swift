@@ -100,7 +100,7 @@ class HomeViewController: UIViewController, TabBarPerehodDelegate {
         onlineLawyersText.text = "загрузка"
 //        defaults.removeObject(forKey: "lawyersGlobal")
         lawyersGlobal = parseLawyersUserDefaults()
-       
+        print(parseLawyersUserDefaults().count)
         consultsGlobal = parseConsultsUserDefaults()
         collegionssGlobal = parseCollegionUserDefaults()
         

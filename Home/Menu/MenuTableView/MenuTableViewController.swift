@@ -17,10 +17,10 @@ class MenuTableViewController: UIViewController, UITableViewDataSource, UISearch
     }
     
     func update(text: [[String]]) {
-        //        lawyers = text
-        //        DispatchQueue.main.async {
-        //            self.tableView.reloadData()
-        //        }
+                lawyers = text
+                DispatchQueue.main.async {
+                    self.tableView.reloadData()
+                }
     }
 
 func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
